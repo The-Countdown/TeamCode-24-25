@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tuning;
+package org.firstinspires.ftc.teamcode.Auto.RoadRunner.tuning;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.reflection.ReflectionConfig;
@@ -22,10 +22,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TankDrive;
-import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
-import org.firstinspires.ftc.teamcode.TwoDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.Auto.RoadRunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Auto.RoadRunner.TankDrive;
+import org.firstinspires.ftc.teamcode.Auto.RoadRunner.ThreeDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.Auto.RoadRunner.TwoDeadWheelLocalizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,8 +72,8 @@ public final class TuningOpModes {
                     perpEncs.add(dl.perp);
                 } else if (md.localizer instanceof TwoDeadWheelLocalizer) {
                     TwoDeadWheelLocalizer dl = (TwoDeadWheelLocalizer) md.localizer;
-                    parEncs.add(dl.par);
-                    perpEncs.add(dl.perp);
+                    parEncs.add(dl.leftBack);
+                    perpEncs.add(dl.rightFront);
                 } else {
                     throw new RuntimeException("unknown localizer: " + md.localizer.getClass().getName());
                 }
@@ -121,8 +121,8 @@ public final class TuningOpModes {
                     perpEncs.add(dl.perp);
                 } else if (td.localizer instanceof TwoDeadWheelLocalizer) {
                     TwoDeadWheelLocalizer dl = (TwoDeadWheelLocalizer) td.localizer;
-                    parEncs.add(dl.par);
-                    perpEncs.add(dl.perp);
+                    parEncs.add(dl.leftBack);
+                    perpEncs.add(dl.rightFront);
                 } else {
                     throw new RuntimeException("unknown localizer: " + td.localizer.getClass().getName());
                 }
