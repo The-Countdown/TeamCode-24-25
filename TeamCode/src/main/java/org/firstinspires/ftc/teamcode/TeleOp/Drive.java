@@ -21,8 +21,11 @@ public class Drive extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        DcMotorEx arm = hardwareMap.get(DcMotorEx.class, "arm");
-        DcMotorEx depositArm = hardwareMap.get(DcMotorEx.class, "depositArm");
+        //All motors are goBlida Yellow Jacket 5203 with 435rpm
+        //All servos except for claw and clawAngle are goBilda Dual Mode
+
+        DcMotorEx intakeSlide = hardwareMap.get(DcMotorEx.class, "intakeSlide");
+        DcMotorEx depositSlide = hardwareMap.get(DcMotorEx.class, "depositSlide");
 
         DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
@@ -34,7 +37,7 @@ public class Drive extends LinearOpMode {
         CRServo intakeRoller = hardwareMap.get(CRServo.class,"intakeRoller");
 
         Servo depositServo = hardwareMap.get(Servo.class,"depositServo");
-        Servo clawRot = hardwareMap.get(Servo.class,"clawRot"); //TODO: Rename config as "clawRot" not "clawRotAngle"
+        Servo clawAngle = hardwareMap.get(Servo.class,"clawAngle");
         Servo claw = hardwareMap.get(Servo.class,"claw");
 
         Pose2d beginPose = new Pose2d(0, 0, 0); //TODO: Figure out what pos to start with (Changes depending on situation)
@@ -59,8 +62,8 @@ public class Drive extends LinearOpMode {
             leftBack.setPower(yStickL - xStickL + xStickR);
             rightFront.setPower(yStickL - xStickL - xStickR);
             rightBack.setPower(yStickL + xStickL - xStickR);
-            arm.setPower(gamepad2.right_trigger);
-            arm.setPower(-gamepad2.left_trigger);
+            intakeSlide.setPower(gamepad2.right_trigger);
+            intakeSlide.setPower(-gamepad2.left_trigger);
 
             intakeYaw.setPosition(gamepad2.left_stick_x); //TODO: Multiply to reduce how much the intake turns
 
@@ -86,7 +89,6 @@ public class Drive extends LinearOpMode {
             telemetry.addData("Rotation",rotAngle);
 
         }
-
     }
 }
 
