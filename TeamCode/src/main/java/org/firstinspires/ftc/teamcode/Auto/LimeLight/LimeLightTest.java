@@ -32,7 +32,6 @@ public class LimeLightTest extends LinearOpMode {
                 telemetry.addData("Target X", tx);
                 telemetry.addData("Target Y", ty);
                 telemetry.addData("Target Area", ta);
-                telemetry.addData("Hopefully 37", Drive.superCoolVariable);
 
             } else {
                 telemetry.addData("Limelight", "No Targets");
