@@ -22,7 +22,7 @@ public class Drive extends LinearOpMode {
 
     public static double intakeYawMulti = 0.001;
 
-    public static double intakeYawCenter = 0.5;; //TODO: Find
+    public static double intakeYawCenter = 0.5; //TODO: Find
 
     public static double intakeRollerSpeed = 1;
 
@@ -42,6 +42,8 @@ public class Drive extends LinearOpMode {
     public static double yStickLMulti = 0.6;
     public static double xStickLMulti = 0.75;
     public static double xStickRMulti = 0.85;
+
+    //TODO: Add telemetry into FTC dashboard
 
     @Override
     public void runOpMode() {
@@ -89,8 +91,8 @@ public class Drive extends LinearOpMode {
             rightFront.setPower(xStickR - xStickL - yStickL);
             rightBack.setPower(xStickR + xStickL - yStickL);
 
-            intakeSlide.setPower(gamepad2.right_trigger);
-            intakeSlide.setPower(-gamepad2.left_trigger);
+            intakeSlide.setPower(-gamepad2.right_trigger);
+            intakeSlide.setPower(gamepad2.left_trigger);
 
             depositSlide.setPower(gamepad2.left_stick_y);
 
@@ -124,16 +126,19 @@ public class Drive extends LinearOpMode {
             else if (gamepad2.triangle)
                 claw.setPosition(clawClosed);
 
-            if (gamepad2.dpad_up)
+            if (gamepad2.dpad_up) { //Sequence for grabbing samples from inside the submersible
                 intakeYaw.setPosition(intakeYawCenter);
                 intakePitch.setPosition(intakePosUp);
                 intakeSlide.setTargetPosition(-1700);
                 intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                intakeSlide.setVelocity(850);
-            if (intakeSlide.getCurrentPosition() >= intakeSlide.getTargetPosition() + 50) {
+                intakeSlide.setVelocity(-850);
+            }
+            if (intakeSlide.getCurrentPosition() <= intakeSlide.getTargetPosition() + 50) { //Puts the intake down if the slide is extended
                 intakePitch.setPosition(intakePosDown);
-
-            //TODO: Add limits so when the intake gets to a certain point it goes up and straightens
+            }
+            if (intakeSlide.getCurrentPosition() >= -700) { //Puts the intake back up if slide is retracted
+                intakePitch.setPosition(intakePosUp);
+            }
 
             //IN TESTING
             telemetry.addData("X Position",xPos);
@@ -144,7 +149,6 @@ public class Drive extends LinearOpMode {
             telemetry.addData("Claw Rotation",clawAngle.getPosition());
             telemetry.addData("Deposit Height",depositSlide.getCurrentPosition());
             telemetry.addData("Intake Height",intakeSlide.getCurrentPosition());
-            telemetry.addData("X",gamepad2.cross);
             telemetry.update();
         }
     }
