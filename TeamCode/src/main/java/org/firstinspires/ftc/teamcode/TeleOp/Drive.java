@@ -17,39 +17,39 @@ import org.firstinspires.ftc.teamcode.Auto.RoadRunner.MecanumDrive;
 @Config
 public class Drive extends LinearOpMode {
 
-    public static double intakePosUp = 0.42;
+    public static double intakePosUp = 0
     public static double intakePosDown = 0.52;
 
     public static double intakeYawMulti = 0.001;
 
-    public static double intakeYawCenter = 0.5; //TODO: Find
+    public static double intakeYawCenter = 0.5; // TODO: Find
 
     public static double intakeRollerSpeed = 1;
 
     public static double clawDownPos = 0.475;
-    public static double clawUpPos = 0.6; //TODO: Tune to field
+    public static double clawUpPos = 0.6; // TODO: Tune to field
 
-    public static double clawAngleVertical = 0.5; //TODO: Find
-    public static double clawAngleHorizontal = 0.5; //TODO: Find
+    public static double clawAngleVertical = 0.5; // TODO: Find
+    public static double clawAngleHorizontal = 0.5; // TODO: Find
 
-    public static double clawClosed = 0.5; //TODO: Find
-    public static double clawOpen = 0.5; //TODO: Find
+    public static double clawClosed = 0.5; // TODO: Find
+    public static double clawOpen = 0.5; // TODO: Find
 
     public static double intakePitchThreshold = 0.1;
     public static double intakeYawThreshold = 0.1;
 
-    //TODO: Tune with driver
+    // TODO: Tune with driver
     public static double yStickLMulti = 0.6;
     public static double xStickLMulti = 0.75;
     public static double xStickRMulti = 0.85;
 
-    //TODO: Add telemetry into FTC dashboard
+    // TODO: Add telemetry into FTC dashboard
 
     @Override
     public void runOpMode() {
 
-        //All motors are goBlida Yellow Jacket 5203 with 435rpm
-        //Roller is goBilda Speed, both claw are rev, and the rest are goBilda Torque servos
+        // All motors are goBlida Yellow Jacket 5203 with 435rpm
+        // Roller is goBilda Speed, both claw are rev, and the rest are goBilda Torque servos
 
         DcMotorEx intakeSlide = hardwareMap.get(DcMotorEx.class, "intakeSlide");
             intakeSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -61,53 +61,83 @@ public class Drive extends LinearOpMode {
         DcMotorEx leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         DcMotorEx rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
 
-        Servo intakeYaw = hardwareMap.get(Servo.class,"intakeYaw"); //TODO: Reprogram to default (Need different programmer?)
+        Servo intakeYaw = hardwareMap.get(Servo.class,"intakeYaw");
         Servo intakePitch = hardwareMap.get(Servo.class,"intakePitch");
         CRServo intakeRoller = hardwareMap.get(CRServo.class,"intakeRoller");
 
-        Servo depositServo = hardwareMap.get(Servo.class,"depositServo");
+        Servo clawArm = hardwareMap.get(Servo.class,"clawArm");
         Servo clawAngle = hardwareMap.get(Servo.class,"clawAngle");
         Servo claw = hardwareMap.get(Servo.class,"claw");
 
-        Pose2d beginPose = new Pose2d(0, 0, 0); //TODO: Figure out what pos to start with (Changes depending on situation)
-        MecanumDrive drive = new MecanumDrive(hardwareMap,beginPose);
+        Pose2d beginPose = new Pose2d(0, 0, 0); // TODO: Figure out what pos to start with (Changes depending on situation)
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
         waitForStart();
-
         while (opModeIsActive()) {
 
-            //TODO: Fix
-            //IN TESTING
+            // TODO: Fix
+            // IN TESTING
             double xPos = drive.pose.position.x;
             double yPos = drive.pose.position.y;
+            // Figure out where the robot is to change 
             double rotAngle = drive.pose.heading.real;
 
             double xStickR = xStickRMulti * gamepad1.right_stick_x;
             double xStickL = -xStickLMulti * gamepad1.left_stick_x;
-            double yStickL = -yStickLMulti * gamepad1.left_stick_y; //TODO: Make negative after testing
+            double yStickL = -yStickLMulti * gamepad1.left_stick_y; // TODO: Make negative after testing
 
-            leftFront.setPower(xStickR + xStickL + yStickL); //TODO: Fix low-power motor
+            // Mecanum Drive
+            leftFront.setPower(xStickR + xStickL + yStickL); // TODO: Fix low-power motor
             leftBack.setPower(xStickR - xStickL + yStickL);
             rightFront.setPower(xStickR - xStickL - yStickL);
             rightBack.setPower(xStickR + xStickL - yStickL);
+
+            // Field Oriented Control
+            // double angle = getIMUAngle()
+            // Fix???
+            if (rotAngle < 0) {
+                rotAngle += 360;
+            }
+
+
+            // Adjust motor powers based on robot orientation
+            double angleInRadians  = Math.toRadians(angle);
+            double newForward = forwardsVelocity * Math.cos(angleInRadians) +
+                sidewaysVelocity * Math.sin(angleInRadians);
+            sidewaysVelocity = -forwardsVelocity * Math.sin(angleInRadians) +
+                sidewaysVelocity * Math.cos(angleInRadians);
+            forwardsVelocity = newForward;
+
+            // TODO: Check if it works
+            MotorFL.setVelocity(forwardsVelocity + sidewaysVelocity);
+            MotorFR.setVelocity(forwardsVelocity - sidewaysVelocity);
+            MotorBL.setVelocity(forwardsVelocity - sidewaysVelocity);
+            MotorBR.setVelocity(forwardsVelocity + sidewaysVelocity);
 
             intakeSlide.setPower(-gamepad2.right_trigger);
             intakeSlide.setPower(gamepad2.left_trigger);
 
             depositSlide.setPower(gamepad2.left_stick_y);
+            // TODO: Deposit slide controls
+            //
+            // TODO: One button to drop in low or high net
+            // TODO: One button pickup off wall
+            // TODO: One button low chamber / high chamber
+            // Based on field position change what the buttons do for these operations
 
-            depositServo.setPosition(clawUpPos); //TODO: Bind to drop-off sequence
+            depositServo.setPosition(clawUpPos); // TODO: Bind to drop-off sequence
 
             if (Math.abs(gamepad2.right_stick_x) > intakeYawThreshold)
-                intakeYaw.setPosition(intakeYaw.getPosition() + (gamepad2.right_stick_x * intakeYawMulti)); //TODO: Multiply to reduce how much the intake turns
+                intakeYaw.setPosition(intakeYaw.getPosition() + (gamepad2.right_stick_x * intakeYawMulti)); // TODO: Multiply to reduce how much the intake turns
 
             if (Math.abs(gamepad2.right_stick_y) > intakePitchThreshold) {
                 if (gamepad2.right_stick_y < -intakePitchThreshold)
-                    intakePitch.setPosition(intakePosUp); //TODO: Flip after testing
+                    intakePitch.setPosition(intakePosUp); // TODO: Flip after testing
                 else if (gamepad2.right_stick_y > intakePitchThreshold)
-                    intakePitch.setPosition(intakePosDown); //TODO: Flip after testing
+                    intakePitch.setPosition(intakePosDown); // TODO: Flip after testing
             }
 
+            // Intake samples
             if (gamepad2.right_bumper)
                 intakeRoller.setPower(intakeRollerSpeed);
             else if (gamepad2.left_bumper) {
@@ -126,29 +156,31 @@ public class Drive extends LinearOpMode {
             else if (gamepad2.triangle)
                 claw.setPosition(clawClosed);
 
-            if (gamepad2.dpad_up) { //Sequence for grabbing samples from inside the submersible
+            if (gamepad2.dpad_up) { // Sequence for grabbing samples from inside the submersible
                 intakeYaw.setPosition(intakeYawCenter);
                 intakePitch.setPosition(intakePosUp);
                 intakeSlide.setTargetPosition(-1700);
                 intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 intakeSlide.setVelocity(-850);
             }
-            if (intakeSlide.getCurrentPosition() <= intakeSlide.getTargetPosition() + 50) { //Puts the intake down if the slide is extended
+            if (intakeSlide.getCurrentPosition() <= intakeSlide.getTargetPosition() + 50) { // Puts the intake down if the slide is extended
                 intakePitch.setPosition(intakePosDown);
+                intakeRoller.setPower(intakeRollerSpeed);
             }
-            if (intakeSlide.getCurrentPosition() >= -700) { //Puts the intake back up if slide is retracted
+            if (intakeSlide.getCurrentPosition() >= -700) { // Puts the intake back up if slide is retracted
                 intakePitch.setPosition(intakePosUp);
+                intakeRoller.setPower(0);
             }
 
-            //IN TESTING
-            telemetry.addData("X Position",xPos);
-            telemetry.addData("Y Position",yPos);
-            telemetry.addData("Rotation",rotAngle);
+            // FOR TESTING
+            telemetry.addData("X Position", xPos);
+            telemetry.addData("Y Position", yPos);
+            telemetry.addData("Rotation", rotAngle);
 
-            telemetry.addData("Claw",claw.getPosition());
-            telemetry.addData("Claw Rotation",clawAngle.getPosition());
-            telemetry.addData("Deposit Height",depositSlide.getCurrentPosition());
-            telemetry.addData("Intake Height",intakeSlide.getCurrentPosition());
+            telemetry.addData("Claw", claw.getPosition());
+            telemetry.addData("Claw Rotation", clawAngle.getPosition());
+            telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
+            telemetry.addData("Intake Height", intakeSlide.getCurrentPosition());
             telemetry.update();
         }
     }
