@@ -23,8 +23,8 @@ import org.firstinspires.ftc.teamcode.Auto.RoadRunner.MecanumDrive;
 @Config
 public class Drive extends LinearOpMode {
 
-    public static double intakePosUp = 0.39;
-    public static double intakePosDown = 0.47;
+    public static double intakePosUp = 0.4;
+    public static double intakePosDown = 0.485;
 
     public static double intakeYawMulti = 0.001;
 
@@ -36,14 +36,14 @@ public class Drive extends LinearOpMode {
 
     public static double intakeRollerSpeed = 1;
 
-    public static double clawDownPos = 0.475;
-    public static double clawUpPos = 0.6; // TODO: Tune to field
+    public static double clawDownPos = 0.653;
+    public static double clawUpPos = 0.79;
 
-    public static double clawAngleVertical = 0.5; // TODO: Find
+    public static double clawAngleVertical = 0.625;
     public static double clawAngleHorizontal = 0.5; // TODO: Find
 
-    public static double clawClosed = 0.5; // TODO: Find
-    public static double clawOpen = 0.5; // TODO: Find
+    public static double clawClosed = 0.5;
+    public static double clawOpen = 0;
 
     public static double intakePitchThreshold = 0.1;
     public static double intakeYawThreshold = 0.1;
@@ -202,7 +202,14 @@ public class Drive extends LinearOpMode {
                 intakeSlide.setVelocity(0);
             }
 
-                // FOR TESTING
+            if (gamepad2.dpad_left) {
+                clawArm.setPosition(clawUpPos);
+            }
+            if (gamepad2.dpad_right) {
+                clawArm.setPosition(clawDownPos);
+            }
+
+            // FOR TESTING
                 telemetry.addData("X Position", xPos);
                 telemetry.addData("Y Position", yPos);
                 telemetry.addData("Rotation", rotAngle);
