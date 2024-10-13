@@ -224,7 +224,9 @@ public class Drive extends LinearOpMode {
                 intakeSlide.setTargetPosition(intakeRetracted);
                 intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 intakeSlide.setPower(intakePower);
-                sleep(750);
+                while (!(intakeSlide.getCurrentPosition() > -100)) {
+                    sleep(10);
+                }
                 intakePitch.setPosition(intakePosDown);
                 intakeYaw.setPosition((intakeYawCenter));
                 intakeRoller.setPower(0);
