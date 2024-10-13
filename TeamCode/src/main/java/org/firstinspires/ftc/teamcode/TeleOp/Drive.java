@@ -56,6 +56,7 @@ public class Drive extends LinearOpMode {
     public static double xStickLMulti = 0.75;
     public static double xStickRMulti = 0.85;
 
+    boolean driveToggle = false;
     // TODO: Add telemetry into FTC dashboard
 
     @Override
@@ -122,15 +123,39 @@ public class Drive extends LinearOpMode {
             double imuPitch = robotOrientation.getPitch(AngleUnit.DEGREES);
             double imuRoll = robotOrientation.getRoll(AngleUnit.DEGREES);
 
+            // Convert yaw from degrees to radians
+            double yawRadians = Math.toRadians(imuYaw);
+
             double xStickR = xStickRMulti * gamepad1.right_stick_x;
             double xStickL = xStickLMulti * gamepad1.left_stick_x;
             double yStickL = -yStickLMulti * gamepad1.left_stick_y;
 
-            // Mecanum Drive
-            leftFront.setPower(yStickL + xStickL + xStickR);
-            leftBack.setPower(yStickL - xStickL + xStickR);
-            rightFront.setPower(yStickL - xStickL - xStickR);
-            rightBack.setPower(yStickL + xStickL - xStickR);
+            // Rotate the joystick inputs based on IMU yaw
+            double tempX = xStickL * Math.cos(yawRadians) - yStickL * Math.sin(yawRadians);
+            double tempY = xStickL * Math.sin(yawRadians) + yStickL * Math.cos(yawRadians);
+            double xStickRAdjusted = xStickR * Math.cos(yawRadians) - yStickL * Math.sin(yawRadians);
+
+            // Trigger driveToggle
+            if (gamepad1.dpad_left) {
+                driveToggle = true;
+            }
+            if (gamepad1.dpad_right) {
+                driveToggle = false;
+            }
+
+            if (driveToggle) {
+                // Mecanum Drive
+                leftFront.setPower(tempY + tempX + xStickRAdjusted);
+                leftBack.setPower(tempY - tempX + xStickRAdjusted);
+                rightFront.setPower(tempY - tempX - xStickRAdjusted);
+                rightBack.setPower(tempY + tempX - xStickRAdjusted);
+            } else {
+                // Normal Drive
+                leftFront.setPower(yStickL + xStickL + xStickR);
+                leftBack.setPower(yStickL - xStickL + xStickR);
+                rightFront.setPower(yStickL - xStickL - xStickR);
+                rightBack.setPower(yStickL + xStickL - xStickR);
+            }
 
             // Field Oriented Control
             // Fix???
