@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -23,16 +25,17 @@ import org.firstinspires.ftc.teamcode.Auto.RoadRunner.MecanumDrive;
 @Config
 public class Drive extends LinearOpMode {
 
-    public static double intakePosUp = 0.4;
-    public static double intakePosDown = 0.485;
+    public static double intakePosUp = 0.27;
+    public static double intakePosDown = 0.35;
 
     public static double intakeYawMulti = 0.001;
 
-    public static int intakeExtended = -1000;
+    public static int intakeExtended = -1500;
+    public static int intakeRetracted = -5;
 
-    public static int intakeVelocity = -300;
+    public static double intakePower = 1;
 
-    public static double intakeYawCenter = 0.551;
+    public static double intakeYawCenter = 0.576;
 
     public static double intakeRollerSpeed = 1;
 
@@ -42,7 +45,7 @@ public class Drive extends LinearOpMode {
     public static double clawAngleVertical = 0.625;
     public static double clawAngleHorizontal = 0.5; // TODO: Find
 
-    public static double clawClosed = 0.5;
+    public static double clawClosed = 0.4;
     public static double clawOpen = 0;
 
     public static double intakePitchThreshold = 0.1;
@@ -62,9 +65,15 @@ public class Drive extends LinearOpMode {
         // Roller is goBilda Speed, both claw are rev, and the rest are goBilda Torque servos
 
         DcMotorEx intakeSlide = hardwareMap.get(DcMotorEx.class, "intakeSlide");
+        intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         intakeSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         DcMotorEx depositSlide = hardwareMap.get(DcMotorEx.class, "depositSlide");
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftFront.setDirection(DcMotorEx.Direction.REVERSE);
@@ -104,7 +113,7 @@ public class Drive extends LinearOpMode {
             // IN TESTING
             double xPos = drive.pose.position.x;
             double yPos = drive.pose.position.y;
-            // Figure out where the robot is to change 
+            // Figure out where the robot is to change
             double rotAngle = drive.pose.heading.real;
 
             robotOrientation = imu.getRobotYawPitchRollAngles();
@@ -136,15 +145,16 @@ public class Drive extends LinearOpMode {
             double newForward = yStickL * Math.cos(angleInRadians) + xStickL * Math.sin(angleInRadians);
             double sidewaysVelocity = -yStickL * Math.sin(angleInRadians) + xStickL * Math.cos(angleInRadians);
 
-            if (gamepad2.right_trigger > 0) {
-                intakeSlide.setPower(-gamepad2.right_trigger);
-            } else if (gamepad2.left_trigger > 0) {
-                intakeSlide.setPower(gamepad2.left_trigger);
-            } else {
-                intakeSlide.setPower(0);
-            }
+//            if (gamepad2.right_trigger > 0) {
+//                intakeSlide.setPower(-gamepad2.right_trigger);
+//            } else if (gamepad2.left_trigger > 0) {
+//                intakeSlide.setPower(gamepad2.left_trigger);
+//            } else {
+//                intakeSlide.setPower(0);
+//            }
 
-            depositSlide.setPower(gamepad2.left_stick_y);
+//            depositSlide.setPower(gamepad2.left_stick_y);
+
             // TODO: Deposit slide controls
             //
             // TODO: One button to drop in low or high net
@@ -169,8 +179,7 @@ public class Drive extends LinearOpMode {
                 intakeRoller.setPower(intakeRollerSpeed);
             } else if (gamepad2.left_bumper) {
                 intakeRoller.setPower(-intakeRollerSpeed);
-            } else
-                intakeRoller.setPower(0);
+            }
 
             if (gamepad2.cross) {
                 intakeYaw.setPosition(intakeYawCenter);
@@ -186,7 +195,7 @@ public class Drive extends LinearOpMode {
 
             if (gamepad2.dpad_up) {
                 intakePitch.setPosition(intakePosUp);
-                intakeYaw.setPosition((intakeYawCenter)+0.003);
+                intakeYaw.setPosition((intakeYawCenter) + 0.003);
             }
             if (gamepad2.dpad_down) {
                 intakePitch.setPosition(intakePosDown);
@@ -194,12 +203,31 @@ public class Drive extends LinearOpMode {
             }
 
             if (gamepad2.share) {
-                intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                intakePitch.setPosition(intakePosUp);
+                intakeYaw.setPosition((intakeYawCenter) + 0.003);
+                sleep(750);
                 intakeSlide.setTargetPosition(intakeExtended);
-                intakeSlide.setVelocity(intakeVelocity);
+                intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                intakeSlide.setPower(intakePower);
+                while (!(intakeSlide.getCurrentPosition() < -1450)) {
+                    sleep(10);
+                }
+                intakePitch.setPosition(intakePosDown);
+                intakeYaw.setPosition((intakeYawCenter));
+                intakeRoller.setPower(intakeRollerSpeed);
             }
-            if (!intakeSlide.isBusy()) {
-                intakeSlide.setVelocity(0);
+
+            if (gamepad2.options) {
+                intakePitch.setPosition(intakePosUp);
+                intakeYaw.setPosition((intakeYawCenter) + 0.003);
+                sleep(750);
+                intakeSlide.setTargetPosition(intakeRetracted);
+                intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                intakeSlide.setPower(intakePower);
+                sleep(750);
+                intakePitch.setPosition(intakePosDown);
+                intakeYaw.setPosition((intakeYawCenter));
+                intakeRoller.setPower(0);
             }
 
             if (gamepad2.dpad_left) {
@@ -209,23 +237,37 @@ public class Drive extends LinearOpMode {
                 clawArm.setPosition(clawDownPos);
             }
 
-            // FOR TESTING
-                telemetry.addData("X Position", xPos);
-                telemetry.addData("Y Position", yPos);
-                telemetry.addData("Rotation", rotAngle);
-
-                telemetry.addData("Claw", claw.getPosition());
-                telemetry.addData("Claw Rotation", clawAngle.getPosition());
-                telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
-                telemetry.addData("Intake Height", intakeSlide.getCurrentPosition());
-                telemetry.addData("Intake Yaw", intakeYaw.getPosition());
-                telemetry.addData("Intake Velocity", intakeSlide.getVelocity());
-                telemetry.addData("New F:", newForward);
-                telemetry.addData("Side V: ", sidewaysVelocity);
-                telemetry.addData("IMU Pitch", imuPitch);
-                telemetry.addData("IMU Yaw", imuYaw);
-                telemetry.addData("IMU Roll", imuRoll);
-                telemetry.update();
+            if (gamepad2.ps) {
+                intakeSlide.setPower(0);
+                depositSlide.setPower(0);
             }
+
+            if (gamepad1.ps) {
+                intakeSlide.setPower(0);
+                depositSlide.setPower(0);
+            }
+
+            // FOR TESTING
+            telemetry.addData("X Position", xPos);
+            telemetry.addData("Y Position", yPos);
+            telemetry.addData("Rotation", rotAngle);
+            telemetry.addLine();
+            telemetry.addData("Claw", claw.getPosition());
+            telemetry.addData("Claw Rotation", clawAngle.getPosition());
+            telemetry.addLine();
+            telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
+            telemetry.addData("Intake Height", intakeSlide.getCurrentPosition());
+            telemetry.addLine();
+            telemetry.addData("Intake Yaw", intakeYaw.getPosition());
+            telemetry.addData("Intake Velocity", intakeSlide.getVelocity());
+            telemetry.addLine();
+            telemetry.addData("New F:", newForward);
+            telemetry.addData("Side V: ", sidewaysVelocity);
+            telemetry.addLine();
+            telemetry.addData("IMU Pitch", imuPitch);
+            telemetry.addData("IMU Yaw", imuYaw);
+            telemetry.addData("IMU Roll", imuRoll);
+            telemetry.update();
         }
     }
+}
