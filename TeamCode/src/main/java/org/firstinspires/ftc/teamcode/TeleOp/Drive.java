@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.Auto.RoadRunner.MecanumDrive;
 @Config
 public class Drive extends LinearOpMode {
 
-    public static double intakePosUp = 0.27;
+    public static double intakePosUp = 0.26;
     public static double intakePosDown = 0.35;
 
     public static double intakeYawMulti = 0.001;
@@ -33,30 +33,35 @@ public class Drive extends LinearOpMode {
     public static int intakeExtended = -1500;
     public static int intakeRetracted = -5;
 
+    public static int depositRetracted = 2;
+
     public static double intakePower = 1;
 
-    public static double intakeYawCenter = 0.576;
+    public static double intakeYawCenter = 0.574;
 
     public static double intakeRollerSpeed = 1;
 
-    public static double clawDownPos = 0.653;
-    public static double clawUpPos = 0.79;
+    public static double clawDownPos = 0.6;
+    public static double clawUpPos = 0.575;
+    public static double clawBackPos = 0.4;
+    public static double clawForwardPos = 0.52;
 
-    public static double clawAngleVertical = 0.625;
-    public static double clawAngleHorizontal = 0.5; // TODO: Find
+    public static double clawAngleVertical = 0.27;
+    public static double clawAngleHorizontal = 0.625;
 
-    public static double clawClosed = 0.4;
+    public static double clawClosed = 0.5;
     public static double clawOpen = 0;
 
     public static double intakePitchThreshold = 0.1;
     public static double intakeYawThreshold = 0.1;
 
     // TODO: Tune with driver
-    public static double yStickLMulti = 0.6;
-    public static double xStickLMulti = 0.75;
-    public static double xStickRMulti = 0.85;
+    public static double yStickLMulti = 1;
+    public static double xStickLMulti = 0.6;
+    public static double xStickRMulti = 1;
 
     boolean driveToggle = false;
+
     // TODO: Add telemetry into FTC dashboard
 
     @Override
@@ -191,14 +196,6 @@ public class Drive extends LinearOpMode {
                 intakeYaw.setPosition(intakeYaw.getPosition() - (gamepad2.right_stick_x * intakeYawMulti)); // TODO: Multiply to reduce how much the intake turns
             }
 
-//            if (Math.abs(gamepad2.right_stick_y) > intakePitchThreshold) {
-//                if (gamepad2.right_stick_y < -intakePitchThreshold) {
-//                    intakePitch.setPosition(intakePosUp); // TODO: Flip after testing
-//                } else if (gamepad2.right_stick_y > intakePitchThreshold) {
-//                    intakePitch.setPosition(intakePosDown); // TODO: Flip after testing
-//                }
-//            }
-
             // Intake samples
             if (gamepad2.right_bumper) {
                 intakeRoller.setPower(intakeRollerSpeed);
@@ -207,7 +204,7 @@ public class Drive extends LinearOpMode {
             }
 
             if (gamepad2.cross) {
-                intakeYaw.setPosition(intakeYawCenter);
+                clawAngle.setPosition(clawAngleVertical);
             } else if (gamepad2.circle) {
                 clawAngle.setPosition(clawAngleHorizontal);
             }
@@ -218,18 +215,18 @@ public class Drive extends LinearOpMode {
                 claw.setPosition(clawClosed);
             }
 
+//            if (gamepad2.dpad_up) {
+//                intakePitch.setPosition(intakePosUp);
+//                intakeYaw.setPosition((intakeYawCenter) + 0.004);
+//            }
+//            if (gamepad2.dpad_down) {
+//                intakePitch.setPosition(intakePosDown);
+//                intakeYaw.setPosition((intakeYawCenter));
+//            }
+
             if (gamepad2.dpad_up) {
                 intakePitch.setPosition(intakePosUp);
-                intakeYaw.setPosition((intakeYawCenter) + 0.003);
-            }
-            if (gamepad2.dpad_down) {
-                intakePitch.setPosition(intakePosDown);
-                intakeYaw.setPosition((intakeYawCenter));
-            }
-
-            if (gamepad2.share) {
-                intakePitch.setPosition(intakePosUp);
-                intakeYaw.setPosition((intakeYawCenter) + 0.003);
+                intakeYaw.setPosition((intakeYawCenter) + 0.004);
                 sleep(750);
                 intakeSlide.setTargetPosition(intakeExtended);
                 intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -242,7 +239,7 @@ public class Drive extends LinearOpMode {
                 intakeRoller.setPower(intakeRollerSpeed);
             }
 
-            if (gamepad2.options) {
+            if (gamepad2.dpad_down) {
                 intakePitch.setPosition(intakePosUp);
                 intakeYaw.setPosition((intakeYawCenter) + 0.003);
                 sleep(750);
