@@ -1,30 +1,27 @@
+//region Imports
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import android.util.Log;
-
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Auto.RoadRunner.MecanumDrive;
+//endregion
 
 @TeleOp(name = "Drive")
 @Config
 public class Drive extends LinearOpMode {
 
+    //region Variables
     public static double intakePosUp = 0.26;
     public static double intakePosDown = 0.35;
 
@@ -55,18 +52,19 @@ public class Drive extends LinearOpMode {
     public static double intakePitchThreshold = 0.1;
     public static double intakeYawThreshold = 0.1;
 
-    // TODO: Tune with driver
     public static double yStickLMulti = 1;
     public static double xStickLMulti = 0.6;
     public static double xStickRMulti = 1;
 
     boolean driveToggle = false;
+    //endregion
 
     // TODO: Add telemetry into FTC dashboard
 
     @Override
     public void runOpMode() {
 
+        //region Hardware Initialization & Encoding
         // All motors are goBlida Yellow Jacket 5203 with 435rpm
         // Roller is goBilda Speed, both claw are rev, and the rest are goBilda Torque servos
 
@@ -95,8 +93,11 @@ public class Drive extends LinearOpMode {
         Servo clawArm = hardwareMap.get(Servo.class, "clawArm");
         Servo clawAngle = hardwareMap.get(Servo.class, "clawAngle");
         Servo claw = hardwareMap.get(Servo.class, "claw");
+        //endregion
 
+        //region IMU
         IMU imu = hardwareMap.get(IMU.class, "imu");
+        YawPitchRollAngles robotOrientation;
 
         imu.initialize(
                 new IMU.Parameters(
@@ -106,54 +107,60 @@ public class Drive extends LinearOpMode {
                         )
                 )
         );
+        //endregion
 
-        YawPitchRollAngles robotOrientation;
-
+        //region Pose2d
         Pose2d beginPose = new Pose2d(0, 0, 0); // TODO: Figure out what pos to start with (Changes depending on situation)
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        //endregion
 
         waitForStart();
         while (opModeIsActive()) {
 
+            //region Pose2d Data
             // TODO: Fix
             // IN TESTING
             double xPos = drive.pose.position.x;
             double yPos = drive.pose.position.y;
             // Figure out where the robot is to change
             double rotAngle = drive.pose.heading.real;
+            //endregion
 
+            //region Driving
             robotOrientation = imu.getRobotYawPitchRollAngles();
-
             double imuYaw = robotOrientation.getYaw(AngleUnit.DEGREES);
-            double imuPitch = robotOrientation.getPitch(AngleUnit.DEGREES);
-            double imuRoll = robotOrientation.getRoll(AngleUnit.DEGREES);
 
-            // Convert yaw from degrees to radians
-            double yawRadians = Math.toRadians(imuYaw);
+            double xStickR = gamepad1.right_stick_x * xStickRMulti;
+            double xStickL = gamepad1.left_stick_x;
+            double yStickL = gamepad1.left_stick_y;
 
-            double xStickR = xStickRMulti * gamepad1.right_stick_x;
-            double xStickL = xStickLMulti * gamepad1.left_stick_x;
-            double yStickL = -yStickLMulti * gamepad1.left_stick_y;
+            double joystickAngle = Math.atan2(yStickL,xStickL);
+            double magnitudeL = Math.hypot(xStickL,yStickL);
+            double correctedAngle = Math.toDegrees(joystickAngle) - imuYaw;
 
-            // Rotate the joystick inputs based on IMU yaw
-            double tempX = xStickL * Math.cos(yawRadians) - yStickL * Math.sin(yawRadians);
-            double tempY = xStickL * Math.sin(yawRadians) + yStickL * Math.cos(yawRadians);
-            double xStickRAdjusted = xStickR * Math.cos(yawRadians) - yStickL * Math.sin(yawRadians);
+            if (correctedAngle < 0) {
+                correctedAngle += 360;
+            }
+
+            correctedAngle = Math.toRadians(correctedAngle);
+
+            double newYStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
+            double newXStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
 
             // Trigger driveToggle
-            if (gamepad1.dpad_left) {
+            if (gamepad1.dpad_right) {
                 driveToggle = true;
             }
-            if (gamepad1.dpad_right) {
+            if (gamepad1.dpad_left) {
                 driveToggle = false;
             }
 
             if (driveToggle) {
-                // Mecanum Drive
-                leftFront.setPower(tempY + tempX + xStickRAdjusted);
-                leftBack.setPower(tempY - tempX + xStickRAdjusted);
-                rightFront.setPower(tempY - tempX - xStickRAdjusted);
-                rightBack.setPower(tempY + tempX - xStickRAdjusted);
+                // Field Drive
+                leftFront.setPower(newYStickL + newXStickL + xStickR);
+                leftBack.setPower(newYStickL - newXStickL + xStickR);
+                rightFront.setPower(newYStickL - newXStickL - xStickR);
+                rightBack.setPower(newYStickL + newXStickL - xStickR);
             } else {
                 // Normal Drive
                 leftFront.setPower(yStickL + xStickL + xStickR);
@@ -161,37 +168,15 @@ public class Drive extends LinearOpMode {
                 rightFront.setPower(yStickL - xStickL - xStickR);
                 rightBack.setPower(yStickL + xStickL - xStickR);
             }
-
-            // Field Oriented Control
-            // Fix???
-            if (imuYaw < 0) {
-                imuYaw += 360;
-            }
-
-            // Adjust motor powers based on robot orientation
-            // Convert IMU yaw to radians
-            double angleInRadians = Math.toRadians(imuYaw);
-
-            double newForward = yStickL * Math.cos(angleInRadians) + xStickL * Math.sin(angleInRadians);
-            double sidewaysVelocity = -yStickL * Math.sin(angleInRadians) + xStickL * Math.cos(angleInRadians);
-
-//            if (gamepad2.right_trigger > 0) {
-//                intakeSlide.setPower(-gamepad2.right_trigger);
-//            } else if (gamepad2.left_trigger > 0) {
-//                intakeSlide.setPower(gamepad2.left_trigger);
-//            } else {
-//                intakeSlide.setPower(0);
-//            }
-
-//            depositSlide.setPower(gamepad2.left_stick_y);
+            //endregion
 
             // TODO: Deposit slide controls
-            //
             // TODO: One button to drop in low or high net
             // TODO: One button pickup off wall
             // TODO: One button low chamber / high chamber
             // Based on field position change what the buttons do for these operations
 
+            //region Intake Controls
             if (Math.abs(gamepad2.right_stick_x) > intakeYawThreshold) {
                 intakeYaw.setPosition(intakeYaw.getPosition() - (gamepad2.right_stick_x * intakeYawMulti)); // TODO: Multiply to reduce how much the intake turns
             }
@@ -201,6 +186,15 @@ public class Drive extends LinearOpMode {
                 intakeRoller.setPower(intakeRollerSpeed);
             } else if (gamepad2.left_bumper) {
                 intakeRoller.setPower(-intakeRollerSpeed);
+            }
+            //endregion
+
+            //region Claw Controls
+            if (gamepad2.dpad_left) {
+                clawArm.setPosition(clawUpPos);
+            }
+            if (gamepad2.dpad_right) {
+                clawArm.setPosition(clawDownPos);
             }
 
             if (gamepad2.cross) {
@@ -214,16 +208,9 @@ public class Drive extends LinearOpMode {
             } else if (gamepad2.triangle) {
                 claw.setPosition(clawClosed);
             }
+            //endregion
 
-//            if (gamepad2.dpad_up) {
-//                intakePitch.setPosition(intakePosUp);
-//                intakeYaw.setPosition((intakeYawCenter) + 0.004);
-//            }
-//            if (gamepad2.dpad_down) {
-//                intakePitch.setPosition(intakePosDown);
-//                intakeYaw.setPosition((intakeYawCenter));
-//            }
-
+            //region Macros
             if (gamepad2.dpad_up) {
                 intakePitch.setPosition(intakePosUp);
                 intakeYaw.setPosition((intakeYawCenter) + 0.004);
@@ -254,13 +241,6 @@ public class Drive extends LinearOpMode {
                 intakeRoller.setPower(0);
             }
 
-            if (gamepad2.dpad_left) {
-                clawArm.setPosition(clawUpPos);
-            }
-            if (gamepad2.dpad_right) {
-                clawArm.setPosition(clawDownPos);
-            }
-
             if (gamepad2.ps) {
                 intakeSlide.setPower(0);
                 depositSlide.setPower(0);
@@ -270,8 +250,9 @@ public class Drive extends LinearOpMode {
                 intakeSlide.setPower(0);
                 depositSlide.setPower(0);
             }
+            //endregion
 
-            // FOR TESTING
+            //region Telemetry
             telemetry.addData("X Position", xPos);
             telemetry.addData("Y Position", yPos);
             telemetry.addData("Rotation", rotAngle);
@@ -285,13 +266,12 @@ public class Drive extends LinearOpMode {
             telemetry.addData("Intake Yaw", intakeYaw.getPosition());
             telemetry.addData("Intake Velocity", intakeSlide.getVelocity());
             telemetry.addLine();
-            telemetry.addData("New F:", newForward);
-            telemetry.addData("Side V: ", sidewaysVelocity);
+            telemetry.addData("newYStickL", newYStickL);
+            telemetry.addData("newXStickL", newXStickL);
             telemetry.addLine();
-            telemetry.addData("IMU Pitch", imuPitch);
             telemetry.addData("IMU Yaw", imuYaw);
-            telemetry.addData("IMU Roll", imuRoll);
             telemetry.update();
+            //endregion
         }
     }
 }
