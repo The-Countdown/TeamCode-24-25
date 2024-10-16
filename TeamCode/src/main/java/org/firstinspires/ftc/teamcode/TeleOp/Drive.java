@@ -30,9 +30,12 @@ public class Drive extends LinearOpMode {
     public static int intakeExtended = -1500;
     public static int intakeRetracted = -5;
 
-    public static int depositRetracted = 2;
+    public static int depositRetracted = -2;
+    public static int depositHighbasket = -1675;
+    public static int depositLowbasket = -600;
 
     public static double intakePower = 1;
+    public static double depositPower = 1;
 
     public static double intakeYawCenter = 0.574;
 
@@ -144,8 +147,8 @@ public class Drive extends LinearOpMode {
 
             correctedAngle = Math.toRadians(correctedAngle);
 
-            double newYStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
-            double newXStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
+            double newXStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
+            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
 
             // Trigger driveToggle
             if (gamepad1.dpad_right) {
@@ -157,16 +160,16 @@ public class Drive extends LinearOpMode {
 
             if (driveToggle) {
                 // Field Drive
-                leftFront.setPower(newYStickL + newXStickL + xStickR);
-                leftBack.setPower(newYStickL - newXStickL + xStickR);
-                rightFront.setPower(newYStickL - newXStickL - xStickR);
-                rightBack.setPower(newYStickL + newXStickL - xStickR);
+                leftFront.setPower(-newYStickL + newXStickL + xStickR);
+                leftBack.setPower(-newYStickL - newXStickL + xStickR);
+                rightFront.setPower(-newYStickL - newXStickL - xStickR);
+                rightBack.setPower(-newYStickL + newXStickL - xStickR);
             } else {
                 // Normal Drive
-                leftFront.setPower(yStickL + xStickL + xStickR);
-                leftBack.setPower(yStickL - xStickL + xStickR);
-                rightFront.setPower(yStickL - xStickL - xStickR);
-                rightBack.setPower(yStickL + xStickL - xStickR);
+                leftFront.setPower(-yStickL + xStickL + xStickR);
+                leftBack.setPower(-yStickL - xStickL + xStickR);
+                rightFront.setPower(-yStickL - xStickL - xStickR);
+                rightBack.setPower(-yStickL + xStickL - xStickR);
             }
             //endregion
 
@@ -190,12 +193,6 @@ public class Drive extends LinearOpMode {
             //endregion
 
             //region Claw Controls
-            if (gamepad2.dpad_left) {
-                clawArm.setPosition(clawUpPos);
-            }
-            if (gamepad2.dpad_right) {
-                clawArm.setPosition(clawDownPos);
-            }
 
             if (gamepad2.cross) {
                 clawAngle.setPosition(clawAngleVertical);
@@ -231,7 +228,7 @@ public class Drive extends LinearOpMode {
                 intakeYaw.setPosition((intakeYawCenter) + 0.003);
                 sleep(750);
                 intakeSlide.setTargetPosition(intakeRetracted);
-                intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 intakeSlide.setPower(intakePower);
                 while (!(intakeSlide.getCurrentPosition() > -100)) {
                     sleep(10);
@@ -239,6 +236,28 @@ public class Drive extends LinearOpMode {
                 intakePitch.setPosition(intakePosDown);
                 intakeYaw.setPosition((intakeYawCenter));
                 intakeRoller.setPower(0);
+            }
+
+            if (gamepad2.dpad_left) {
+                claw.setPosition(clawOpen);
+                clawArm.setPosition(clawDownPos);
+                clawAngle.setPosition(clawAngleVertical);
+                sleep(500);
+                claw.setPosition(clawClosed);
+                sleep(500);
+                clawArm.setPosition(clawForwardPos);
+                depositSlide.setTargetPosition(depositHighbasket);
+                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                depositSlide.setPower(depositPower);
+                while (!(depositSlide.getCurrentPosition() < (depositHighbasket + 50))) {
+                    sleep(10);
+                }
+                clawArm.setPosition(clawBackPos);
+                sleep(2000);
+                claw.setPosition(clawOpen);
+            }
+            if (gamepad2.dpad_right) {
+                clawArm.setPosition(clawDownPos);
             }
 
             if (gamepad2.ps) {
