@@ -31,8 +31,8 @@ public class Drive extends LinearOpMode {
     public static int intakeRetracted = -5;
 
     public static int depositRetracted = -2;
-    public static int depositHighbasket = -1675;
-    public static int depositLowbasket = -600;
+    public static int depositHighBasket = -1675;
+    public static int depositLowBasket = -600;
 
     public static double intakePower = 1;
     public static double depositPower = 1;
@@ -246,10 +246,10 @@ public class Drive extends LinearOpMode {
                 claw.setPosition(clawClosed);
                 sleep(500);
                 clawArm.setPosition(clawForwardPos);
-                depositSlide.setTargetPosition(depositHighbasket);
+                depositSlide.setTargetPosition(depositHighBasket);
                 depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 depositSlide.setPower(depositPower);
-                while (!(depositSlide.getCurrentPosition() < (depositHighbasket + 50))) {
+                while (!(depositSlide.getCurrentPosition() < (depositHighBasket + 50))) {
                     sleep(10);
                 }
                 clawArm.setPosition(clawBackPos);
