@@ -28,9 +28,9 @@ public class Drive extends LinearOpMode {
     public static double intakeYawMulti = 0.001;
 
     public static int intakeExtended = -1500;
-    public static int intakeRetracted = -5;
+    public static int intakeRetracted = 0;
 
-    public static int depositRetracted = -2;
+    public static int depositRetracted = 0;
     public static int depositHighBasket = -1675;
     public static int depositLowBasket = -600;
 
@@ -46,8 +46,8 @@ public class Drive extends LinearOpMode {
     public static double clawBackPos = 0.45;
     public static double clawForwardPos = 0.5925;
 
-    public static double clawAngleVertical = 0.27;
-    public static double clawAngleHorizontal = 0.625;
+    public static double clawAngleHorizontal = 0.27;
+    public static double clawAngleVertical = 0.625;
 
     public static double clawClosed = 0.5;
     public static double clawOpen = 0;
@@ -152,7 +152,7 @@ public class Drive extends LinearOpMode {
             correctedAngle = Math.toRadians(correctedAngle);
 
             double newXStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
-            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
+            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * -yStickLMulti;
 
             // Trigger driveToggle
             if (gamepad1.right_bumper) {
@@ -164,10 +164,10 @@ public class Drive extends LinearOpMode {
 
             if (driveToggle) {
                 // Field Drive
-                leftFront.setPower(-newYStickL + newXStickL + xStickR);
-                leftBack.setPower(-newYStickL - newXStickL + xStickR);
-                rightFront.setPower(-newYStickL - newXStickL - xStickR);
-                rightBack.setPower(-newYStickL + newXStickL - xStickR);
+                leftFront.setPower(newYStickL + newXStickL + xStickR);
+                leftBack.setPower(newYStickL - newXStickL + xStickR);
+                rightFront.setPower(newYStickL - newXStickL - xStickR);
+                rightBack.setPower(newYStickL + newXStickL - xStickR);
             } else {
                 // Normal Drive
                 leftFront.setPower(-yStickL + xStickL + xStickR);
@@ -216,12 +216,14 @@ public class Drive extends LinearOpMode {
                 intakePitch.setPosition(intakePosUp);
                 intakeYaw.setPosition((intakeYawCenter) + 0.004);
                 sleep(750);
+                intakeSlide.setTargetPositionTolerance(5);
                 intakeSlide.setTargetPosition(intakeExtended);
                 intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 intakeSlide.setPower(intakePower);
-                while (!(intakeSlide.getCurrentPosition() < -1450)) {
+                while (!(intakeSlide.getCurrentPosition() < -1400)) {
                     sleep(10);
                 }
+                intakeSlide.setPower(intakePower / 5);
                 intakePitch.setPosition(intakePosDown);
                 intakeYaw.setPosition((intakeYawCenter));
                 intakeRoller.setPower(intakeRollerSpeed);
@@ -231,6 +233,7 @@ public class Drive extends LinearOpMode {
                 intakePitch.setPosition(intakePosUp);
                 intakeYaw.setPosition((intakeYawCenter) + 0.003);
                 sleep(750);
+                intakeSlide.setTargetPositionTolerance(5);
                 intakeSlide.setTargetPosition(intakeRetracted);
                 intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 intakeSlide.setPower(intakePower);
@@ -245,12 +248,13 @@ public class Drive extends LinearOpMode {
             if (gamepad2.dpad_left) {
                 claw.setPosition(clawOpen);
                 clawArm.setPosition(clawDownPos);
-                clawAngle.setPosition(clawAngleHorizontal);
+                clawAngle.setPosition(clawAngleVertical);
                 sleep(3000);
                 claw.setPosition(clawClosed);
                 sleep(1500);
                 clawArm.setPosition(clawForwardPos);
                 sleep(1000);
+                depositSlide.setTargetPositionTolerance(5);
                 depositSlide.setTargetPosition(depositHighBasket);
                 depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 depositSlide.setPower(depositPower);
@@ -267,7 +271,21 @@ public class Drive extends LinearOpMode {
 
             if (gamepad2.dpad_right) {
                 clawArm.setPosition(clawDownPos);
+                clawAngle.setPosition(clawAngleVertical);
+                claw.setPosition(clawOpen);
                 sleep(1000);
+                depositSlide.setTargetPositionTolerance(5);
+                depositSlide.setTargetPosition(depositRetracted);
+                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                depositSlide.setPower(depositPower);
+            }
+
+            if ((!intakeSlide.isBusy()) && (intakeSlide.getTargetPosition() > -5)) {
+                intakeSlide.setPower(0);
+            }
+
+            if ((!depositSlide.isBusy()) && (depositSlide.getTargetPosition() > -5)) {
+                depositSlide.setPower(0);
             }
 
             if (gamepad2.ps) {
