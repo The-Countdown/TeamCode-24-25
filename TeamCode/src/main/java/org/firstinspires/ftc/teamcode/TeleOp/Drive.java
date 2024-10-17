@@ -23,7 +23,8 @@ public class Drive extends LinearOpMode {
 
     //region Variables
     public static double intakePosUp = 0.26;
-    public static double intakePosDown = 0.35;
+    public static double intakePosDown = 0.33;
+    public static double intakePosDownBack = 0.35;
 
     public static double intakeYawMulti = 0.001;
 
@@ -37,7 +38,7 @@ public class Drive extends LinearOpMode {
     public static double intakePower = 1;
     public static double depositPower = 1;
 
-    public static double intakeYawCenter = 0.574;
+    public static double intakeYawCenter = 0.612;
 
     public static double intakeRollerSpeed = 1;
 
@@ -118,7 +119,18 @@ public class Drive extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         //endregion
 
+        //region Threads
+        Intake intakeRunnable = new Intake("inSequences", hardwareMap, gamepad2);
+        Thread intakeThread = new Thread(intakeRunnable);
+        intakeThread.start();
+
+        Deposit depositRunnable = new Deposit("depSequences", hardwareMap,gamepad1, gamepad2);
+        Thread depositThread = new Thread(depositRunnable);
+        depositThread.start();
+        //endregion
+
         waitForStart();
+
         while (opModeIsActive()) {
 
             //region Pose2d Data
@@ -194,16 +206,16 @@ public class Drive extends LinearOpMode {
             } else if (gamepad2.left_bumper) {
                 intakeRoller.setPower(-intakeRollerSpeed);
             }
+
+            if (gamepad2.cross) {
+                intakePitch.setPosition(intakePosUp);
+            } else if (gamepad2.circle) {
+                intakePitch.setPosition(intakePosDown);
+            }
+
             //endregion
 
             //region Claw Controls
-
-            if (gamepad2.cross) {
-                clawAngle.setPosition(clawAngleVertical);
-            } else if (gamepad2.circle) {
-                clawAngle.setPosition(clawAngleHorizontal);
-            }
-
             if (gamepad2.square) {
                 claw.setPosition(clawOpen);
             } else if (gamepad2.triangle) {
@@ -211,82 +223,8 @@ public class Drive extends LinearOpMode {
             }
             //endregion
 
-            //region Macros
-            if (gamepad2.dpad_up) {
-                intakePitch.setPosition(intakePosUp);
-                intakeYaw.setPosition((intakeYawCenter) + 0.004);
-                sleep(750);
-                intakeSlide.setTargetPositionTolerance(5);
-                intakeSlide.setTargetPosition(intakeExtended);
-                intakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                intakeSlide.setPower(intakePower);
-                while (!(intakeSlide.getCurrentPosition() < -1400)) {
-                    sleep(10);
-                }
-                intakeSlide.setPower(intakePower / 5);
-                intakePitch.setPosition(intakePosDown);
-                intakeYaw.setPosition((intakeYawCenter));
-                intakeRoller.setPower(intakeRollerSpeed);
-            }
+            //region E-Stop
 
-            if (gamepad2.dpad_down) {
-                intakePitch.setPosition(intakePosUp);
-                intakeYaw.setPosition((intakeYawCenter) + 0.003);
-                sleep(750);
-                intakeSlide.setTargetPositionTolerance(5);
-                intakeSlide.setTargetPosition(intakeRetracted);
-                intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                intakeSlide.setPower(intakePower);
-                while (!(intakeSlide.getCurrentPosition() > -100)) {
-                    sleep(10);
-                }
-                intakePitch.setPosition(intakePosDown);
-                intakeYaw.setPosition((intakeYawCenter));
-                intakeRoller.setPower(0);
-            }
-
-            if (gamepad2.dpad_left) {
-                claw.setPosition(clawOpen);
-                clawArm.setPosition(clawDownPos);
-                clawAngle.setPosition(clawAngleVertical);
-                sleep(3000);
-                claw.setPosition(clawClosed);
-                sleep(1500);
-                clawArm.setPosition(clawForwardPos);
-                sleep(1000);
-                depositSlide.setTargetPositionTolerance(5);
-                depositSlide.setTargetPosition(depositHighBasket);
-                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                depositSlide.setPower(depositPower);
-                while (!(depositSlide.getCurrentPosition() < (depositHighBasket + 50))) {
-                    sleep(10);
-                }
-                clawArm.setPosition(clawBackPos);
-                sleep(2000);
-                claw.setPosition(clawOpen);
-            }
-            if (gamepad1.b && (clawArm.getPosition() == clawBackPos)){
-                claw.setPosition(clawOpen);
-            }
-
-            if (gamepad2.dpad_right) {
-                clawArm.setPosition(clawDownPos);
-                clawAngle.setPosition(clawAngleVertical);
-                claw.setPosition(clawOpen);
-                sleep(1000);
-                depositSlide.setTargetPositionTolerance(5);
-                depositSlide.setTargetPosition(depositRetracted);
-                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                depositSlide.setPower(depositPower);
-            }
-
-            if ((!intakeSlide.isBusy()) && (intakeSlide.getTargetPosition() > -5)) {
-                intakeSlide.setPower(0);
-            }
-
-            if ((!depositSlide.isBusy()) && (depositSlide.getTargetPosition() > -5)) {
-                depositSlide.setPower(0);
-            }
 
             if (gamepad2.ps) {
                 intakeSlide.setPower(0);
@@ -319,6 +257,9 @@ public class Drive extends LinearOpMode {
             telemetry.addData("IMU Yaw", imuYaw);
             telemetry.addData("Corrected Angle", correctedAngle);
             telemetry.addData("Joystick Angle", joystickAngle);
+            telemetry.addLine();
+            telemetry.addData("Left Stick X", xStickL);
+            telemetry.addData("Left Stick Y", yStickL);
             telemetry.update();
             //endregion
         }
