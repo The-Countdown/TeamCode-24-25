@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-public class Deposit implements Runnable {
+class Deposit implements Runnable {
     private final String depSequences;
     private final HardwareMap hardwareMap;
     private final Gamepad gamepad1;
@@ -33,6 +33,10 @@ public class Deposit implements Runnable {
     public void run() {
 
         DcMotorEx depositSlide = hardwareMap.get(DcMotorEx.class, "depositSlide");
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         Servo clawArm = hardwareMap.get(Servo.class, "clawArm");
         Servo clawAngle = hardwareMap.get(Servo.class, "clawAngle");
         Servo claw = hardwareMap.get(Servo.class, "claw");
@@ -59,7 +63,7 @@ public class Deposit implements Runnable {
                     Thread.sleep(2000);
                     claw.setPosition(clawOpen);
                 }
-                if (gamepad1.b && (clawArm.getPosition() == clawBackPos)) {
+                if (gamepad1.circle && (clawArm.getPosition() == clawBackPos)) {
                     claw.setPosition(clawOpen);
                 }
 
@@ -77,8 +81,9 @@ public class Deposit implements Runnable {
                 if ((!depositSlide.isBusy()) && (depositSlide.getTargetPosition() > -5)) {
                     depositSlide.setPower(0);
                 }
+
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }

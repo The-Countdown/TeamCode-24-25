@@ -30,6 +30,10 @@ class Intake implements Runnable {
     public void run() {
 
         DcMotorEx intakeSlide = hardwareMap.get(DcMotorEx.class, "intakeSlide");
+            intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            intakeSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            intakeSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         Servo intakeYaw = hardwareMap.get(Servo.class, "intakeYaw");
         Servo intakePitch = hardwareMap.get(Servo.class, "intakePitch");
         CRServo intakeRoller = hardwareMap.get(CRServo.class, "intakeRoller");
@@ -69,7 +73,7 @@ class Intake implements Runnable {
                     intakeRoller.setPower(0);
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }

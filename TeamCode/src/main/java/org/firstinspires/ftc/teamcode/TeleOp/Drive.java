@@ -73,21 +73,21 @@ public class Drive extends LinearOpMode {
         // Roller is goBilda Speed, both claw are rev, and the rest are goBilda Torque servos
 
         DcMotorEx intakeSlide = hardwareMap.get(DcMotorEx.class, "intakeSlide");
-        intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        intakeSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        intakeSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            intakeSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            intakeSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         DcMotorEx depositSlide = hardwareMap.get(DcMotorEx.class, "depositSlide");
-        depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+            leftFront.setDirection(DcMotorEx.Direction.REVERSE);
         DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
         DcMotorEx leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
-        leftBack.setDirection(DcMotorEx.Direction.REVERSE);
+            leftBack.setDirection(DcMotorEx.Direction.REVERSE);
         DcMotorEx rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
 
         Servo intakeYaw = hardwareMap.get(Servo.class, "intakeYaw");
@@ -120,13 +120,13 @@ public class Drive extends LinearOpMode {
         //endregion
 
         //region Threads
+        Deposit depositRunnable = new Deposit("depSequences", hardwareMap, gamepad1, gamepad2);
+        Thread depositThread = new Thread(depositRunnable);
+        depositThread.start();
+
         Intake intakeRunnable = new Intake("inSequences", hardwareMap, gamepad2);
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
-
-        Deposit depositRunnable = new Deposit("depSequences", hardwareMap,gamepad1, gamepad2);
-        Thread depositThread = new Thread(depositRunnable);
-        depositThread.start();
         //endregion
 
         waitForStart();
