@@ -155,10 +155,10 @@ public class Drive extends LinearOpMode {
             double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
 
             // Trigger driveToggle
-            if (gamepad1.dpad_right) {
+            if (gamepad1.right_bumper) {
                 driveToggle = true;
             }
-            if (gamepad1.dpad_left) {
+            if (gamepad1.left_bumper) {
                 driveToggle = false;
             }
 
@@ -261,8 +261,13 @@ public class Drive extends LinearOpMode {
                 sleep(2000);
                 claw.setPosition(clawOpen);
             }
+            if (gamepad1.b && (clawArm.getPosition() == clawBackPos)){
+                claw.setPosition(clawOpen);
+            }
+
             if (gamepad2.dpad_right) {
                 clawArm.setPosition(clawDownPos);
+                sleep(1000);
             }
 
             if (gamepad2.ps) {
