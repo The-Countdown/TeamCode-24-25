@@ -41,10 +41,10 @@ public class Drive extends LinearOpMode {
 
     public static double intakeRollerSpeed = 1;
 
-    public static double clawDownPos = 0.6;
+    public static double clawDownPos = 0.6075;
     public static double clawUpPos = 0.575;
-    public static double clawBackPos = 0.4;
-    public static double clawForwardPos = 0.52;
+    public static double clawBackPos = 0.45;
+    public static double clawForwardPos = 0.5925;
 
     public static double clawAngleVertical = 0.27;
     public static double clawAngleHorizontal = 0.625;
@@ -110,6 +110,7 @@ public class Drive extends LinearOpMode {
                         )
                 )
         );
+        imu.resetYaw();
         //endregion
 
         //region Pose2d
@@ -131,14 +132,17 @@ public class Drive extends LinearOpMode {
 
             //region Driving
             robotOrientation = imu.getRobotYawPitchRollAngles();
-            double imuYaw = robotOrientation.getYaw(AngleUnit.DEGREES);
+            double imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
+            if (imuYaw < 0) {
+                imuYaw += 360;
+            }
 
             double xStickR = gamepad1.right_stick_x * xStickRMulti;
             double xStickL = gamepad1.left_stick_x;
             double yStickL = gamepad1.left_stick_y;
 
-            double joystickAngle = Math.atan2(yStickL,xStickL);
-            double magnitudeL = Math.hypot(xStickL,yStickL);
+            double joystickAngle = Math.atan2(yStickL, xStickL);
+            double magnitudeL = Math.hypot(xStickL, yStickL);
             double correctedAngle = Math.toDegrees(joystickAngle) - imuYaw;
 
             if (correctedAngle < 0) {
@@ -241,11 +245,12 @@ public class Drive extends LinearOpMode {
             if (gamepad2.dpad_left) {
                 claw.setPosition(clawOpen);
                 clawArm.setPosition(clawDownPos);
-                clawAngle.setPosition(clawAngleVertical);
-                sleep(500);
+                clawAngle.setPosition(clawAngleHorizontal);
+                sleep(3000);
                 claw.setPosition(clawClosed);
-                sleep(500);
+                sleep(1500);
                 clawArm.setPosition(clawForwardPos);
+                sleep(1000);
                 depositSlide.setTargetPosition(depositHighBasket);
                 depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 depositSlide.setPower(depositPower);
@@ -289,6 +294,8 @@ public class Drive extends LinearOpMode {
             telemetry.addData("newXStickL", newXStickL);
             telemetry.addLine();
             telemetry.addData("IMU Yaw", imuYaw);
+            telemetry.addData("Corrected Angle", correctedAngle);
+            telemetry.addData("Joystick Angle", joystickAngle);
             telemetry.update();
             //endregion
         }
