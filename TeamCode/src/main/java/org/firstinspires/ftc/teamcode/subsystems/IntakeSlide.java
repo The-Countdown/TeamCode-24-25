@@ -1,13 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.intakeExtended;
-import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.intakePosDown;
-import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.intakePosUp;
-import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.intakePower;
-import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.intakeRetracted;
-import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.intakeRollerSpeed;
-import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.intakeYawCenter;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -66,20 +58,6 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakePitch.setPosition(Intake.position.down);
             intakeYaw.setPosition((Intake.position.center));
             intakeRoller.setPower(Intake.power.spinIn);
-            intakePitch.setPosition(intakePosUp);
-            intakeYaw.setPosition((intakeYawCenter) + 0.004);
-            Thread.sleep(750);
-            intakeSlide.setTargetPositionTolerance(5);
-            intakeSlide.setTargetPosition(intakeExtended);
-            intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            intakeSlide.setPower(intakePower);
-            while (!(intakeSlide.getCurrentPosition() < -1400)) {
-                Thread.sleep(10);
-            }
-            intakeSlide.setPower(intakePower / 5);
-            intakePitch.setPosition(intakePosDown);
-            intakeYaw.setPosition((intakeYawCenter));
-            intakeRoller.setPower(intakeRollerSpeed);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -99,19 +77,6 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakePitch.setPosition(Intake.position.down);
             intakeYaw.setPosition((Intake.position.center));
             intakeRoller.setPower(Intake.power.stop);
-            intakePitch.setPosition(intakePosUp);
-            intakeYaw.setPosition((intakeYawCenter) + 0.003);
-            Thread.sleep(750);
-            intakeSlide.setTargetPositionTolerance(5);
-            intakeSlide.setTargetPosition(intakeRetracted);
-            intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            intakeSlide.setPower(intakePower);
-            while (!(intakeSlide.getCurrentPosition() > -100)) {
-                Thread.sleep(10);
-            }
-            intakePitch.setPosition(intakePosDown);
-            intakeYaw.setPosition((intakeYawCenter));
-            intakeRoller.setPower(0);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
