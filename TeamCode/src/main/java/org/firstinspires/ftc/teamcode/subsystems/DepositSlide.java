@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.clawAngleVertical;
+import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.clawDownPos;
+import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.clawOpen;
+import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.depositPower;
+import static org.firstinspires.ftc.teamcode.OldTeleOp.Teleoperation.depositRetracted;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -75,6 +81,14 @@ public class DepositSlide extends Robot.HardwareDevices {
             depositSlide.setTargetPosition(position.retracted);
             depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             depositSlide.setPower(power.move);
+            clawArm.setPosition(clawDownPos);
+            clawAngle.setPosition(clawAngleVertical);
+            claw.setPosition(clawOpen);
+            Thread.sleep(1000);
+            depositSlide.setTargetPositionTolerance(5);
+            depositSlide.setTargetPosition(depositRetracted);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            depositSlide.setPower(depositPower);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
