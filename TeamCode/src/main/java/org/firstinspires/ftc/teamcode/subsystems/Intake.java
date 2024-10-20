@@ -4,18 +4,18 @@ import com.acmerobotics.dashboard.config.Config;
 
 public class Intake extends Robot.HardwareDevices {
     @Config
-    public static final class position {
-        public static final double up = 0.5;
-        public static final double down = 0.1;
-        public static final double back = 0.1;
-        public static final double center = 0.6225;
-        public static final double upCenter = 0.6265;
+    public static class IntakePosition {
+        public static double up = 0.5;
+        public static double down = 0.6;
+        public static double back = 0.1;
+        public static double center = 0.6225;
+        public static double upCenter = 0.62;
     }
     @Config
-    public static final class power {
-        public static final double spinIn = 1;
-        public static final double spinOut = -1;
-        public static final double stop = 0;
+    public static class IntakePower {
+        public static double spinIn = 1;
+        public static double spinOut = -1;
+        public static double stop = 0;
     }
 
     public void yaw(double position) {
@@ -23,26 +23,26 @@ public class Intake extends Robot.HardwareDevices {
     }
 
     public void up() {
-        intakePitch.setPosition(position.up);
-        intakeYaw.setPosition(position.upCenter);
+        intakePitch.setPosition(IntakePosition.up);
+        intakeYaw.setPosition(IntakePosition.upCenter);
     }
     public void down() {
-        intakePitch.setPosition(position.down);
+        intakePitch.setPosition(IntakePosition.down);
     }
     public void back() {
-        intakePitch.setPosition(position.back);
+        intakePitch.setPosition(IntakePosition.back);
     }
     public void center() {
-        intakeYaw.setPosition(position.center);
+        intakeYaw.setPosition(IntakePosition.center);
     }
 
     public void spinIn() {
-        intakeRoller.setPower(power.spinIn);
+        intakeRoller.setPower(IntakePower.spinIn);
     }
     public void spinOut() {
-        intakeRoller.setPower(power.spinOut);
+        intakeRoller.setPower(IntakePower.spinOut);
     }
     public void spinStop() {
-        intakeRoller.setPower(power.stop);
+        intakeRoller.setPower(IntakePower.stop);
     }
 }

@@ -17,7 +17,6 @@ public class Robot {
     Telemetry telemetry;
     LinearOpMode opMode;
     public static class HardwareDevices {
-
         public static DcMotorEx leftFront;
         public static DcMotorEx rightFront;
         public static DcMotorEx leftBack;

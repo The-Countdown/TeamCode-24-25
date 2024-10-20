@@ -5,78 +5,78 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class IntakeSlide extends Robot.HardwareDevices {
     @Config
-    public static final class position {
-        public static final int retracted = 0;
-        public static final int extended = 1500;
-        public static final int minimum = 0;
-        public static final int maximum = 1500;
-        public static final int tolerance = 5;
+    public static class IntakeSlidePosition {
+        public static int retracted = 0;
+        public static int extended = 1500;
+        public static int minimum = 0;
+        public static int maximum = 1500;
+        public static int tolerance = 5;
     }
     @Config
-    public static final class power {
-        public static final double stop = 0;
-        public static final double move = 1;
+    public static class IntakeSlidePower {
+        public static double stop = 0;
+        public static double move = 1;
     }
     public void stop() {
-        intakeSlide.setPower(power.stop);
+        intakeSlide.setPower(IntakeSlidePower.stop);
     }
 
     public void move(int amount){
-        if (amount < position.minimum) {
-            amount = position.minimum;
-        } else if (amount > position.maximum) {
-            amount = position.maximum;
+        if (amount < IntakeSlidePosition.minimum) {
+            amount = IntakeSlidePosition.minimum;
+        } else if (amount > IntakeSlidePosition.maximum) {
+            amount = IntakeSlidePosition.maximum;
         }
 
         intakeSlide.setTargetPosition(amount);
         intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        intakeSlide.setPower(power.move);
+        intakeSlide.setPower(IntakeSlidePower.move);
     }
     public void retract() {
-        intakeSlide.setTargetPosition(position.retracted);
+        intakeSlide.setTargetPosition(IntakeSlidePosition.retracted);
         intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        intakeSlide.setPower(power.move);
+        intakeSlide.setPower(IntakeSlidePower.move);
     }
     public void extend() {
-        intakeSlide.setTargetPosition(position.extended);
+        intakeSlide.setTargetPosition(IntakeSlidePosition.extended);
         intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        intakeSlide.setPower(power.move);
+        intakeSlide.setPower(IntakeSlidePower.move);
     }
     public void pickUp() {
         try {
-            intakePitch.setPosition(Intake.position.up);
-            intakeYaw.setPosition((Intake.position.center) + 0.004);
+            intakePitch.setPosition(Intake.IntakePosition.up);
+            intakeYaw.setPosition((Intake.IntakePosition.upCenter));
             Thread.sleep(750);
-            intakeSlide.setTargetPositionTolerance(5);
-            intakeSlide.setTargetPosition(position.extended);
+            intakeSlide.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+            intakeSlide.setTargetPosition(IntakeSlidePosition.extended);
             intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            intakeSlide.setPower(power.move);
-            while (!(intakeSlide.getCurrentPosition() > (position.extended - 100))) {
+            intakeSlide.setPower(IntakeSlidePower.move);
+            while (!(intakeSlide.getCurrentPosition() > (IntakeSlidePosition.extended - 100))) {
                 Thread.sleep(10);
             }
-            intakeSlide.setPower(power.move / position.tolerance);
-            intakePitch.setPosition(Intake.position.down);
-            intakeYaw.setPosition((Intake.position.center));
-            intakeRoller.setPower(Intake.power.spinIn);
+            intakeSlide.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
+            intakePitch.setPosition(Intake.IntakePosition.down);
+            intakeYaw.setPosition((Intake.IntakePosition.center));
+            intakeRoller.setPower(Intake.IntakePower.spinIn);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
     public void condense() {
         try {
-            intakePitch.setPosition(Intake.position.up);
-            intakeYaw.setPosition((Intake.position.center) + 0.003);
+            intakePitch.setPosition(Intake.IntakePosition.up);
+            intakeYaw.setPosition((Intake.IntakePosition.center) + 0.003);
             Thread.sleep(750);
-            intakeSlide.setTargetPositionTolerance(position.tolerance);
-            intakeSlide.setTargetPosition(position.retracted);
+            intakeSlide.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+            intakeSlide.setTargetPosition(IntakeSlidePosition.retracted);
             intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            intakeSlide.setPower(power.move);
+            intakeSlide.setPower(IntakeSlidePower.move);
             while (!(intakeSlide.getCurrentPosition() > -100)) {
                 Thread.sleep(10);
             }
-            intakePitch.setPosition(Intake.position.down);
-            intakeYaw.setPosition((Intake.position.center));
-            intakeRoller.setPower(Intake.power.stop);
+            intakePitch.setPosition(Intake.IntakePosition.down);
+            intakeYaw.setPosition((Intake.IntakePosition.center));
+            intakeRoller.setPower(Intake.IntakePower.stop);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

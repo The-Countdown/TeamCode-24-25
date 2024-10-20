@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "TeleOp")
@@ -144,6 +145,10 @@ public class TeleOp extends LinearOpMode {
                 Robot.HardwareDevices.arm.setPower(gamepad1.left_trigger);
             } else
                 robot.arm.stop();
+
+            if (gamepad1.dpad_up) {
+                robot.intakeSlide.move(1000);
+            }
             //endregion
 
             //region Telemetry
