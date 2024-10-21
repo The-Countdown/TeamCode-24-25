@@ -8,18 +8,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+
+import java.util.Locale;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "TeleOp")
 @Config
-public class TeleOp extends LinearOpMode {
+public class ProtoTeleOp extends LinearOpMode {
     public static double intakeYawThreshold = 0.1;
     public static double intakeYawMulti = 0.001;
 
-    public static double yStickLMulti = 1;
+    public static double yStickLMulti = -1;
     public static double xStickLMulti = 0.6;
     public static double xStickRMulti = 1;
     public boolean driveToggle = false;
@@ -31,9 +30,6 @@ public class TeleOp extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
-        Pose2d beginPose = new Pose2d(0, 0, 0);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-
         waitForStart();
 
         DepositThread depositRunnable = new DepositThread("depSequences", hardwareMap, gamepad1, gamepad2, this, robot);
@@ -44,12 +40,13 @@ public class TeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
+        Pose2d robotPosition = robot.drive.getRobotPos();
+
         while (opModeIsActive()) {
 
-            // TODO: Fix
-            double xPos = drive.pose.position.x;
-            double yPos = drive.pose.position.y;
-            double rotAngle = drive.pose.heading.real;
+            double x = robotPosition.position.x;
+            double y = robotPosition.position.y;
+            double heading = robotPosition.heading.real;
 
             //region Driving
              robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
@@ -59,8 +56,8 @@ public class TeleOp extends LinearOpMode {
             }
 
             double xStickR = gamepad1.right_stick_x * xStickRMulti;
-            double xStickL = gamepad1.left_stick_x;
-            double yStickL = gamepad1.left_stick_y;
+            double xStickL = gamepad1.left_stick_x * xStickLMulti;
+            double yStickL = gamepad1.left_stick_y * yStickLMulti;
 
             double joystickAngle = Math.atan2(yStickL, xStickL);
             double magnitudeL = Math.hypot(xStickL, yStickL);
@@ -73,7 +70,7 @@ public class TeleOp extends LinearOpMode {
             correctedAngle = Math.toRadians(correctedAngle);
 
             double newXStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
-            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * -yStickLMulti;
+            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
 
             // Trigger driveToggle
             if (gamepad1.right_bumper) {
@@ -91,26 +88,26 @@ public class TeleOp extends LinearOpMode {
                 Robot.HardwareDevices.rightBack.setPower(newYStickL + newXStickL - xStickR);
             } else {
                 // Normal Drive
-                Robot.HardwareDevices.leftFront.setPower(-yStickL + xStickL + xStickR);
-                Robot.HardwareDevices.leftBack.setPower(-yStickL - xStickL + xStickR);
-                Robot.HardwareDevices.rightFront.setPower(-yStickL - xStickL - xStickR);
-                Robot.HardwareDevices.rightBack.setPower(-yStickL + xStickL - xStickR);
+                Robot.HardwareDevices.leftFront.setPower(yStickL + xStickL + xStickR);
+                Robot.HardwareDevices.leftBack.setPower(yStickL - xStickL + xStickR);
+                Robot.HardwareDevices.rightFront.setPower(yStickL - xStickL - xStickR);
+                Robot.HardwareDevices.rightBack.setPower(yStickL + xStickL - xStickR);
             }
             //endregion
 
-            //region Subsystems
+            //region Subsystem Controls
             if (Math.abs(gamepad2.right_stick_x) > intakeYawThreshold) {
                 robot.intake.yaw(Robot.HardwareDevices.intakeYaw.getPosition() - (gamepad2.right_stick_x * intakeYawMulti));
             }
 
-            if (gamepad2.options) {
+            while (gamepad2.options) {
                 if (gamepad2.cross) {
                     robot.claw.vertical();
                 } else if (gamepad2.circle) {
                     robot.claw.horizontal();
                 }
             }
-            if (gamepad2.share) {
+            while (gamepad2.share) {
                 if (gamepad2.cross) {
                     robot.claw.down();
                 } else if (gamepad2.circle) {
@@ -153,11 +150,9 @@ public class TeleOp extends LinearOpMode {
 
             //region Telemetry
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Touchpad X", gamepad2.touchpad_finger_1_x);
-            packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
-            packet.put("X Position", xPos);
-            packet.put("Y Position", yPos);
-            packet.put("Rotation", rotAngle);
+            packet.put("X Position", x);
+            packet.put("Y Position", y);
+            packet.put("Rotation", heading);
             packet.put("Claw Position", Robot.HardwareDevices.claw.getPosition());
             packet.put("Claw Rotation", Robot.HardwareDevices.clawAngle.getPosition());
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
@@ -171,11 +166,11 @@ public class TeleOp extends LinearOpMode {
             packet.put("Joystick Angle", joystickAngle);
             packet.put("Left Stick X", xStickL);
             packet.put("Left Stick Y", yStickL);
+            packet.put("Touchpad X", gamepad2.touchpad_finger_1_x);
+            packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("X Position", xPos);
-            telemetry.addData("Y Position", yPos);
-            telemetry.addData("Rotation", rotAngle);
+            telemetry.addData("Position", String.format(Locale.US,"X: %.2f, Y: %.2f, Heading: %.2f", x, y, heading));
             telemetry.addLine();
             telemetry.addData("Claw", Robot.HardwareDevices.claw.getPosition());
             telemetry.addData("Claw Rotation", Robot.HardwareDevices.clawAngle.getPosition());

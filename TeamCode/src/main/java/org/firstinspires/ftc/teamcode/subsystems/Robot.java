@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -34,6 +36,7 @@ public class Robot {
         public static Servo clawArm;
         public static Servo clawAngle;
 
+        public static Limelight3A limelight;
         public static IMU imu;
     }
 
@@ -78,6 +81,11 @@ public class Robot {
         HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Motor Modes and Settings
+        HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
         HardwareDevices.intakeSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         HardwareDevices.intakeSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -89,6 +97,8 @@ public class Robot {
         HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         HardwareDevices.imu = hardwareMap.get(IMU.class, "imu");
         HardwareDevices.imu.initialize(

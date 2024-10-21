@@ -65,7 +65,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
     public void condense() {
         try {
             intakePitch.setPosition(Intake.IntakePosition.up);
-            intakeYaw.setPosition((Intake.IntakePosition.center) + 0.003);
+            intakeYaw.setPosition(Intake.IntakePosition.upCenter);
             Thread.sleep(750);
             intakeSlide.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
             intakeSlide.setTargetPosition(IntakeSlidePosition.retracted);

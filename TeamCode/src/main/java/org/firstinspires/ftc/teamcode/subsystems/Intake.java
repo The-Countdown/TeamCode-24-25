@@ -8,7 +8,7 @@ public class Intake extends Robot.HardwareDevices {
         public static double up = 0.5;
         public static double down = 0.6;
         public static double back = 0.1;
-        public static double center = 0.6225;
+        public static double center = 0.615;
         public static double upCenter = 0.62;
     }
     @Config
