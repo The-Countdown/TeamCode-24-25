@@ -4,8 +4,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
@@ -13,7 +11,11 @@ public class Drive extends Robot.HardwareDevices {
 
     public MecanumDrive drive;
 
-    public Drive(HardwareMap hardwareMap, Pose2d initialPose) {
+    public Drive(HardwareMap hardwareMap) {
+        Pose2d initialPose = getRobotPosLimeLight();
+        if (initialPose == null) {
+            initialPose = new Pose2d(0, 0, 0);
+        }
         this.drive = new MecanumDrive(hardwareMap, initialPose);
     }
 
@@ -28,12 +30,13 @@ public class Drive extends Robot.HardwareDevices {
 
         Pose3D botPose_mt2 = result.getBotpose_MT2();
 
-        double xLimeLight = botPose_mt2.getPosition().x * 39.3700787402;
-        double yLimeLight = botPose_mt2.getPosition().y * 39.3700787402;
+        double xLimeLight = botPose_mt2.getPosition().x * 39.3700787402; // Convert from meters to inches
+        double yLimeLight = botPose_mt2.getPosition().y * 39.3700787402; // Convert from meters to inches
         double headingLimeLight = botPose_mt2.getOrientation().getYaw();
 
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);
     }
+
     public Pose2d getRobotPosRoadRunner() {
         return drive.pose;
     }
@@ -71,6 +74,7 @@ public class Drive extends Robot.HardwareDevices {
                                 .splineToSplineHeading(new Pose2d(57.88, 56.86, Math.toRadians(45)), Math.toRadians(45))
                                 .build());
             }
+
         }
         public void specimen() {
             Pose2d currentPose = getRobotPos();
@@ -129,6 +133,6 @@ public class Drive extends Robot.HardwareDevices {
             }
         }
     }
-
     public Blue blue = new Blue();
+    public Red red = new Red();
 }

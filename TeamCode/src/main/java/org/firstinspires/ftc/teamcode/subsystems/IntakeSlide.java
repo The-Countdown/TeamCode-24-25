@@ -11,6 +11,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
         public static int minimum = 0;
         public static int maximum = 1500;
         public static int tolerance = 5;
+        public static int stepRange = 100;
     }
     @Config
     public static class IntakeSlidePower {
@@ -51,7 +52,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakeSlide.setTargetPosition(IntakeSlidePosition.extended);
             intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             intakeSlide.setPower(IntakeSlidePower.move);
-            while (!(intakeSlide.getCurrentPosition() > (IntakeSlidePosition.extended - 100))) {
+            while (!(intakeSlide.getCurrentPosition() > (IntakeSlidePosition.extended - IntakeSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
             intakeSlide.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
