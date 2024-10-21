@@ -110,8 +110,11 @@ public class Robot {
                 )
         );
         HardwareDevices.imu.resetYaw();
+        Pose2d initialPose = new Pose2d(0, 0, 0);
+        this.drive = new Drive(hardwareMap, initialPose);
     }
-    public Drive drive = new Drive();
+
+    public Drive drive;
     public IntakeSlide intakeSlide = new IntakeSlide();
     public DepositSlide depositSlide = new DepositSlide();
     public Intake intake = new Intake();

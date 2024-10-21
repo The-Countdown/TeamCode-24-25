@@ -40,9 +40,11 @@ public class ProtoTeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-        Pose2d robotPosition = robot.drive.getRobotPos();
+        Pose2d beginPos = robot.drive.getRobotPos();
 
         while (opModeIsActive()) {
+
+            Pose2d robotPosition = robot.drive.getRobotPos();
 
             double x = robotPosition.position.x;
             double y = robotPosition.position.y;
