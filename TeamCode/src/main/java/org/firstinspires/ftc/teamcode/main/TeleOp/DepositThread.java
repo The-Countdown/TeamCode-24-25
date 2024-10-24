@@ -36,16 +36,8 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 if (gamepad2.dpad_left) {
                     robot.depositSlide.deposit();
                 }
-                if (gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.back)) {
-                    claw.setPosition(Claw.ClawPosition.open);
-                }
-
                 if (gamepad2.dpad_right) {
                     robot.depositSlide.condense();
-                }
-
-                if ((!depositSlide.isBusy()) && (depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
-                    depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
                 }
 
             } catch (Exception e) {

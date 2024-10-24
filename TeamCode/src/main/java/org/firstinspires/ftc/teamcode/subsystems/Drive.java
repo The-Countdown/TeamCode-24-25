@@ -60,7 +60,7 @@ public class Drive extends Robot.HardwareDevices {
         public void basket() {
             Pose2d currentPose = getRobotPos();
             {
-                Actions.run(
+                Actions.runBlocking(
                         drive.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(57.88, 56.86, Math.toRadians(45)), Math.toRadians(45))
                                 .build());
@@ -79,7 +79,7 @@ public class Drive extends Robot.HardwareDevices {
         public void specimen() {
             Pose2d currentPose = getRobotPos();
             {
-                Actions.run(
+                Actions.runBlocking(
                         drive.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(0, 35, Math.toRadians(90)), Math.toRadians(90))
                                 .build());
@@ -99,7 +99,7 @@ public class Drive extends Robot.HardwareDevices {
         public void basket() {
             Pose2d currentPose = getRobotPos();
             {
-                Actions.run(
+                Actions.runBlocking(
                         drive.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(45)) // Flipped signs
                                 .build());
@@ -117,7 +117,7 @@ public class Drive extends Robot.HardwareDevices {
         public void specimen() {
             Pose2d currentPose = getRobotPos();
             {
-                Actions.run(
+                Actions.runBlocking(
                         drive.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(0, -35, Math.toRadians(90)), Math.toRadians(90)) // Flipped sign on Y
                                 .build());

@@ -7,8 +7,8 @@ public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
         public static int retracted = 0;
-        public static int highBasket = 1675;
-        public static int lowBasket = 600;
+        public static int highBasket = 2375;
+        public static int lowBasket = 1000;
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 5;
@@ -45,14 +45,6 @@ public class DepositSlide extends Robot.HardwareDevices {
 
     public void deposit() {
         try {
-            claw.setPosition(Claw.ClawPosition.open);
-            clawArm.setPosition(Claw.ClawPosition.down);
-            clawAngle.setPosition(Claw.ClawPosition.vertical);
-            Thread.sleep(3000);
-            claw.setPosition(Claw.ClawPosition.closed);
-            Thread.sleep(1500);
-            clawArm.setPosition(Claw.ClawPosition.forwards);
-            Thread.sleep(1000);
             depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
             depositSlide.setTargetPosition(DepositSlidePosition.highBasket);
             depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -61,6 +53,7 @@ public class DepositSlide extends Robot.HardwareDevices {
                 Thread.sleep(10);
             }
             clawArm.setPosition(Claw.ClawPosition.back);
+            Thread.sleep(750);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

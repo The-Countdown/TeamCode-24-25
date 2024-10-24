@@ -72,12 +72,19 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakeSlide.setTargetPosition(IntakeSlidePosition.retracted);
             intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             intakeSlide.setPower(IntakeSlidePower.move);
-            while (!(intakeSlide.getCurrentPosition() > -100)) {
+            while (!(intakeSlide.getCurrentPosition() < 200)) {
                 Thread.sleep(10);
             }
-            intakePitch.setPosition(Intake.IntakePosition.down);
             intakeYaw.setPosition((Intake.IntakePosition.center));
+            intakePitch.setPosition(Intake.IntakePosition.down - 0.04);
+            Thread.sleep(500);
+            intakePitch.setPosition(Intake.IntakePosition.down);
             intakeRoller.setPower(Intake.IntakePower.stop);
+            Thread.sleep(500);
+            claw.setPosition(Claw.ClawPosition.closed);
+            Thread.sleep(750);
+            clawArm.setPosition(Claw.ClawPosition.forwards);
+            Thread.sleep(750);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
