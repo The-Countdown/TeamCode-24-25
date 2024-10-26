@@ -24,11 +24,13 @@ public class Robot {
         public static DcMotorEx leftBack;
         public static DcMotorEx rightBack;
 
-        public static DcMotorEx intakeSlide;
+        public static DcMotorEx intakeSlideL;
+        public static DcMotorEx intakeSlideR;
         public static DcMotorEx depositSlide;
         public static DcMotorEx arm;
 
-        public static Servo intakePitch;
+        public static Servo intakePitchL;
+        public static Servo intakePitchR;
         public static Servo intakeYaw;
         public static CRServo intakeRoller;
 
@@ -60,13 +62,15 @@ public class Robot {
         HardwareDevices.rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
 
         // Mechanism motors
-        HardwareDevices.intakeSlide = hardwareMap.get(DcMotorEx.class, "intakeSlide");
+        HardwareDevices.intakeSlideL = hardwareMap.get(DcMotorEx.class, "intakeSlideL");
+        HardwareDevices.intakeSlideR = hardwareMap.get(DcMotorEx.class, "intakeSlideR");
         HardwareDevices.depositSlide = hardwareMap.get(DcMotorEx.class, "depositSlide");
         HardwareDevices.arm = hardwareMap.get(DcMotorEx.class, "arm");
 
         // Servos
         HardwareDevices.intakeYaw = hardwareMap.get(Servo.class, "intakeYaw");
-        HardwareDevices.intakePitch = hardwareMap.get(Servo.class, "intakePitch");
+        HardwareDevices.intakePitchL = hardwareMap.get(Servo.class, "intakePitchL");
+        HardwareDevices.intakePitchR = hardwareMap.get(Servo.class, "intakePitchR");
         HardwareDevices.intakeRoller = hardwareMap.get(CRServo.class, "intakeRoller");
 
         HardwareDevices.clawArm = hardwareMap.get(Servo.class, "clawArm");
@@ -76,7 +80,7 @@ public class Robot {
         // Motor Directions
         HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
         HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
-        HardwareDevices.intakeSlide.setDirection(DcMotorEx.Direction.REVERSE);
+        HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
         HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
         HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
 
@@ -86,9 +90,13 @@ public class Robot {
         HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        HardwareDevices.intakeSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        HardwareDevices.intakeSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.intakeSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);

@@ -5,11 +5,12 @@ import com.acmerobotics.dashboard.config.Config;
 public class Intake extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
-        public static double up = 0.53;
-        public static double down = 0.62;
+        public static double upL = 0.53;
+        public static double upR = 0.62;
+        public static double downL = 0.62;
+        public static double downR = 0.53;
         public static double back = 0.1;
         public static double center = 0.615;
-        public static double upCenter = 0.6225;
     }
     @Config
     public static class IntakePower {
@@ -23,14 +24,16 @@ public class Intake extends Robot.HardwareDevices {
     }
 
     public void up() {
-        intakePitch.setPosition(IntakePosition.up);
-        intakeYaw.setPosition(IntakePosition.upCenter);
+        intakePitchL.setPosition(IntakePosition.upL);
+        intakePitchR.setPosition(IntakePosition.upR);
     }
     public void down() {
-        intakePitch.setPosition(IntakePosition.down);
+        intakePitchL.setPosition(IntakePosition.downL);
+        intakePitchR.setPosition(IntakePosition.downR);
     }
     public void back() {
-        intakePitch.setPosition(IntakePosition.back);
+        intakePitchL.setPosition(IntakePosition.back);
+        intakePitchR.setPosition(IntakePosition.back);
     }
     public void center() {
         intakeYaw.setPosition(IntakePosition.center);

@@ -19,7 +19,8 @@ public class IntakeSlide extends Robot.HardwareDevices {
         public static double move = 1;
     }
     public void stop() {
-        intakeSlide.setPower(IntakeSlidePower.stop);
+        intakeSlideL.setPower(IntakeSlidePower.stop);
+        intakeSlideR.setPower(IntakeSlidePower.stop);
     }
 
     public void move(int amount){
@@ -29,34 +30,48 @@ public class IntakeSlide extends Robot.HardwareDevices {
             amount = IntakeSlidePosition.maximum;
         }
 
-        intakeSlide.setTargetPosition(amount);
-        intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        intakeSlide.setPower(IntakeSlidePower.move);
+        intakeSlideL.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideR.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideL.setTargetPosition(amount);
+        intakeSlideR.setTargetPosition(amount);
+        intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideL.setPower(IntakeSlidePower.move);
+        intakeSlideR.setPower(IntakeSlidePower.move);
     }
     public void retract() {
-        intakeSlide.setTargetPosition(IntakeSlidePosition.retracted);
-        intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        intakeSlide.setPower(IntakeSlidePower.move);
+        intakeSlideL.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideR.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideL.setTargetPosition(IntakeSlidePosition.retracted);
+        intakeSlideR.setTargetPosition(IntakeSlidePosition.retracted);
+        intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideL.setPower(IntakeSlidePower.move);
+        intakeSlideR.setPower(IntakeSlidePower.move);
     }
     public void extend() {
-        intakeSlide.setTargetPosition(IntakeSlidePosition.extended);
-        intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        intakeSlide.setPower(IntakeSlidePower.move);
+        intakeSlideL.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideR.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideL.setTargetPosition(IntakeSlidePosition.extended);
+        intakeSlideR.setTargetPosition(IntakeSlidePosition.extended);
+        intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideL.setPower(IntakeSlidePower.move);
+        intakeSlideR.setPower(IntakeSlidePower.move);
     }
     public void pickUp() {
         try {
-            intakePitch.setPosition(Intake.IntakePosition.up);
-            intakeYaw.setPosition((Intake.IntakePosition.upCenter));
+            intakePitchL.setPosition(Intake.IntakePosition.upL);
+            intakePitchR.setPosition(Intake.IntakePosition.upR);
             Thread.sleep(750);
-            intakeSlide.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
-            intakeSlide.setTargetPosition(IntakeSlidePosition.extended);
-            intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            intakeSlide.setPower(IntakeSlidePower.move);
-            while (!(intakeSlide.getCurrentPosition() > (IntakeSlidePosition.extended - IntakeSlidePosition.stepRange))) {
+            extend();
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.extended - IntakeSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            intakeSlide.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
-            intakePitch.setPosition(Intake.IntakePosition.down);
+            intakeSlideL.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
+            intakeSlideR.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
+            intakePitchL.setPosition(Intake.IntakePosition.downL);
+            intakePitchR.setPosition(Intake.IntakePosition.downR);
             intakeYaw.setPosition((Intake.IntakePosition.center));
             intakeRoller.setPower(Intake.IntakePower.spinIn);
         } catch (InterruptedException e) {
@@ -65,20 +80,19 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
     public void condense() {
         try {
-            intakePitch.setPosition(Intake.IntakePosition.up);
-            intakeYaw.setPosition(Intake.IntakePosition.upCenter);
+            intakePitchL.setPosition(Intake.IntakePosition.upL);
+            intakePitchR.setPosition(Intake.IntakePosition.upR);
             Thread.sleep(750);
-            intakeSlide.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
-            intakeSlide.setTargetPosition(IntakeSlidePosition.retracted);
-            intakeSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            intakeSlide.setPower(IntakeSlidePower.move);
-            while (!(intakeSlide.getCurrentPosition() < 200)) {
+            retract();
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 200)) {
                 Thread.sleep(10);
             }
             intakeYaw.setPosition((Intake.IntakePosition.center));
-            intakePitch.setPosition(Intake.IntakePosition.down - 0.04);
+            intakePitchL.setPosition(Intake.IntakePosition.downL - 0.04);
+            intakePitchR.setPosition(Intake.IntakePosition.downR + 0.04);
             Thread.sleep(500);
-            intakePitch.setPosition(Intake.IntakePosition.down);
+            intakePitchL.setPosition(Intake.IntakePosition.downL);
+            intakePitchR.setPosition(Intake.IntakePosition.downR);
             intakeRoller.setPower(Intake.IntakePower.stop);
             Thread.sleep(500);
             claw.setPosition(Claw.ClawPosition.closed);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -66,26 +67,7 @@ public class Drive extends Robot.HardwareDevices {
                                 .build());
             }
         }
-        public void basketBlock() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(57.88, 56.86, Math.toRadians(45)), Math.toRadians(45))
-                                .build());
-            }
-
-        }
         public void specimen() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(0, 35, Math.toRadians(90)), Math.toRadians(90))
-                                .build());
-            }
-        }
-        public void specimenBlocking() {
             Pose2d currentPose = getRobotPos();
             {
                 Actions.runBlocking(
@@ -105,25 +87,8 @@ public class Drive extends Robot.HardwareDevices {
                                 .build());
             }
         }
-        public void basketBlock() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(45)) // Flipped signs
-                                .build());
-            }
-        }
+
         public void specimen() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(0, -35, Math.toRadians(90)), Math.toRadians(90)) // Flipped sign on Y
-                                .build());
-            }
-        }
-        public void specimenBlocking() {
             Pose2d currentPose = getRobotPos();
             {
                 Actions.runBlocking(

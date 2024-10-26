@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.cl
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawAngle;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawArm;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositSlide;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideL;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideR;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -185,9 +187,9 @@ public class ProtoTeleOp extends LinearOpMode {
             packet.put("Claw Position", claw.getPosition());
             packet.put("Claw Rotation", clawAngle.getPosition());
             packet.put("Deposit Height", depositSlide.getCurrentPosition());
-            packet.put("Intake Height", Robot.HardwareDevices.intakeSlide.getCurrentPosition());
+            packet.put("Intake Height", ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2));
             packet.put("Intake Yaw", Robot.HardwareDevices.intakeYaw.getPosition());
-            packet.put("Intake Velocity", Robot.HardwareDevices.intakeSlide.getVelocity());
+            packet.put("Intake Velocity", ((intakeSlideL.getVelocity() + intakeSlideR.getVelocity()) / 2));
             packet.put("New Y Stick L", newYStickL);
             packet.put("New X Stick L", newXStickL);
             packet.put("IMU Yaw", imuYaw);
@@ -205,10 +207,10 @@ public class ProtoTeleOp extends LinearOpMode {
             telemetry.addData("Claw Rotation", clawAngle.getPosition());
             telemetry.addLine();
             telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
-            telemetry.addData("Intake Height", Robot.HardwareDevices.intakeSlide.getCurrentPosition());
+            telemetry.addData("Intake Height", ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2));
             telemetry.addLine();
             telemetry.addData("Intake Yaw", Robot.HardwareDevices.intakeYaw.getPosition());
-            telemetry.addData("Intake Velocity", Robot.HardwareDevices.intakeSlide.getVelocity());
+            telemetry.addData("Intake Velocity", ((intakeSlideL.getVelocity() + intakeSlideR.getVelocity()) / 2));
             telemetry.addLine();
             telemetry.addData("newYStickL", newYStickL);
             telemetry.addData("newXStickL", newXStickL);

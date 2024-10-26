@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.main.Auto;
 
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @Autonomous
@@ -15,16 +19,11 @@ public class AutoTest extends LinearOpMode {
 
         waitForStart();
 
-        robot.drive.red.basket();
-        robot.depositSlide.deposit();
+        Actions.runBlocking(new ParallelAction(
+                new SequentialAction(
+                new ParallelAction(
 
-        while (opModeIsActive()) {
-            Pose2d currentPos = robot.drive.getRobotPos();
-            if (currentPos.position.y > 55 && currentPos.position.y < 57 && currentPos.position.x > 54 && currentPos.position.x < 56) {
-                break;
-            }
-        }
-
-        robot.claw.open();
+                )
+        )));
     }
 }

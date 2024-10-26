@@ -62,12 +62,16 @@ public class DepositSlide extends Robot.HardwareDevices {
         try {
             clawArm.setPosition(Claw.ClawPosition.down);
             clawAngle.setPosition(Claw.ClawPosition.vertical);
-            claw.setPosition(Claw.ClawPosition.open);
+            claw.setPosition(Claw.ClawPosition.closed);
             Thread.sleep(1000);
             depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
             depositSlide.setTargetPosition(DepositSlidePosition.retracted);
             depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             depositSlide.setPower(DepositSlidePower.move);
+            while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.retracted + DepositSlidePosition.stepRange))) {
+                Thread.sleep(10);
+            }
+            claw.setPosition(Claw.ClawPosition.open);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
