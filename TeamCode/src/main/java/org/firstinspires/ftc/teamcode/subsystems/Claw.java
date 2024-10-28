@@ -28,8 +28,11 @@ public class Claw extends Robot.HardwareDevices {
     public void horizontal() {
         clawAngle.setPosition(ClawPosition.horizontal);
     }
-    public void up() {
+    public void upWall() {
         clawArm.setPosition(ClawPosition.upWall);
+    }
+    public void upBar() {
+        clawArm.setPosition(ClawPosition.upBar);
     }
     public void down() {
         clawArm.setPosition(ClawPosition.down);
