@@ -28,11 +28,10 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
     public void run() {
         while (opMode.opModeIsActive()) {
             try {
-                if (gamepad2.dpad_up) {
+                if (gamepad2.triangle) {
                    robot.intakeSlide.pickUp();
                 }
-
-                if (gamepad2.dpad_down) {
+                if (gamepad2.cross) {
                     robot.intakeSlide.condense();
                 }
             } catch (Exception e) {
