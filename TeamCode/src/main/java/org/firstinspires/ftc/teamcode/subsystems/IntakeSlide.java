@@ -81,7 +81,6 @@ public class IntakeSlide extends Robot.HardwareDevices {
             }
             intakePitchL.setPosition(Intake.IntakePosition.downL);
             intakePitchR.setPosition(Intake.IntakePosition.downR);
-            intakeYaw.setPosition((Intake.IntakePosition.center));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -102,7 +101,6 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakeSlideR.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
             intakePitchL.setPosition(Intake.IntakePosition.downL);
             intakePitchR.setPosition(Intake.IntakePosition.downR);
-            intakeYaw.setPosition((Intake.IntakePosition.center));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -118,12 +116,11 @@ public class IntakeSlide extends Robot.HardwareDevices {
             while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 200)) {
                 Thread.sleep(10);
             }
-            intakeYaw.setPosition((Intake.IntakePosition.center));
             intakePitchL.setPosition(Intake.IntakePosition.downL - 0.04);
             intakePitchR.setPosition(Intake.IntakePosition.downR + 0.04);
             Thread.sleep(500);
-            intakePitchL.setPosition(Intake.IntakePosition.downL - 0.01);
-            intakePitchR.setPosition(Intake.IntakePosition.downR + 0.01);
+            intakePitchL.setPosition(Intake.IntakePosition.downL - 0.005);
+            intakePitchR.setPosition(Intake.IntakePosition.downR + 0.005);
             Thread.sleep(500);
             claw.setPosition(Claw.ClawPosition.closed);
             Thread.sleep(750);

@@ -34,6 +34,8 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                     robot.intakeSlide.pickUp();
                 } else if (gamepad2.share && gamepad2.circle) {
                     robot.intakeSlide.pickUpGround();
+                } else if (gamepad2.dpad_down) {
+                    robot.intakeSlide.condense();
                 }
             } catch (Exception e) {
                 telemetry.addData("Error", e.getMessage());

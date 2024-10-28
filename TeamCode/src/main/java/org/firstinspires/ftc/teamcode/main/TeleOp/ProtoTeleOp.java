@@ -36,10 +36,6 @@ public class ProtoTeleOp extends LinearOpMode {
     public static double xStickLMulti = 0.5;
     public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
-    public int yStickLInt  = (int) (gamepad2.left_stick_y * 10);
-    public int yStickRInt  = (int) (gamepad2.right_stick_y * 10);
-    public int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
-
     @Override
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap, telemetry, this);
@@ -60,7 +56,7 @@ public class ProtoTeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-        Pose2d beginPos = robot.drive.getRobotPos();
+//        Pose2d beginPos = robot.drive.getRobotPos();
 
         claw.setPosition(Claw.ClawPosition.open);
         clawArm.setPosition(Claw.ClawPosition.down);
@@ -68,13 +64,15 @@ public class ProtoTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            intakeYaw.setPosition(Intake.IntakePosition.center);
+            int yStickLInt  = (int) (gamepad2.left_stick_y * 30);
+            int yStickRInt  = (int) (gamepad2.right_stick_y * 30);
+            int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
 
-            Pose2d robotPosition = robot.drive.getRobotPos();
+//            Pose2d robotPosition = robot.drive.getRobotPos();
 
-            double x = robotPosition.position.x;
-            double y = robotPosition.position.y;
-            double heading = robotPosition.heading.real;
+//            double x = robotPosition.position.x;
+//            double y = robotPosition.position.y;
+//            double heading = robotPosition.heading.real;
 
             //region Driving
              robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
@@ -124,10 +122,6 @@ public class ProtoTeleOp extends LinearOpMode {
             //endregion
 
             //region Subsystem Controls
-            if (Math.abs(gamepad2.right_stick_x) > intakeYawThreshold) {
-                robot.intake.yaw(intakeYaw.getPosition() - (gamepad2.right_stick_x * intakeYawMulti));
-            }
-
             if (gamepad2.right_bumper) {
                 robot.intake.spinIn();
             } else if (gamepad2.left_bumper) {
@@ -136,12 +130,9 @@ public class ProtoTeleOp extends LinearOpMode {
                 robot.intake.spinStop();
             }
 
-            if (gamepad2.left_stick_y > 0) {
-                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() + yStickLInt);
-                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() + yStickLInt);
-            } else if (gamepad2.left_stick_y < 0) {
-                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() + yStickLInt);
-                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() + yStickLInt);
+            if (gamepad2.left_stick_y != 0) {
+                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
+                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
             } else {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
@@ -161,20 +152,14 @@ public class ProtoTeleOp extends LinearOpMode {
             } else
                 robot.arm.stop();
 
-            if ((gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.back)) || (gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.upBar + 0.05) && (runtime.milliseconds() < 750))) { //TODO: Find
+            if (gamepad1.circle) {
                 claw.setPosition(Claw.ClawPosition.open);
-            } else if (gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.upBar)) {
-                clawArm.setPosition(Claw.ClawPosition.upBar + 0.05); //TODO: Find
-                runtime.reset();
             }
-            if ((gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.back)) || (gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.upBar + 0.05) && (runtime.milliseconds() < 750))) { //TODO: Find
+            if (gamepad2.dpad_left) {
                 claw.setPosition(Claw.ClawPosition.open);
-            } else if (gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.upBar)) {
-                clawArm.setPosition(Claw.ClawPosition.upBar + 0.05); //TODO: Find
-                runtime.reset();
             }
 
-            if (gamepad2.dpad_right && (depositSlide.getTargetPosition() == DepositSlide.DepositSlidePosition.retracted)) {
+            if (gamepad2.dpad_right && (depositSlide.getCurrentPosition() < 100)) {
                 claw.setPosition(Claw.ClawPosition.open);
                 clawArm.setPosition(Claw.ClawPosition.down);
             }
@@ -193,9 +178,9 @@ public class ProtoTeleOp extends LinearOpMode {
 
             //region Telemetry
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("X Position", x);
-            packet.put("Y Position", y);
-            packet.put("Rotation", heading);
+//            packet.put("X Position", x);
+//            packet.put("Y Position", y);
+//            packet.put("Rotation", heading);
             packet.put("Claw Position", claw.getPosition());
             packet.put("Claw Rotation", clawAngle.getPosition());
             packet.put("Deposit Height", depositSlide.getCurrentPosition());
@@ -217,10 +202,12 @@ public class ProtoTeleOp extends LinearOpMode {
             packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Robot Position", String.format(Locale.US,"X: %.2f, Y: %.2f, Heading: %.2f", x, y, heading));
+//            telemetry.addData("Robot Position", String.format(Locale.US,"X: %.2f, Y: %.2f, Heading: %.2f", x, y, heading));
             telemetry.addLine();
             telemetry.addData("Claw", claw.getPosition());
             telemetry.addData("Claw Rotation", clawAngle.getPosition());
+            telemetry.addData("ClawArm", clawArm.getPosition());
+            telemetry.addData("BackPos", Claw.ClawPosition.back);
             telemetry.addLine();
             telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
             telemetry.addLine();
