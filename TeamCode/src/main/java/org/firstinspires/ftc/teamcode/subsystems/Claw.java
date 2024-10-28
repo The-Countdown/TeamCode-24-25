@@ -9,7 +9,8 @@ public class Claw extends Robot.HardwareDevices {
         public static double closed = 0.53;
         public static double vertical = 0.625;
         public static double horizontal = 0.27;
-        public static double up = 0.555;
+        public static double upWall = 0.555; //TODO: Check?
+        public static double upBar = 0.555; //TODO: Find
         public static double down = 0.6425;
         public static double back = 0.4;
         public static double forwards = 0.635;
@@ -28,7 +29,7 @@ public class Claw extends Robot.HardwareDevices {
         clawAngle.setPosition(ClawPosition.horizontal);
     }
     public void up() {
-        clawArm.setPosition(ClawPosition.up);
+        clawArm.setPosition(ClawPosition.upWall);
     }
     public void down() {
         clawArm.setPosition(ClawPosition.down);

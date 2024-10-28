@@ -8,6 +8,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
     public static class IntakeSlidePosition {
         public static int retracted = 0;
         public static int extended = 1000;
+        public static int ground = 300; //TODO: Find
         public static int minimum = 0;
         public static int maximum = 1500;
         public static int tolerance = 5;
@@ -58,6 +59,32 @@ public class IntakeSlide extends Robot.HardwareDevices {
         intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         intakeSlideL.setPower(IntakeSlidePower.move);
         intakeSlideR.setPower(IntakeSlidePower.move);
+    }
+    public void ground() {
+        intakeSlideL.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideR.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
+        intakeSlideL.setTargetPosition(IntakeSlidePosition.ground);
+        intakeSlideR.setTargetPosition(IntakeSlidePosition.ground);
+        intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideL.setPower(IntakeSlidePower.move);
+        intakeSlideR.setPower(IntakeSlidePower.move);
+    }
+    public void pickUpGround() {
+        try {
+            clawArm.setPosition(Claw.ClawPosition.down);
+            claw.setPosition(Claw.ClawPosition.open);
+            Thread.sleep(250);
+            ground();
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.ground - IntakeSlidePosition.stepRange))) {
+                Thread.sleep(10);
+            }
+            intakePitchL.setPosition(Intake.IntakePosition.downL);
+            intakePitchR.setPosition(Intake.IntakePosition.downR);
+            intakeYaw.setPosition((Intake.IntakePosition.center));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void pickUp() {
         try {

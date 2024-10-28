@@ -14,6 +14,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -37,6 +38,7 @@ public class ProtoTeleOp extends LinearOpMode {
     public boolean driveToggle = false;
     public int yStickLInt  = (int) (gamepad2.left_stick_y * 10);
     public int yStickRInt  = (int) (gamepad2.right_stick_y * 10);
+    public int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
 
     @Override
     public void runOpMode() {
@@ -47,6 +49,8 @@ public class ProtoTeleOp extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
         waitForStart();
+
+        ElapsedTime runtime = new ElapsedTime();
 
         DepositThread depositRunnable = new DepositThread("depSequences", hardwareMap, gamepad2, this, robot);
         Thread depositThread = new Thread(depositRunnable);
@@ -157,14 +161,20 @@ public class ProtoTeleOp extends LinearOpMode {
             } else
                 robot.arm.stop();
 
-            if (gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.back)) {
+            if ((gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.back)) || (gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.upBar + 0.05) && (runtime.milliseconds() < 750))) { //TODO: Find
                 claw.setPosition(Claw.ClawPosition.open);
+            } else if (gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.upBar)) {
+                clawArm.setPosition(Claw.ClawPosition.upBar + 0.05); //TODO: Find
+                runtime.reset();
             }
-            if (gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.back)) {
+            if ((gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.back)) || (gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.upBar + 0.05) && (runtime.milliseconds() < 750))) { //TODO: Find
                 claw.setPosition(Claw.ClawPosition.open);
+            } else if (gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.upBar)) {
+                clawArm.setPosition(Claw.ClawPosition.upBar + 0.05); //TODO: Find
+                runtime.reset();
             }
 
-            if (gamepad2.dpad_down && (depositSlide.getCurrentPosition() < 100)) {
+            if (gamepad2.dpad_right && (depositSlide.getTargetPosition() == DepositSlide.DepositSlidePosition.retracted)) {
                 claw.setPosition(Claw.ClawPosition.open);
                 clawArm.setPosition(Claw.ClawPosition.down);
             }
@@ -189,7 +199,7 @@ public class ProtoTeleOp extends LinearOpMode {
             packet.put("Claw Position", claw.getPosition());
             packet.put("Claw Rotation", clawAngle.getPosition());
             packet.put("Deposit Height", depositSlide.getCurrentPosition());
-            packet.put("Intake Height Avg", ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2));
+            packet.put("Intake Height Avg", (intakeAvg));
             packet.put("IntakeL Height", (intakeSlideL.getCurrentPosition()));
             packet.put("IntakeR Height", (intakeSlideR.getCurrentPosition()));
             packet.put("Intake Yaw", intakeYaw.getPosition());

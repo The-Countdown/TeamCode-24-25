@@ -28,11 +28,12 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
     public void run() {
         while (opMode.opModeIsActive()) {
             try {
-                if (gamepad2.triangle) {
-                   robot.intakeSlide.pickUp();
-                }
-                if (gamepad2.cross) {
+                if (gamepad2.cross && (((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > 75)) {
                     robot.intakeSlide.condense();
+                } else if (gamepad2.cross && (((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 75)) {
+                    robot.intakeSlide.pickUp();
+                } else if (gamepad2.share && gamepad2.circle) {
+                    robot.intakeSlide.pickUpGround();
                 }
             } catch (Exception e) {
                 telemetry.addData("Error", e.getMessage());

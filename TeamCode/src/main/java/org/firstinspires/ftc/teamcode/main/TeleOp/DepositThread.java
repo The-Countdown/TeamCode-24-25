@@ -28,11 +28,18 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
     public void run() {
         while (opMode.opModeIsActive()) {
             try {
-                if (gamepad2.square) {
-                    robot.depositSlide.deposit();
-                }
-                if (gamepad2.circle) {
+                if (gamepad2.circle && (depositSlide.getCurrentPosition() > 75)) {
                     robot.depositSlide.condense();
+                } else if (gamepad2.circle && (depositSlide.getCurrentPosition() < 75)) {
+                    robot.depositSlide.depositHigh();
+                } else if (gamepad2.share && gamepad2.circle) {
+                    robot.depositSlide.depositLow();
+                }
+
+                if (gamepad2.square) {
+                    robot.depositSlide.specimenWall();
+                } else if (gamepad2.triangle) {
+                    robot.depositSlide.specimenHang();
                 }
             } catch (Exception e) {
                 telemetry.addData("Error", e.getMessage());

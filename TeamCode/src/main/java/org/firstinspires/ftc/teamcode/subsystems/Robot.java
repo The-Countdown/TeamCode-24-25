@@ -46,6 +46,8 @@ public class Robot {
         this.telemetry = telemetry;
         this.opMode = opMode;
 
+        HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -104,8 +106,6 @@ public class Robot {
         HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         HardwareDevices.imu = hardwareMap.get(IMU.class, "imu");
         HardwareDevices.imu.initialize(
