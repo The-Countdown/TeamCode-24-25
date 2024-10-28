@@ -5,10 +5,10 @@ import com.acmerobotics.dashboard.config.Config;
 public class Intake extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
-        public static double upL = 0.53;
-        public static double upR = 0.62;
-        public static double downL = 0.62;
-        public static double downR = 0.53;
+        public static double upL = 0.52;
+        public static double upR = 0.63;
+        public static double downL = 0.61;
+        public static double downR = 0.54;
         public static double back = 0.1;
         public static double center = 0.615;
     }

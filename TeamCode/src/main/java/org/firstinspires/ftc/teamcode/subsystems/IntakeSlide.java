@@ -7,7 +7,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
     @Config
     public static class IntakeSlidePosition {
         public static int retracted = 0;
-        public static int extended = 1500;
+        public static int extended = 1000;
         public static int minimum = 0;
         public static int maximum = 1500;
         public static int tolerance = 5;
@@ -61,6 +61,9 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
     public void pickUp() {
         try {
+            clawArm.setPosition(Claw.ClawPosition.down);
+            claw.setPosition(Claw.ClawPosition.open);
+            Thread.sleep(250);
             intakePitchL.setPosition(Intake.IntakePosition.upL);
             intakePitchR.setPosition(Intake.IntakePosition.upR);
             Thread.sleep(750);
@@ -73,13 +76,14 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakePitchL.setPosition(Intake.IntakePosition.downL);
             intakePitchR.setPosition(Intake.IntakePosition.downR);
             intakeYaw.setPosition((Intake.IntakePosition.center));
-            intakeRoller.setPower(Intake.IntakePower.spinIn);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
     public void condense() {
         try {
+            clawArm.setPosition(Claw.ClawPosition.down);
+            claw.setPosition(Claw.ClawPosition.open);
             intakePitchL.setPosition(Intake.IntakePosition.upL);
             intakePitchR.setPosition(Intake.IntakePosition.upR);
             Thread.sleep(750);
@@ -91,9 +95,8 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakePitchL.setPosition(Intake.IntakePosition.downL - 0.04);
             intakePitchR.setPosition(Intake.IntakePosition.downR + 0.04);
             Thread.sleep(500);
-            intakePitchL.setPosition(Intake.IntakePosition.downL);
-            intakePitchR.setPosition(Intake.IntakePosition.downR);
-            intakeRoller.setPower(Intake.IntakePower.stop);
+            intakePitchL.setPosition(Intake.IntakePosition.downL - 0.01);
+            intakePitchR.setPosition(Intake.IntakePosition.downR + 0.01);
             Thread.sleep(500);
             claw.setPosition(Claw.ClawPosition.closed);
             Thread.sleep(750);

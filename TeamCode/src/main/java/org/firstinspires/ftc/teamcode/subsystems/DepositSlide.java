@@ -7,7 +7,7 @@ public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
         public static int retracted = 0;
-        public static int highBasket = 2375;
+        public static int highBasket = 2500;
         public static int lowBasket = 1000;
         public static int tolerance = 5;
         public static int stepRange = 50;
@@ -53,7 +53,7 @@ public class DepositSlide extends Robot.HardwareDevices {
                 Thread.sleep(10);
             }
             clawArm.setPosition(Claw.ClawPosition.back);
-            Thread.sleep(750);
+            clawAngle.setPosition(Claw.ClawPosition.horizontal);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
