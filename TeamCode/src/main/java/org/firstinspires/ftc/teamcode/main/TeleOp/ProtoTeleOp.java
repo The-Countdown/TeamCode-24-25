@@ -138,9 +138,10 @@ public class ProtoTeleOp extends LinearOpMode {
             } else if (gamepad2.left_stick_y < 0) {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() + yStickLInt);
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() + yStickLInt);
-            } else
+            } else {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
+            }
 
             if (gamepad2.right_stick_y > 0) {
                 depositSlide.setTargetPosition(depositSlide.getTargetPosition() + yStickRInt);
