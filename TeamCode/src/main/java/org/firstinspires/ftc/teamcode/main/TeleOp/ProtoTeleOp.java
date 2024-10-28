@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.arm;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.claw;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawAngle;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawArm;
@@ -34,7 +35,9 @@ public class ProtoTeleOp extends LinearOpMode {
     public static double xStickLMulti = 0.5;
     public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
-    public int yStickLInt  = (int) (gamepad1.left_stick_y * 10);
+    public int yStickLInt  = (int) (gamepad2.left_stick_y * 10);
+    public int yStickRInt  = (int) (gamepad2.right_stick_y * 10);
+
     @Override
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap, telemetry, this);
@@ -121,36 +124,6 @@ public class ProtoTeleOp extends LinearOpMode {
                 robot.intake.yaw(intakeYaw.getPosition() - (gamepad2.right_stick_x * intakeYawMulti));
             }
 
-            while (gamepad2.left_stick_button) {
-                if (gamepad2.cross) {
-                    robot.claw.vertical();
-                } else if (gamepad2.circle) {
-                    robot.claw.horizontal();
-                }
-            }
-            while (gamepad2.share) {
-                if (gamepad2.cross) {
-                    robot.claw.down();
-                } else if (gamepad2.circle) {
-                    robot.claw.forwards();
-                } else if (gamepad2.square) {
-                    robot.claw.up();
-                } else if (gamepad2.triangle) {
-                    robot.claw.back();
-                }
-            }
-
-            if (gamepad2.dpad_up) {
-                robot.intake.up();
-            } else if (gamepad2.dpad_right) {
-                robot.intake.down();
-            }
-            if (gamepad2.dpad_left) {
-                robot.claw.open();
-            } else if (gamepad2.dpad_up) {
-                robot.claw.close();
-            }
-
             if (gamepad2.right_bumper) {
                 robot.intake.spinIn();
             } else if (gamepad2.left_bumper) {
@@ -159,24 +132,40 @@ public class ProtoTeleOp extends LinearOpMode {
                 robot.intake.spinStop();
             }
 
-            if (gamepad1.left_stick_y > 0) {
+            if (gamepad2.left_stick_y > 0) {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() + yStickLInt);
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() + yStickLInt);
-            } else if (gamepad1.left_stick_y < 0) {
+            } else if (gamepad2.left_stick_y < 0) {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() + yStickLInt);
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() + yStickLInt);
             } else
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
 
-            if (gamepad1.dpad_up) {
-                robot.intakeSlide.move(1000);
-            } else if (gamepad1.dpad_down) {
-                robot.intakeSlide.retract();
+            if (gamepad2.right_stick_y > 0) {
+                depositSlide.setTargetPosition(depositSlide.getTargetPosition() + yStickRInt);
+            } else if (gamepad2.right_stick_y < 0) {
+                depositSlide.setTargetPosition(depositSlide.getTargetPosition() + yStickRInt);
+            } else
+                depositSlide.setTargetPosition(depositSlide.getTargetPosition());
+
+            if (gamepad2.right_trigger > 0) {
+                arm.setPower(-gamepad2.right_trigger);
+            } else if (gamepad2.left_trigger > 0) {
+                arm.setPower(gamepad2.left_trigger);
+            } else
+                robot.arm.stop();
+
+            if (gamepad1.circle && (clawArm.getPosition() == Claw.ClawPosition.back)) {
+                claw.setPosition(Claw.ClawPosition.open);
+            }
+            if (gamepad2.dpad_left && (clawArm.getPosition() == Claw.ClawPosition.back)) {
+                claw.setPosition(Claw.ClawPosition.open);
             }
 
-            if (gamepad1.circle) {
+            if (gamepad2.dpad_down && (depositSlide.getCurrentPosition() < 100)) {
                 claw.setPosition(Claw.ClawPosition.open);
+                clawArm.setPosition(Claw.ClawPosition.down);
             }
 
             if ((!depositSlide.isBusy()) && (depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
