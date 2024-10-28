@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.cl
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositSlide;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideL;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideR;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeYaw;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 import java.util.Locale;
@@ -31,6 +33,7 @@ public class ProtoTeleOp extends LinearOpMode {
     public static double xStickLMulti = 1.5;
     public static double xStickRMulti = 0.6;
     public boolean driveToggle = false;
+    public int yStickLInt  = (int) (gamepad1.left_stick_y * 10);
     @Override
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap, telemetry, this);
@@ -41,7 +44,7 @@ public class ProtoTeleOp extends LinearOpMode {
 
         waitForStart();
 
-        DepositThread depositRunnable = new DepositThread("depSequences", hardwareMap, gamepad1, gamepad2, this, robot);
+        DepositThread depositRunnable = new DepositThread("depSequences", hardwareMap, gamepad2, this, robot);
         Thread depositThread = new Thread(depositRunnable);
         depositThread.start();
 
@@ -49,7 +52,7 @@ public class ProtoTeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-        //Pose2d beginPos = robot.drive.getRobotPos();
+        Pose2d beginPos = robot.drive.getRobotPos();
 
         claw.setPosition(Claw.ClawPosition.open);
         clawArm.setPosition(Claw.ClawPosition.down);
@@ -57,11 +60,11 @@ public class ProtoTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            //Pose2d robotPosition = robot.drive.getRobotPos();
+            Pose2d robotPosition = robot.drive.getRobotPos();
 
-            //double x = robotPosition.position.x;
-            //double y = robotPosition.position.y;
-            //double heading = robotPosition.heading.real;
+            double x = robotPosition.position.x;
+            double y = robotPosition.position.y;
+            double heading = robotPosition.heading.real;
 
             //region Driving
              robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
@@ -112,7 +115,7 @@ public class ProtoTeleOp extends LinearOpMode {
 
             //region Subsystem Controls
             if (Math.abs(gamepad2.right_stick_x) > intakeYawThreshold) {
-                robot.intake.yaw(Robot.HardwareDevices.intakeYaw.getPosition() - (gamepad2.right_stick_x * intakeYawMulti));
+                robot.intake.yaw(intakeYaw.getPosition() - (gamepad2.right_stick_x * intakeYawMulti));
             }
 
             while (gamepad2.left_stick_button) {
@@ -134,14 +137,14 @@ public class ProtoTeleOp extends LinearOpMode {
                 }
             }
 
-            if (gamepad2.cross) {
+            if (gamepad2.dpad_up) {
                 robot.intake.up();
-            } else if (gamepad2.circle) {
+            } else if (gamepad2.dpad_right) {
                 robot.intake.down();
             }
-            if (gamepad2.square) {
+            if (gamepad2.dpad_left) {
                 robot.claw.open();
-            } else if (gamepad2.triangle) {
+            } else if (gamepad2.dpad_up) {
                 robot.claw.close();
             }
 
@@ -149,47 +152,57 @@ public class ProtoTeleOp extends LinearOpMode {
                 robot.intake.spinIn();
             } else if (gamepad2.left_bumper) {
                 robot.intake.spinOut();
+            } else {
+                robot.intake.spinStop();
             }
 
-            if (gamepad1.right_trigger > 0) {
-                Robot.HardwareDevices.arm.setPower(-gamepad1.right_trigger);
-            } else if (gamepad1.left_trigger > 0) {
-                Robot.HardwareDevices.arm.setPower(gamepad1.left_trigger);
+            if (gamepad1.left_stick_y > 0) {
+                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() + yStickLInt);
+                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() + yStickLInt);
+            } else if (gamepad1.left_stick_y < 0) {
+                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() + yStickLInt);
+                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() + yStickLInt);
             } else
-                robot.arm.stop();
+                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
+                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
 
             if (gamepad1.dpad_up) {
                 robot.intakeSlide.move(1000);
             } else if (gamepad1.dpad_down) {
                 robot.intakeSlide.retract();
             }
-            if (gamepad2.dpad_left) {
-                robot.depositSlide.deposit();
-            }
+
             if (gamepad1.circle) {
                 claw.setPosition(Claw.ClawPosition.open);
-            }
-
-            if (gamepad2.dpad_right) {
-                robot.depositSlide.condense();
             }
 
             if ((!depositSlide.isBusy()) && (depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
                 depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
             }
+            if ((!intakeSlideL.isBusy()) && (intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+                intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
+            }
+            if ((!intakeSlideR.isBusy()) && (intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+                intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
+            }
+
             //endregion
 
             //region Telemetry
             TelemetryPacket packet = new TelemetryPacket();
-            //packet.put("X Position", x);
-            //packet.put("Y Position", y);
-            //packet.put("Rotation", heading);
+            packet.put("X Position", x);
+            packet.put("Y Position", y);
+            packet.put("Rotation", heading);
             packet.put("Claw Position", claw.getPosition());
             packet.put("Claw Rotation", clawAngle.getPosition());
             packet.put("Deposit Height", depositSlide.getCurrentPosition());
-            packet.put("Intake Height", ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2));
-            packet.put("Intake Yaw", Robot.HardwareDevices.intakeYaw.getPosition());
+            packet.put("Intake Height Avg", ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2));
+            packet.put("IntakeL Height", (intakeSlideL.getCurrentPosition()));
+            packet.put("IntakeR Height", (intakeSlideR.getCurrentPosition()));
+            packet.put("Intake Yaw", intakeYaw.getPosition());
             packet.put("Intake Velocity", ((intakeSlideL.getVelocity() + intakeSlideR.getVelocity()) / 2));
+            packet.put("IntakeL Velocity", intakeSlideL.getVelocity());
+            packet.put("IntakeR Velocity", intakeSlideR.getVelocity());
             packet.put("New Y Stick L", newYStickL);
             packet.put("New X Stick L", newXStickL);
             packet.put("IMU Yaw", imuYaw);
@@ -201,16 +214,20 @@ public class ProtoTeleOp extends LinearOpMode {
             packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
             dashboard.sendTelemetryPacket(packet);
 
-            //telemetry.addData("Position", String.format(Locale.US,"X: %.2f, Y: %.2f, Heading: %.2f", x, y, heading));
+            telemetry.addData("Robot Position", String.format(Locale.US,"X: %.2f, Y: %.2f, Heading: %.2f", x, y, heading));
             telemetry.addLine();
             telemetry.addData("Claw", claw.getPosition());
             telemetry.addData("Claw Rotation", clawAngle.getPosition());
             telemetry.addLine();
             telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
-            telemetry.addData("Intake Height", ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2));
             telemetry.addLine();
-            telemetry.addData("Intake Yaw", Robot.HardwareDevices.intakeYaw.getPosition());
-            telemetry.addData("Intake Velocity", ((intakeSlideL.getVelocity() + intakeSlideR.getVelocity()) / 2));
+            telemetry.addData("IntakeL Height", (intakeSlideL.getCurrentPosition()));
+            telemetry.addData("IntakeR Height", (intakeSlideR.getCurrentPosition()));
+            telemetry.addLine();
+            telemetry.addData("IntakeL Velocity", intakeSlideL.getVelocity());
+            telemetry.addData("IntakeR Velocity", intakeSlideR.getVelocity());
+            telemetry.addLine();
+            telemetry.addData("Intake Yaw", intakeYaw.getPosition());
             telemetry.addLine();
             telemetry.addData("newYStickL", newYStickL);
             telemetry.addData("newXStickL", newXStickL);
@@ -226,3 +243,4 @@ public class ProtoTeleOp extends LinearOpMode {
         }
     }
 }
+
