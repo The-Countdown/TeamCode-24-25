@@ -30,9 +30,9 @@ public class ProtoTeleOp extends LinearOpMode {
     public static double intakeYawThreshold = 0.1;
     public static double intakeYawMulti = 0.001;
 
-    public static double yStickLMulti = -0.8;
-    public static double xStickLMulti = 1.5;
-    public static double xStickRMulti = 0.6;
+    public static double yStickLMulti = -0.4;
+    public static double xStickLMulti = 0.5;
+    public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
     public int yStickLInt  = (int) (gamepad1.left_stick_y * 10);
     @Override
