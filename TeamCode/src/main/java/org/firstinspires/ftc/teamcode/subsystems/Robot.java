@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -37,6 +38,7 @@ public class Robot {
         public static Servo clawArm;
         public static Servo clawAngle;
 
+        public static TouchSensor depositMagnet;
         public static Limelight3A limelight;
         public static IMU imu;
     }
@@ -45,6 +47,8 @@ public class Robot {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         this.opMode = opMode;
+
+        HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
 
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
