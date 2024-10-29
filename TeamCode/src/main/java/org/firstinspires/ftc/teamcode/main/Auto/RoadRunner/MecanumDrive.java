@@ -44,6 +44,7 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.messages.DriveCommand
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.messages.MecanumLocalizerInputsMessage;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 import java.lang.Math;
 import java.util.Arrays;
@@ -225,6 +226,9 @@ public final class MecanumDrive {
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+        leftBack.setDirection(DcMotorEx.Direction.REVERSE);
 
         // TODO: reverse motor directions if needed
 
