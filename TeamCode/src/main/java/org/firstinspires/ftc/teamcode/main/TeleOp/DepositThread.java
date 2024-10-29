@@ -6,19 +6,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 
 public class DepositThread extends Robot.HardwareDevices implements Runnable {
     private final String depSequences;
     private final HardwareMap hardwareMap;
+    private final Gamepad gamepad1;
     private final Gamepad gamepad2;
     private final LinearOpMode opMode;
     private final Robot robot;
 
-    public DepositThread(String depSequences, HardwareMap hardwareMap, Gamepad gamepad2, LinearOpMode opMode, Robot robot) {
+    public DepositThread(String depSequences, HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, LinearOpMode opMode, Robot robot) {
         this.depSequences = depSequences;
         this.hardwareMap = hardwareMap;
+        this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         this.opMode = opMode;
         this.robot = robot;
@@ -37,9 +40,21 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 }
 
                 if (gamepad2.square) {
-                    robot.depositSlide.specimenWall();
+                    robot.depositSlide.specimenGrab();
                 } else if (gamepad2.triangle) {
                     robot.depositSlide.specimenHang();
+                }
+
+                if (gamepad1.circle) {
+                    claw.setPosition(Claw.ClawPosition.open);
+                } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upLift) {
+                    claw.setPosition(Claw.ClawPosition.closed);
+                    Thread.sleep(250);
+                    clawArm.setPosition(Claw.ClawPosition.upClip);
+                } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upClip) {
+                    claw.setPosition(Claw.ClawPosition.closed);
+                    Thread.sleep(250);
+                    clawArm.setPosition(Claw.ClawPosition.upLift);
                 }
             } catch (Exception e) {
                 telemetry.addData("Error", e.getMessage());

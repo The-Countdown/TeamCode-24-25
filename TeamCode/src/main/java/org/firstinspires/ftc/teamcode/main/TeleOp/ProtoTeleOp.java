@@ -49,7 +49,7 @@ public class ProtoTeleOp extends LinearOpMode {
 
         ElapsedTime runtime = new ElapsedTime();
 
-        DepositThread depositRunnable = new DepositThread("depSequences", hardwareMap, gamepad2, this, robot);
+        DepositThread depositRunnable = new DepositThread("depSequences", hardwareMap, gamepad1, gamepad2, this, robot);
         Thread depositThread = new Thread(depositRunnable);
         depositThread.start();
 
@@ -155,7 +155,14 @@ public class ProtoTeleOp extends LinearOpMode {
 
             if (gamepad1.circle) {
                 claw.setPosition(Claw.ClawPosition.open);
+            } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upLift) {
+                claw.setPosition(Claw.ClawPosition.closed);
+                clawArm.setPosition(Claw.ClawPosition.upClip);
+            } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upClip) {
+                claw.setPosition(Claw.ClawPosition.closed);
+                clawArm.setPosition(Claw.ClawPosition.upLift);
             }
+
             if (gamepad2.dpad_left) {
                 claw.setPosition(Claw.ClawPosition.open);
             }

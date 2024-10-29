@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class DepositSlide extends Robot.HardwareDevices {
@@ -10,8 +9,8 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int retracted = 0;
         public static int highBasket = 2500;
         public static int lowBasket = 1500; //TODO: Check?
-        public static int specimenWall = 1000; //TODO: Find
-        public static int specimenBar = 1000; //TODO: Find
+        public static int specimenWall = 1000;
+        public static int specimenBar = 2000; //TODO: Find
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 5;
@@ -68,8 +67,10 @@ public class DepositSlide extends Robot.HardwareDevices {
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            clawArm.setPosition(Claw.ClawPosition.upWall);
+            clawArm.setPosition(Claw.ClawPosition.upClip);
             clawAngle.setPosition(Claw.ClawPosition.horizontal);
+            Thread.sleep(750);
+            retract();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -77,11 +78,11 @@ public class DepositSlide extends Robot.HardwareDevices {
     public void specimenHang() {
         try {
             specimenBar();
+            clawArm.setPosition(Claw.ClawPosition.upLift);
+            clawAngle.setPosition(Claw.ClawPosition.horizontal);
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenBar - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            clawArm.setPosition(Claw.ClawPosition.upBar);
-            clawAngle.setPosition(Claw.ClawPosition.horizontal);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
