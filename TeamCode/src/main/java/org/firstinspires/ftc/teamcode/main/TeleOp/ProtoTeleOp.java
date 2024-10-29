@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.ar
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.claw;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawAngle;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawArm;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositMagnet;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositSlide;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideL;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideR;
@@ -228,6 +229,8 @@ public class ProtoTeleOp extends LinearOpMode {
             telemetry.addLine();
             telemetry.addData("Left Stick X", xStickL);
             telemetry.addData("Left Stick Y", yStickL);
+            telemetry.addLine();
+            telemetry.addData("Deposit Magnet", depositMagnet.getValue());
             telemetry.update();
             //endregion
         }
