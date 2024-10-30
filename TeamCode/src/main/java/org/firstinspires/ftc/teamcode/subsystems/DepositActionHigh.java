@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.claw;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawAngle;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawArm;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositSlide;
@@ -17,6 +18,7 @@ public class DepositActionHigh implements Action {
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         if (!initialized) {
             try {
+                claw.setPosition(Claw.ClawPosition.closed);
                 depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
                 depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.highBasket);
                 depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
