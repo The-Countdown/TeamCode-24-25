@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.specimen.SpecimenAutoBa
 import org.firstinspires.ftc.teamcode.subsystems.actions.specimen.SpecimenDown;
 
 @Autonomous
-public class AutoTest extends LinearOpMode {
+public class AutoRed extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -40,7 +40,7 @@ public class AutoTest extends LinearOpMode {
                         new SequentialAction(
                                 // Drive to high chamber and get ready to place
                                 drive.actionBuilder(beginPose)
-                                        .splineTo(new Vector2d(12.00, 34.00), Math.toRadians(270.00))
+                                        .splineTo(new Vector2d(-12.00, -34.00), Math.toRadians(90.00))
                                         .build()
                         ),
                         new SequentialAction(
@@ -55,8 +55,8 @@ public class AutoTest extends LinearOpMode {
                                 // Back up and spin into neutral samples to get ready to pick up
                                 drive.actionBuilder(drive.pose)
                                         .setReversed(true)
-                                        .splineToConstantHeading(new Vector2d(26.56, 52.41), Math.toRadians(270.00))
-                                        .splineToSplineHeading(new Pose2d(35.85, 26.15, Math.toRadians(0.00)), Math.toRadians(260.00))
+                                        .splineToConstantHeading(new Vector2d(-26.56, -52.41), Math.toRadians(90.00))
+                                        .splineToSplineHeading(new Pose2d(-35.85, -26.15, Math.toRadians(180.00)), Math.toRadians(100.00))
                                         .waitSeconds(0.25)
                                         .build()
                         ),
@@ -68,7 +68,7 @@ public class AutoTest extends LinearOpMode {
                 new SequentialAction(
                         // Goes forwards slightly to intake samples
                         drive.actionBuilder(drive.pose)
-                                .splineToConstantHeading(new Vector2d(40, 26.15), Math.toRadians(0.00))
+                                .splineToConstantHeading(new Vector2d(-40, -26.15), Math.toRadians(180.00))
                                 .waitSeconds(0.5)
                                 .build()
                 ),
@@ -77,7 +77,7 @@ public class AutoTest extends LinearOpMode {
                                 // Goes to basket to deposit sample
                                 drive.actionBuilder(drive.pose)
                                         .setReversed(true)
-                                        .splineToLinearHeading(new Pose2d(57.88, 56.86, Math.toRadians(225)), Math.toRadians(45))
+                                        .splineToLinearHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(225))
                                         .build()
                         ),
                         new SequentialAction(
@@ -97,7 +97,7 @@ public class AutoTest extends LinearOpMode {
                                 // Goes to second sample
                                 drive.actionBuilder(drive.pose)
                                         .setReversed(true)
-                                        .splineToLinearHeading(new Pose2d(45, 26.15, Math.toRadians(0.00)), Math.toRadians(0.00))
+                                        .splineToLinearHeading(new Pose2d(-45, -26.15, Math.toRadians(180.00)), Math.toRadians(180.00))
                                         .waitSeconds(0.25)
                                         .build()
                         ),
@@ -109,7 +109,7 @@ public class AutoTest extends LinearOpMode {
                 new SequentialAction(
                         // Drives into second sample to pick up
                         drive.actionBuilder(drive.pose)
-                                .splineToConstantHeading(new Vector2d(50, 26.15), Math.toRadians(0.00))
+                                .splineToConstantHeading(new Vector2d(-50, -26.15), Math.toRadians(180.00))
                                 .waitSeconds(0.5)
                                 .build()
                 ),
@@ -118,7 +118,7 @@ public class AutoTest extends LinearOpMode {
                                 // Goes to basket to deposit sample
                                 drive.actionBuilder(drive.pose)
                                         .setReversed(true)
-                                        .splineToLinearHeading(new Pose2d(57.88, 56.86, Math.toRadians(225)), Math.toRadians(45))
+                                        .splineToLinearHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(225))
                                         .build()
                         ),
                         new SequentialAction(
@@ -138,7 +138,7 @@ public class AutoTest extends LinearOpMode {
                                 // Goes to third sample
                                 drive.actionBuilder(drive.pose)
                                         .setReversed(true)
-                                        .splineToLinearHeading(new Pose2d(55, 26.15, Math.toRadians(0.00)), Math.toRadians(0.00))
+                                        .splineToLinearHeading(new Pose2d(-55, -26.15, Math.toRadians(180.00)), Math.toRadians(180.00))
                                         .waitSeconds(0.25)
                                         .build()
                         ),
@@ -150,7 +150,7 @@ public class AutoTest extends LinearOpMode {
                 new SequentialAction(
                         // Drives into third sample to pick up
                         drive.actionBuilder(drive.pose)
-                                .splineToConstantHeading(new Vector2d(60, 26.15), Math.toRadians(0.00))
+                                .splineToConstantHeading(new Vector2d(-60, -26.15), Math.toRadians(180.00))
                                 .waitSeconds(0.5)
                                 .build()
                 ),
@@ -159,7 +159,7 @@ public class AutoTest extends LinearOpMode {
                                 // Goes to basket to deposit sample
                                 drive.actionBuilder(drive.pose)
                                         .setReversed(true)
-                                        .splineToLinearHeading(new Pose2d(57.88, 56.86, Math.toRadians(225)), Math.toRadians(45))
+                                        .splineToLinearHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(225))
                                         .build()
                         ),
                         new SequentialAction(
