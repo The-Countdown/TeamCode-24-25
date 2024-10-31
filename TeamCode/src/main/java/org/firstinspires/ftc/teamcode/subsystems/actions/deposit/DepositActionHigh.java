@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.actions;
+package org.firstinspires.ftc.teamcode.subsystems.actions.deposit;
 
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.claw;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawAngle;
@@ -14,35 +14,30 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 
-public class SpecimenAutoBar implements Action {
+public class DepositActionHigh implements Action {
     private boolean initialized = false;
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         if (!initialized) {
             try {
-                depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
-                depositSlide.setTargetPosition(120);
-                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-                Thread.sleep(500);
                 claw.setPosition(Claw.ClawPosition.closed);
-                Thread.sleep(500);
                 depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
-                depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.specimenBar);
+                depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.highBasket);
                 depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-                Thread.sleep(750);
-                clawArm.setPosition(Claw.ClawPosition.upLift);
-                clawAngle.setPosition(Claw.ClawPosition.horizontal);
-                while (!(depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.specimenBar - DepositSlide.DepositSlidePosition.stepRange))) {
+                while (!(depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.highBasket - DepositSlide.DepositSlidePosition.stepRange))) {
                     Thread.sleep(10);
                 }
+                clawArm.setPosition(Claw.ClawPosition.back);
+                clawAngle.setPosition(Claw.ClawPosition.horizontal);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-                }
             }
+        }
         initialized = true;
         return initialized;
     }
 }
+

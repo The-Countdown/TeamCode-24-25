@@ -13,7 +13,6 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.in
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,11 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-
-import java.util.Locale;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "ProtoTeleOp", group = "TeleOp")
 @Config
@@ -34,9 +30,9 @@ public class ProtoTeleOp extends LinearOpMode {
     public static double intakeYawThreshold = 0.1;
     public static double intakeYawMulti = 0.001;
 
-    public static double yStickLMulti = -0.4;
-    public static double xStickLMulti = 0.5;
-    public static double xStickRMulti = 0.4;
+    public static double yStickLMulti = 0.5;
+    public static double xStickLMulti = 0.7;
+    public static double xStickRMulti = 0.5;
     public boolean driveToggle = false;
     boolean depositMagnetPressed = false;
     @Override
@@ -78,7 +74,7 @@ public class ProtoTeleOp extends LinearOpMode {
 //            double heading = robotPosition.heading.real;
 
             if (depositMagnet.isPressed()) {
-                if (depositMagnetPressed == false) {
+                if (!depositMagnetPressed) {
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
                     depositMagnetPressed = true;
@@ -94,9 +90,9 @@ public class ProtoTeleOp extends LinearOpMode {
                 imuYaw += 360;
             }
 
-            double xStickR = gamepad1.right_stick_x * xStickRMulti;
-            double xStickL = gamepad1.left_stick_x * xStickLMulti;
-            double yStickL = gamepad1.left_stick_y * yStickLMulti;
+            double xStickR = gamepad1.right_stick_x * (xStickRMulti + (gamepad1.right_trigger * 0.3) - (gamepad1.left_trigger * 0.4));
+            double xStickL = gamepad1.left_stick_x * (xStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.5));
+            double yStickL = gamepad1.left_stick_y * -(yStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.4));
 
             double joystickAngle = Math.atan2(yStickL, xStickL);
             double magnitudeL = Math.hypot(xStickL, yStickL);
@@ -109,7 +105,7 @@ public class ProtoTeleOp extends LinearOpMode {
             correctedAngle = Math.toRadians(correctedAngle);
 
             double newXStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
-            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
+            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * -yStickLMulti;
 
             // Trigger driveToggle
             if (gamepad1.right_bumper) {
@@ -151,7 +147,7 @@ public class ProtoTeleOp extends LinearOpMode {
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
             }
             if (gamepad2.right_stick_y != 0) {
-                depositSlide.setTargetPosition(depositSlide.getTargetPosition() + yStickRInt);
+                depositSlide.setTargetPosition(depositSlide.getTargetPosition() - yStickRInt);
             } else {
                 depositSlide.setTargetPosition(depositSlide.getTargetPosition());
             }

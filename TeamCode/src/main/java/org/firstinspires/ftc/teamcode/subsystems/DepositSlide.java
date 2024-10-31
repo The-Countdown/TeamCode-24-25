@@ -14,7 +14,6 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 5;
-
     }
     @Config
     public static class DepositSlidePower {
@@ -114,6 +113,12 @@ public class DepositSlide extends Robot.HardwareDevices {
     }
     public void condense() {
         try {
+            if (depositSlide.getCurrentPosition() <= 700) {
+                move(700);
+                while (!(depositSlide.getCurrentPosition() > (700 - DepositSlidePosition.stepRange))) {
+                    Thread.sleep(10);
+                }
+            }
             clawArm.setPosition(Claw.ClawPosition.down);
             clawAngle.setPosition(Claw.ClawPosition.vertical);
             claw.setPosition(Claw.ClawPosition.closed);

@@ -46,8 +46,6 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 }
 
                 if (gamepad1.circle && clawArm.getPosition() == Claw.ClawPosition.upLift) {
-                    clawArm.setPosition(Claw.ClawPosition.upClip);
-                    Thread.sleep(250);
                     claw.setPosition(Claw.ClawPosition.open);
                 } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upClip) {
                     claw.setPosition(Claw.ClawPosition.closed);

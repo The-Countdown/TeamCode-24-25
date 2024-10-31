@@ -80,7 +80,7 @@ public class Robot {
 
         HardwareDevices.clawArm = hardwareMap.get(Servo.class, "clawArm");
         HardwareDevices.clawAngle = hardwareMap.get(Servo.class, "clawAngle");
-        HardwareDevices.claw = hardwareMap.get(Servo.class, "claw");
+        HardwareDevices.claw = hardwareMap.get(Servo.class, "org/firstinspires/ftc/teamcode/subsystems/actions/claw");
 
         // Motor Directions
         HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
