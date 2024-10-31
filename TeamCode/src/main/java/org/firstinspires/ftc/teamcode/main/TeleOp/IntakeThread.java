@@ -32,7 +32,7 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                     robot.intakeSlide.condense();
                 } else if (gamepad2.cross && (((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 75)) {
                     robot.intakeSlide.pickUp();
-                } else if (gamepad2.share && gamepad2.circle) {
+                } else if (gamepad2.share) {
                     robot.intakeSlide.pickUpGround();
                 } else if (gamepad2.dpad_down) {
                     robot.intakeSlide.condense();

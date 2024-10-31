@@ -45,17 +45,19 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                     robot.depositSlide.specimenHang();
                 }
 
-                if (gamepad1.circle) {
-                    claw.setPosition(Claw.ClawPosition.open);
-                } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upLift) {
-                    claw.setPosition(Claw.ClawPosition.closed);
-                    Thread.sleep(250);
+                if (gamepad1.circle && clawArm.getPosition() == Claw.ClawPosition.upLift) {
                     clawArm.setPosition(Claw.ClawPosition.upClip);
+                    Thread.sleep(250);
+                    claw.setPosition(Claw.ClawPosition.open);
                 } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upClip) {
                     claw.setPosition(Claw.ClawPosition.closed);
                     Thread.sleep(250);
                     clawArm.setPosition(Claw.ClawPosition.upLift);
-                }
+                } else if (gamepad1.cross) {
+                    claw.setPosition(Claw.ClawPosition.closed);
+                } else if (gamepad1.circle) {
+                claw.setPosition(Claw.ClawPosition.open);
+            }
             } catch (Exception e) {
                 telemetry.addData("Error", e.getMessage());
                 telemetry.update();

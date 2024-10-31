@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.actions;
 
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.claw;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawAngle;
@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 
 public class DepositActionHigh implements Action {
     private boolean initialized = false;

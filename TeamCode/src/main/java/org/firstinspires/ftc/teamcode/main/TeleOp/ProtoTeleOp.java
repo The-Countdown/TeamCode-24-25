@@ -15,6 +15,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -37,6 +38,7 @@ public class ProtoTeleOp extends LinearOpMode {
     public static double xStickLMulti = 0.5;
     public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
+    boolean depositMagnetPressed = false;
     @Override
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap, telemetry, this);
@@ -74,6 +76,16 @@ public class ProtoTeleOp extends LinearOpMode {
 //            double x = robotPosition.position.x;
 //            double y = robotPosition.position.y;
 //            double heading = robotPosition.heading.real;
+
+            if (depositMagnet.isPressed()) {
+                if (depositMagnetPressed == false) {
+                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                    depositMagnetPressed = true;
+                }
+            } else {
+                depositMagnetPressed = false;
+            }
 
             //region Driving
              robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
@@ -138,13 +150,11 @@ public class ProtoTeleOp extends LinearOpMode {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
             }
-
-            if (gamepad2.right_stick_y > 0) {
+            if (gamepad2.right_stick_y != 0) {
                 depositSlide.setTargetPosition(depositSlide.getTargetPosition() + yStickRInt);
-            } else if (gamepad2.right_stick_y < 0) {
-                depositSlide.setTargetPosition(depositSlide.getTargetPosition() + yStickRInt);
-            } else
+            } else {
                 depositSlide.setTargetPosition(depositSlide.getTargetPosition());
+            }
 
             if (gamepad2.right_trigger > 0) {
                 arm.setPower(-gamepad2.right_trigger);
@@ -153,18 +163,15 @@ public class ProtoTeleOp extends LinearOpMode {
             } else
                 robot.arm.stop();
 
-            if (gamepad1.circle) {
-                claw.setPosition(Claw.ClawPosition.open);
-            } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upLift) {
-                claw.setPosition(Claw.ClawPosition.closed);
-                clawArm.setPosition(Claw.ClawPosition.upClip);
-            } else if (gamepad1.cross && clawArm.getPosition() == Claw.ClawPosition.upClip) {
-                claw.setPosition(Claw.ClawPosition.closed);
-                clawArm.setPosition(Claw.ClawPosition.upLift);
-            }
-
             if (gamepad2.dpad_left) {
                 claw.setPosition(Claw.ClawPosition.open);
+            }
+
+            if (gamepad1.square) {
+                robot.claw.vertical();
+            }
+            if (gamepad1.triangle) {
+                robot.claw.horizontal();
             }
 
             if (gamepad2.dpad_right && (depositSlide.getCurrentPosition() < 100)) {
@@ -238,6 +245,7 @@ public class ProtoTeleOp extends LinearOpMode {
             telemetry.addData("Left Stick Y", yStickL);
             telemetry.addLine();
             telemetry.addData("Deposit Magnet", depositMagnet.getValue());
+            telemetry.addData("Deposit Magnet", depositMagnet.isPressed());
             telemetry.update();
             //endregion
         }

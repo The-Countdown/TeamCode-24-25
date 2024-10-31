@@ -123,8 +123,12 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakePitchR.setPosition(Intake.IntakePosition.downR + 0.005);
             Thread.sleep(500);
             claw.setPosition(Claw.ClawPosition.closed);
-            Thread.sleep(750);
+            Thread.sleep(500);
             clawArm.setPosition(Claw.ClawPosition.forwards);
+            depositSlide.setTargetPositionTolerance(3);
+            depositSlide.setTargetPosition(20);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             Thread.sleep(750);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

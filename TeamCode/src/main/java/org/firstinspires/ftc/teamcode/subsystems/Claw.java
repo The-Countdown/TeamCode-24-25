@@ -5,14 +5,14 @@ import com.acmerobotics.dashboard.config.Config;
 public class Claw extends Robot.HardwareDevices {
     @Config
     public static class ClawPosition {
-        public static double open = 0;
-        public static double closed = 0.53;
-        public static double vertical = 0.625;
-        public static double horizontal = 0.27;
-        public static double upClip = 0.565;
-        public static double upLift = 0.555;
-        public static double down = 0.6425;
-        public static double back = 0.4;
+        public static double open = 0.65;
+        public static double closed = 0.3;
+        public static double vertical = 0.13;
+        public static double horizontal = 0.5;
+        public static double upClip = 0.575;
+        public static double upLift = 0.55;
+        public static double down = 0.6475;
+        public static double back = 0.395;
         public static double forwards = 0.635;
     }
 
