@@ -52,11 +52,10 @@ public class IntakeCondense implements Action {
             depositSlide.setTargetPosition(20);
             depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-            Thread.sleep(750);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return true;
+        return false;
     }
 }
 

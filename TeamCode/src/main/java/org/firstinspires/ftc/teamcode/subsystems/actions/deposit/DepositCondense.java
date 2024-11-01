@@ -42,7 +42,7 @@ public class DepositCondense implements Action {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return true;
+        return false;
     }
 }
 

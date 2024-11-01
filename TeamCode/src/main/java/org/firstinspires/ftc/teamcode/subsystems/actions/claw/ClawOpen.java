@@ -15,11 +15,11 @@ public class ClawOpen implements Action {
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         try {
             Robot.rb.claw.open();
-            Thread.sleep(500);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return true;
+        return false;
     }
 }
 

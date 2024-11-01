@@ -195,8 +195,8 @@ public class ProtoTeleOp extends LinearOpMode {
 //            packet.put("Y Position", y);
 //            packet.put("Rotation", heading);
             packet.put("Heading", Math.toDegrees(robot.drive.roadRunner.pose.heading.real));
-            packet.put("PoseX", (robot.drive.roadRunner.pose.position.y));
-            packet.put("PoseY", (-robot.drive.roadRunner.pose.position.x));
+            packet.put("PoseX", (robot.drive.roadRunner.pose.position.x));
+            packet.put("PoseY", (robot.drive.roadRunner.pose.position.y));
             packet.put("Claw Position", claw.getPosition());
             packet.put("Claw Rotation", clawAngle.getPosition());
             packet.put("Deposit Height", depositSlide.getCurrentPosition());

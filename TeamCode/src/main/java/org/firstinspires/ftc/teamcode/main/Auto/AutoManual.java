@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.main.Auto;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawAngle;
-
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -18,6 +17,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.claw.ClawOpen;
 import org.firstinspires.ftc.teamcode.subsystems.actions.deposit.DepositActionHigh;
+import org.firstinspires.ftc.teamcode.subsystems.actions.deposit.DepositCondense;
+import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeCondense;
+import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeGround;
 
 @Autonomous
 public class AutoManual extends LinearOpMode {
@@ -26,9 +28,17 @@ public class AutoManual extends LinearOpMode {
     public void runOpMode() {
         Robot robot = new Robot(this);
 
-        Pose2d beginPose = new Pose2d(0, 0, Math.toRadians(270));
+        Pose2d beginPose = new Pose2d(0, 0, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         drive.updatePoseEstimate();
+
+        TrajectoryActionBuilder toPlace = drive.actionBuilder(beginPose)
+                //.splineToLinearHeading(new Pose2d(15, 0, Math.toRadians(-45)), Math.toRadians(-45))
+                .splineToLinearHeading(new Pose2d(7, 31, Math.toRadians(-45)), Math.toRadians(-45));
+
+        TrajectoryActionBuilder toFirstSample = toPlace.fresh()
+                .splineToLinearHeading(new Pose2d(15, -10, Math.toRadians(90)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(54, -3, Math.toRadians(90)), Math.toRadians(0));
 
         robot.claw.close();
         sleep(500);
@@ -42,14 +52,21 @@ public class AutoManual extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                new ParallelAction(
-                        drive.actionBuilder(beginPose)
-                                .splineToConstantHeading(new Vector2d(0, -18), Math.toRadians(270.00))
-                                .splineToSplineHeading(new Pose2d(31, -6, Math.toRadians(45)), Math.toRadians(0))
-                                .build(),
-                        new DepositActionHigh()
-                ),
-                new Wait(1000),
+                //new ParallelAction(
+                        toPlace.build(),
+                        new DepositActionHigh(),
+                //),
+                new ClawOpen(),
+                new Wait(200),
+                new DepositCondense(),
+                toFirstSample.build(),
+                new IntakeGround(),
+                new Wait(2000),
+                new IntakeCondense(),
+                //new ParallelAction(
+                        toPlace.build(),
+                        new DepositActionHigh(),
+                //),
                 new ClawOpen()
         ));
     }

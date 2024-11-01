@@ -24,6 +24,6 @@ public class SpecimenDown implements Action {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return true;
+        return false;
     }
 }

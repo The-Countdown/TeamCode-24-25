@@ -20,6 +20,6 @@ public class Wait implements Action {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
-        return true;
+        return false;
     }
 }

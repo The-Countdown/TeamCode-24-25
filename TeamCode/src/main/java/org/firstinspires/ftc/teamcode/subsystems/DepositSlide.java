@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
-        public static int retracted = 0;
+        public static int retracted = 20;
         public static int highBasket = 2500;
         public static int lowBasket = 1500; //TODO: Check?
         public static int specimenWall = 700;

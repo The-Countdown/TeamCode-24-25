@@ -22,9 +22,6 @@ public class IntakeGround implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         try {
-            clawArm.setPosition(Claw.ClawPosition.down);
-            claw.setPosition(Claw.ClawPosition.open);
-            Thread.sleep(250);
             intakeSlideL.setTargetPositionTolerance(IntakeSlide.IntakeSlidePosition.tolerance);
             intakeSlideR.setTargetPositionTolerance(IntakeSlide.IntakeSlidePosition.tolerance);
             intakeSlideL.setTargetPosition(IntakeSlide.IntakeSlidePosition.ground);
@@ -33,16 +30,15 @@ public class IntakeGround implements Action {
             intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
             intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
-            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlide.IntakeSlidePosition.ground - IntakeSlide.IntakeSlidePosition.stepRange))) {
-                Thread.sleep(10);
-            }
             intakePitchL.setPosition(Intake.IntakePosition.downL);
             intakePitchR.setPosition(Intake.IntakePosition.downR);
             intakeRoller.setPower(Intake.IntakePower.spinIn);
-        } catch (InterruptedException e) {
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlide.IntakeSlidePosition.ground - IntakeSlide.IntakeSlidePosition.stepRange))) {
+                Thread.sleep(10);
+            }} catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return true;
+        return false;
     }
 }
 

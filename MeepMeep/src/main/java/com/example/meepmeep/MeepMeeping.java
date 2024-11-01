@@ -78,15 +78,15 @@ public class MeepMeeping {
                 .build();
 
         myThirdBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(270)))
-                .splineToConstantHeading(new Vector2d(0, -18), Math.toRadians(270.00))
-                .splineToSplineHeading(new Pose2d(28, -8, Math.toRadians(45)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(27, -6, Math.toRadians(45)), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(6, -28), Math.toRadians(270.00))
                 .build());
 
                 meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
-                .addEntity(mySecondBot)
+                //.addEntity(myBot)
+                //.addEntity(mySecondBot)
                 .addEntity(myThirdBot)
                 .start();
     }
