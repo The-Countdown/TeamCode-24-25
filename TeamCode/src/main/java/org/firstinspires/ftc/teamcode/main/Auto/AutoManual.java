@@ -33,16 +33,13 @@ public class AutoManual extends LinearOpMode {
         drive.updatePoseEstimate();
 
         TrajectoryActionBuilder toPlace = drive.actionBuilder(beginPose)
-                //.splineToLinearHeading(new Pose2d(15, 0, Math.toRadians(-45)), Math.toRadians(-45))
                 .splineToLinearHeading(new Pose2d(7, 31, Math.toRadians(-45)), Math.toRadians(-45));
 
         TrajectoryActionBuilder toFirstSample = toPlace.fresh()
                 .splineToLinearHeading(new Pose2d(15, -10, Math.toRadians(90)), Math.toRadians(0))
                 .splineToLinearHeading(new Pose2d(54, -3, Math.toRadians(90)), Math.toRadians(0));
 
-        robot.claw.close();
         sleep(500);
-        robot.claw.forwards();
         Robot.HardwareDevices.depositSlide.setTargetPositionTolerance(3);
         Robot.HardwareDevices.depositSlide.setTargetPosition(20);
         Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -51,11 +48,15 @@ public class AutoManual extends LinearOpMode {
 
         waitForStart();
 
+        robot.intake.down();
+        sleep(100);
+        robot.claw.close();
+        sleep(100);
+        robot.claw.forwards();
+
         Actions.runBlocking(new SequentialAction(
-                //new ParallelAction(
-                        toPlace.build(),
-                        new DepositActionHigh(),
-                //),
+                toPlace.build(),
+                new DepositActionHigh(),
                 new ClawOpen(),
                 new Wait(200),
                 new DepositCondense(),
@@ -63,11 +64,11 @@ public class AutoManual extends LinearOpMode {
                 new IntakeGround(),
                 new Wait(2000),
                 new IntakeCondense(),
-                //new ParallelAction(
-                        toPlace.build(),
-                        new DepositActionHigh(),
-                //),
-                new ClawOpen()
+                toPlace.build(),
+                new DepositActionHigh(),
+                new ClawOpen(),
+                new Wait(200),
+                new DepositCondense()
         ));
     }
 }
