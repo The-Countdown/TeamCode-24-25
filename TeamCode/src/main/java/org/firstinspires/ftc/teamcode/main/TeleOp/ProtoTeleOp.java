@@ -14,6 +14,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -30,15 +31,14 @@ public class ProtoTeleOp extends LinearOpMode {
     public static double intakeYawThreshold = 0.1;
     public static double intakeYawMulti = 0.001;
 
-    public static double yStickLMulti = 0.5;
-    public static double xStickLMulti = 0.7;
-    public static double xStickRMulti = 0.5;
+    public static double yStickLMulti = 0.4;
+    public static double xStickLMulti = 0.6;
+    public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
     boolean depositMagnetPressed = false;
     @Override
     public void runOpMode() {
-        Robot robot = new Robot(hardwareMap, telemetry, this);
-
+        Robot robot = new Robot(this);
         YawPitchRollAngles robotOrientation;
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -60,6 +60,7 @@ public class ProtoTeleOp extends LinearOpMode {
         claw.setPosition(Claw.ClawPosition.open);
         clawArm.setPosition(Claw.ClawPosition.down);
         clawAngle.setPosition(Claw.ClawPosition.vertical);
+        robot.intake.down();
 
         while (opModeIsActive()) {
 
@@ -77,6 +78,7 @@ public class ProtoTeleOp extends LinearOpMode {
                 if (!depositMagnetPressed) {
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                     depositMagnetPressed = true;
                 }
             } else {
@@ -90,9 +92,9 @@ public class ProtoTeleOp extends LinearOpMode {
                 imuYaw += 360;
             }
 
-            double xStickR = gamepad1.right_stick_x * (xStickRMulti + (gamepad1.right_trigger * 0.3) - (gamepad1.left_trigger * 0.4));
-            double xStickL = gamepad1.left_stick_x * (xStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.5));
-            double yStickL = gamepad1.left_stick_y * -(yStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.4));
+            double xStickR = gamepad1.right_stick_x * (xStickRMulti + (gamepad1.right_trigger * 0.3) - (gamepad1.left_trigger * 0.35));
+            double xStickL = gamepad1.left_stick_x * (xStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.45));
+            double yStickL = gamepad1.left_stick_y * -(yStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.35));
 
             double joystickAngle = Math.atan2(yStickL, xStickL);
             double magnitudeL = Math.hypot(xStickL, yStickL);
@@ -175,8 +177,8 @@ public class ProtoTeleOp extends LinearOpMode {
                 clawArm.setPosition(Claw.ClawPosition.down);
             }
 
-            if ((!depositSlide.isBusy()) && (depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
-                depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
+            if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) && (depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
+                robot.depositSlide.stop();
             }
             if ((!intakeSlideL.isBusy()) && (intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
                 intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
@@ -192,6 +194,9 @@ public class ProtoTeleOp extends LinearOpMode {
 //            packet.put("X Position", x);
 //            packet.put("Y Position", y);
 //            packet.put("Rotation", heading);
+            packet.put("Heading", Math.toDegrees(robot.drive.roadRunner.pose.heading.real));
+            packet.put("PoseX", (robot.drive.roadRunner.pose.position.y));
+            packet.put("PoseY", (-robot.drive.roadRunner.pose.position.x));
             packet.put("Claw Position", claw.getPosition());
             packet.put("Claw Rotation", clawAngle.getPosition());
             packet.put("Deposit Height", depositSlide.getCurrentPosition());
@@ -214,6 +219,10 @@ public class ProtoTeleOp extends LinearOpMode {
             dashboard.sendTelemetryPacket(packet);
 
 //            telemetry.addData("Robot Position", String.format(Locale.US,"X: %.2f, Y: %.2f, Heading: %.2f", x, y, heading));
+            robot.drive.roadRunner.updatePoseEstimate();
+            telemetry.addData("Heading", Math.toDegrees(robot.drive.roadRunner.pose.heading.real));
+            telemetry.addData("PoseX", (robot.drive.roadRunner.pose.position.x));
+            telemetry.addData("PoseY", (robot.drive.roadRunner.pose.position.y));
             telemetry.addLine();
             telemetry.addData("Claw", claw.getPosition());
             telemetry.addData("Claw Rotation", clawAngle.getPosition());

@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.claw.ClawOpen;
 import org.firstinspires.ftc.teamcode.subsystems.actions.deposit.DepositActionHigh;
@@ -27,6 +28,8 @@ public class AutoRed extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        Robot robot = new Robot(this);
+
         Pose2d beginPose = new Pose2d(12, 62, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         drive.updatePoseEstimate();
@@ -76,6 +79,7 @@ public class AutoRed extends LinearOpMode {
                         new SequentialAction(
                                 // Goes to basket to deposit sample
                                 drive.actionBuilder(drive.pose)
+                                        .strafeToConstantHeading(new Vector2d (-40, -35))
                                         .setReversed(true)
                                         .splineToLinearHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(225))
                                         .build()
@@ -96,7 +100,7 @@ public class AutoRed extends LinearOpMode {
                         new SequentialAction(
                                 // Goes to second sample
                                 drive.actionBuilder(drive.pose)
-                                        .setReversed(true)
+                                        .setReversed(false)
                                         .splineToLinearHeading(new Pose2d(-45, -26.15, Math.toRadians(180.00)), Math.toRadians(180.00))
                                         .waitSeconds(0.25)
                                         .build()
@@ -137,7 +141,7 @@ public class AutoRed extends LinearOpMode {
                         new SequentialAction(
                                 // Goes to third sample
                                 drive.actionBuilder(drive.pose)
-                                        .setReversed(true)
+                                        .setReversed(false)
                                         .splineToLinearHeading(new Pose2d(-55, -26.15, Math.toRadians(180.00)), Math.toRadians(180.00))
                                         .waitSeconds(0.25)
                                         .build()

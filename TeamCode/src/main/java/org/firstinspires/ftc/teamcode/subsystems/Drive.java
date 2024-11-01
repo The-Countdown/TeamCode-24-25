@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -10,14 +9,14 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Drive extends Robot.HardwareDevices {
 
-    public MecanumDrive drive;
+    public MecanumDrive roadRunner;
 
     public Drive(HardwareMap hardwareMap) {
-        Pose2d initialPose = getRobotPosLimeLight();
+        Pose2d initialPose/* = getRobotPosLimeLight()*/ = null;
         if (initialPose == null) {
             initialPose = new Pose2d(0, 0, 0);
         }
-        this.drive = new MecanumDrive(hardwareMap, initialPose);
+        this.roadRunner = new MecanumDrive(hardwareMap, initialPose);
     }
 
     public Pose2d getRobotPosLimeLight() {
@@ -39,7 +38,7 @@ public class Drive extends Robot.HardwareDevices {
     }
 
     public Pose2d getRobotPosRoadRunner() {
-        return drive.pose;
+        return roadRunner.pose;
     }
 
     public Pose2d getRobotPos() {
@@ -62,7 +61,7 @@ public class Drive extends Robot.HardwareDevices {
             Pose2d currentPose = getRobotPos();
             {
                 Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
+                        roadRunner.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(57.88, 56.86, Math.toRadians(45)), Math.toRadians(45))
                                 .build());
             }
@@ -71,7 +70,7 @@ public class Drive extends Robot.HardwareDevices {
             Pose2d currentPose = getRobotPos();
             {
                 Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
+                        roadRunner.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(0, 35, Math.toRadians(90)), Math.toRadians(90))
                                 .build());
             }
@@ -82,7 +81,7 @@ public class Drive extends Robot.HardwareDevices {
             Pose2d currentPose = getRobotPos();
             {
                 Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
+                        roadRunner.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(45)) // Flipped signs
                                 .build());
             }
@@ -92,7 +91,7 @@ public class Drive extends Robot.HardwareDevices {
             Pose2d currentPose = getRobotPos();
             {
                 Actions.runBlocking(
-                        drive.actionBuilder(currentPose)
+                        roadRunner.actionBuilder(currentPose)
                                 .splineToSplineHeading(new Pose2d(0, -35, Math.toRadians(90)), Math.toRadians(90)) // Flipped sign on Y
                                 .build());
             }

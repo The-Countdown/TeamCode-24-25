@@ -62,7 +62,7 @@ public class DepositSlide extends Robot.HardwareDevices {
 
     public void specimenGrab() {
         try {
-            claw.setPosition(Claw.ClawPosition.closed);
+            claw.setPosition(Claw.ClawPosition.halfOpen);
             Thread.sleep(500);
             specimenWall();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {
@@ -72,6 +72,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             clawAngle.setPosition(Claw.ClawPosition.horizontal);
             Thread.sleep(750);
             retract();
+            depositSlide.setPower(DepositSlidePower.move/2);
             claw.setPosition(Claw.ClawPosition.open);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -124,6 +125,10 @@ public class DepositSlide extends Robot.HardwareDevices {
             claw.setPosition(Claw.ClawPosition.closed);
             Thread.sleep(1000);
             retract();
+            while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.retracted + 700))) {
+                Thread.sleep(10);
+            }
+            depositSlide.setPower(DepositSlidePower.move/4);
             while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.retracted + DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }

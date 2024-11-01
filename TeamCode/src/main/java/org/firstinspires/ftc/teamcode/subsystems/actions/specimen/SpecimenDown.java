@@ -11,24 +11,19 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 
 public class SpecimenDown implements Action {
-    private boolean initialized = false;
-
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        if (!initialized) {
-            try {
-                depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
-                depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.specimenBar - 250);
-                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-                while (!(depositSlide.getCurrentPosition() < ((DepositSlide.DepositSlidePosition.specimenBar - 250) + DepositSlide.DepositSlidePosition.tolerance))) {
-                    Thread.sleep(10);
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        try {
+            depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
+            depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.specimenBar - 250);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+            while (!(depositSlide.getCurrentPosition() < ((DepositSlide.DepositSlidePosition.specimenBar - 250) + DepositSlide.DepositSlidePosition.tolerance))) {
+                Thread.sleep(10);
             }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        initialized = true;
-        return initialized;
+        return true;
     }
 }

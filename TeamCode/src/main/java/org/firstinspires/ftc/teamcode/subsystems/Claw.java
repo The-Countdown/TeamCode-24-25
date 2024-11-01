@@ -9,11 +9,12 @@ public class Claw extends Robot.HardwareDevices {
         public static double closed = 0.3;
         public static double vertical = 0.13;
         public static double horizontal = 0.5;
-        public static double upClip = 0.575;
-        public static double upLift = 0.55;
-        public static double down = 0.6475;
-        public static double back = 0.395;
-        public static double forwards = 0.635;
+        public static double upClip = 0.5875;
+        public static double upLift = 0.5625;
+        public static double down = 0.66;
+        public static double back = 0.4075;
+        public static double halfOpen = 0.55;
+        public static double forwards = 0.65;
     }
 
     public void open() {

@@ -8,22 +8,18 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class ClawOpen implements Action {
-    private boolean initialized = false;
-
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        if (!initialized) {
-            try {
-                claw.setPosition(Claw.ClawPosition.open);
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            Robot.rb.claw.open();
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        initialized = true;
-        return initialized;
+        return true;
     }
 }
 

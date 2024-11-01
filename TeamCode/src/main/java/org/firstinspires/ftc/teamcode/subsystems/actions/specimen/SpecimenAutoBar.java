@@ -15,34 +15,29 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 
 public class SpecimenAutoBar implements Action {
-    private boolean initialized = false;
-
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        if (!initialized) {
-            try {
-                depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
-                depositSlide.setTargetPosition(120);
-                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-                Thread.sleep(500);
-                claw.setPosition(Claw.ClawPosition.closed);
-                Thread.sleep(500);
-                depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
-                depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.specimenBar);
-                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-                Thread.sleep(750);
-                clawArm.setPosition(Claw.ClawPosition.upLift);
-                clawAngle.setPosition(Claw.ClawPosition.horizontal);
-                while (!(depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.specimenBar - DepositSlide.DepositSlidePosition.stepRange))) {
-                    Thread.sleep(10);
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-                }
+        try {
+            depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
+            depositSlide.setTargetPosition(120);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+            Thread.sleep(500);
+            claw.setPosition(Claw.ClawPosition.closed);
+            Thread.sleep(500);
+            depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
+            depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.specimenBar);
+            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+            Thread.sleep(750);
+            clawArm.setPosition(Claw.ClawPosition.upLift);
+            clawAngle.setPosition(Claw.ClawPosition.horizontal);
+            while (!(depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.specimenBar - DepositSlide.DepositSlidePosition.stepRange))) {
+                Thread.sleep(10);
             }
-        initialized = true;
-        return initialized;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 }

@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.Action;
 
 public class Wait implements Action {
     private final long duration;
-    private boolean initialized = false;
 
     public Wait(long duration) {
         this.duration = duration;
@@ -15,15 +14,12 @@ public class Wait implements Action {
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        if (!initialized) {
-            try {
-                Thread.sleep(duration);
-                initialized = true;
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException(e);
-            }
+        try {
+            Thread.sleep(duration);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
         }
-        return initialized;
+        return true;
     }
 }

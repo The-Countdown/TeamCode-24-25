@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
+    public static Robot rb;
     HardwareMap hardwareMap;
     Telemetry telemetry;
     LinearOpMode opMode;
@@ -43,10 +44,12 @@ public class Robot {
         public static IMU imu;
     }
 
-    public Robot(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
+    public Robot(LinearOpMode opMode) {
+        rb = this;
+
         this.opMode = opMode;
+        this.hardwareMap = opMode.hardwareMap;
+        this.telemetry = opMode.telemetry;
 
         HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
 
@@ -80,7 +83,7 @@ public class Robot {
 
         HardwareDevices.clawArm = hardwareMap.get(Servo.class, "clawArm");
         HardwareDevices.clawAngle = hardwareMap.get(Servo.class, "clawAngle");
-        HardwareDevices.claw = hardwareMap.get(Servo.class, "org/firstinspires/ftc/teamcode/subsystems/actions/claw");
+        HardwareDevices.claw = hardwareMap.get(Servo.class, "claw");
 
         // Motor Directions
         HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
@@ -121,6 +124,8 @@ public class Robot {
                 )
         );
         HardwareDevices.imu.resetYaw();
+
+        drive = new Drive(hardwareMap);
     }
 
     public Drive drive;

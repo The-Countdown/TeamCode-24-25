@@ -8,7 +8,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeeping {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(700);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -23,17 +23,18 @@ public class MeepMeeping {
                 .waitSeconds(0.25)
                 .splineToConstantHeading(new Vector2d(40, 26.15), Math.toRadians(0.00))
                 .waitSeconds(0.5)
+                .strafeToConstantHeading(new Vector2d (40, 35))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(57.88, 56.86, Math.toRadians(225)), Math.toRadians(45))
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(45, 26.15, Math.toRadians(0.00)), Math.toRadians(0.00))
+                .setReversed(false)
+                .splineToLinearHeading(new Pose2d(45, 26.15, Math.toRadians(0.00)), Math.toRadians(0))
                 .waitSeconds(0.25)
                 .splineToConstantHeading(new Vector2d(50, 26.15), Math.toRadians(0.00))
                 .waitSeconds(0.5)
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(57.88, 56.86, Math.toRadians(225)), Math.toRadians(45))
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(55, 26.15, Math.toRadians(0.00)), Math.toRadians(0.00))
+                .setReversed(false)
+                .splineToLinearHeading(new Pose2d(55, 26.15, Math.toRadians(0.00)), Math.toRadians(0))
                 .waitSeconds(0.25)
                 .splineToConstantHeading(new Vector2d(60, 26.15), Math.toRadians(0.00))
                 .waitSeconds(0.5)
@@ -53,16 +54,17 @@ public class MeepMeeping {
                 .waitSeconds(0.25)
                 .splineToConstantHeading(new Vector2d(-40, -26.15), Math.toRadians(180.00))
                 .waitSeconds(0.5)
+                .strafeToConstantHeading(new Vector2d (-40, -35))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(225))
-                .setReversed(true)
+                .setReversed(false)
                 .splineToLinearHeading(new Pose2d(-45, -26.15, Math.toRadians(180.00)), Math.toRadians(180.00))
                 .waitSeconds(0.25)
                 .splineToConstantHeading(new Vector2d(-50, -26.15), Math.toRadians(180.00))
                 .waitSeconds(0.5)
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(225))
-                .setReversed(true)
+                .setReversed(false)
                 .splineToLinearHeading(new Pose2d(-55, -26.15, Math.toRadians(180.00)), Math.toRadians(180.00))
                 .waitSeconds(0.25)
                 .splineToConstantHeading(new Vector2d(-60, -26.15), Math.toRadians(180.00))
@@ -71,11 +73,21 @@ public class MeepMeeping {
                 .splineToLinearHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(225))
                 .build());
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
+        RoadRunnerBotEntity myThirdBot = new DefaultBotBuilder(meepMeep)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .build();
+
+        myThirdBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(270)))
+                        .splineToConstantHeading(new Vector2d(11,0 ), Math.toRadians(270.00))
+                .splineToSplineHeading(new Pose2d(6, 31, Math.toRadians(225)), Math.toRadians(225))
+                .build());
+
+                meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
                 .addEntity(mySecondBot)
+                .addEntity(myThirdBot)
                 .start();
     }
 }
