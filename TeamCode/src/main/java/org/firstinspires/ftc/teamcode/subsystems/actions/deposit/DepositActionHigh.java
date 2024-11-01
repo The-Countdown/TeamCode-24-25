@@ -20,13 +20,13 @@ public class DepositActionHigh implements Action {
         try {
             claw.setPosition(Claw.ClawPosition.closed);
             depositSlide.setTargetPositionTolerance(DepositSlide.DepositSlidePosition.tolerance);
-            depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.highBasket);
+            depositSlide.setTargetPosition(2700); //High Basket Forwards
             depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             while (!(depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.highBasket - DepositSlide.DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            clawArm.setPosition(Claw.ClawPosition.back);
+            clawArm.setPosition(Claw.ClawPosition.upLift);
             clawAngle.setPosition(Claw.ClawPosition.horizontal);
             Thread.sleep(1000);
         } catch (InterruptedException e) {

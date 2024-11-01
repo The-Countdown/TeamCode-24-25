@@ -78,8 +78,8 @@ public class MeepMeeping {
                 .build();
 
         myThirdBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(270)))
-                        .splineToConstantHeading(new Vector2d(11,0 ), Math.toRadians(270.00))
-                .splineToSplineHeading(new Pose2d(6, 31, Math.toRadians(225)), Math.toRadians(225))
+                .splineToConstantHeading(new Vector2d(0, -18), Math.toRadians(270.00))
+                .splineToSplineHeading(new Pose2d(28, -8, Math.toRadians(45)), Math.toRadians(0))
                 .build());
 
                 meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
