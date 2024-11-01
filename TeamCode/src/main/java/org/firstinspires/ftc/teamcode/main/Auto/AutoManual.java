@@ -33,6 +33,7 @@ public class AutoManual extends LinearOpMode {
         drive.updatePoseEstimate();
 
         TrajectoryActionBuilder toPlace = drive.actionBuilder(beginPose)
+                .splineToLinearHeading(new Pose2d(15, 0, Math.toRadians(-45)), Math.toRadians(-45))
                 .splineToLinearHeading(new Pose2d(7, 31, Math.toRadians(-45)), Math.toRadians(-45));
 
         TrajectoryActionBuilder toFirstSample = toPlace.fresh()
