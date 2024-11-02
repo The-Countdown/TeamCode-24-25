@@ -42,7 +42,7 @@ public class AutoManual extends LinearOpMode {
 
         sleep(500);
         Robot.HardwareDevices.depositSlide.setTargetPositionTolerance(3);
-        Robot.HardwareDevices.depositSlide.setTargetPosition(40);
+        Robot.HardwareDevices.depositSlide.setTargetPosition(50);
         Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move);
         sleep(750);

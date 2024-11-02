@@ -35,8 +35,13 @@ public class DepositCondense implements Action {
             depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.retracted);
             depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+            int loops = 0;
             while (!(depositSlide.getCurrentPosition() < (DepositSlide.DepositSlidePosition.retracted + DepositSlide.DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
+                loops++;
+                if (loops > 200) {
+                    break;
+                }
             }
             claw.setPosition(Claw.ClawPosition.open);
         } catch (InterruptedException e) {
