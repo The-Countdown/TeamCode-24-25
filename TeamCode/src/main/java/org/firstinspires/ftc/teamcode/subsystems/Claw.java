@@ -14,7 +14,7 @@ public class Claw extends Robot.HardwareDevices {
         public static double down = 0.66;
         public static double back = 0.4075;
         public static double halfOpen = 0.55;
-        public static double forwards = 0.65;
+        public static double forwards = 0.6475;
     }
 
     public void open() {

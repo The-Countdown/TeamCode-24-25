@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -87,6 +89,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
     public void pickUp() {
         try {
+            rb.depositSlide.retract();
             clawArm.setPosition(Claw.ClawPosition.down);
             claw.setPosition(Claw.ClawPosition.open);
             Thread.sleep(250);
@@ -126,7 +129,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
             Thread.sleep(500);
             clawArm.setPosition(Claw.ClawPosition.forwards);
             depositSlide.setTargetPositionTolerance(3);
-            depositSlide.setTargetPosition(20);
+            depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.retracted);
             depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             Thread.sleep(750);

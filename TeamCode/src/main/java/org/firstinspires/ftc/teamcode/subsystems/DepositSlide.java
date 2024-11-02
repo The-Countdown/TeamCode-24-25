@@ -1,16 +1,18 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
-        public static int retracted = 20;
+        public static int retracted = 50;
         public static int highBasket = 2500;
         public static int lowBasket = 1500; //TODO: Check?
         public static int specimenWall = 700;
-        public static int specimenBar = 1250;
+        public static int specimenBar = 1200;
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 5;
@@ -90,6 +92,7 @@ public class DepositSlide extends Robot.HardwareDevices {
     }
     public void depositHigh() {
         try {
+            rb.claw.close();
             highBasket();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
@@ -128,7 +131,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.retracted + 700))) {
                 Thread.sleep(10);
             }
-            depositSlide.setPower(DepositSlidePower.move/4);
+            depositSlide.setPower(DepositSlidePower.move / 4);
             while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.retracted + DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }

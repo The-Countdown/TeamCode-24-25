@@ -6,6 +6,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.cl
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.clawArm;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositMagnet;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositSlide;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchL;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchR;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideL;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideR;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeYaw;
@@ -22,6 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
@@ -64,7 +67,6 @@ public class ProtoTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            int yStickLInt  = (int) (gamepad2.left_stick_y * 30);
             int yStickRInt  = (int) (gamepad2.right_stick_y * 30);
             int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
 
@@ -92,9 +94,9 @@ public class ProtoTeleOp extends LinearOpMode {
                 imuYaw += 360;
             }
 
-            double xStickR = gamepad1.right_stick_x * (xStickRMulti + (gamepad1.right_trigger * 0.3) - (gamepad1.left_trigger * 0.35));
-            double xStickL = gamepad1.left_stick_x * (xStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.45));
-            double yStickL = gamepad1.left_stick_y * -(yStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.35));
+            double xStickR = gamepad1.right_stick_x * (xStickRMulti + (gamepad1.right_trigger * 0.3) - (gamepad1.left_trigger * 0.1));
+            double xStickL = gamepad1.left_stick_x * (xStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.2));
+            double yStickL = gamepad1.left_stick_y * -(yStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.2));
 
             double joystickAngle = Math.atan2(yStickL, xStickL);
             double magnitudeL = Math.hypot(xStickL, yStickL);
@@ -141,13 +143,6 @@ public class ProtoTeleOp extends LinearOpMode {
                 robot.intake.spinStop();
             }
 
-            if (gamepad2.left_stick_y != 0) {
-                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
-                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
-            } else {
-                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
-                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
-            }
             if (gamepad2.right_stick_y != 0) {
                 depositSlide.setTargetPosition(depositSlide.getTargetPosition() - yStickRInt);
             } else {
@@ -180,10 +175,10 @@ public class ProtoTeleOp extends LinearOpMode {
             if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) && (depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
                 robot.depositSlide.stop();
             }
-            if ((!intakeSlideL.isBusy()) && (intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!intakeSlideL.isBusy()) && (intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) && (intakeSlideL.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
                 intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
-            if ((!intakeSlideR.isBusy()) && (intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!intakeSlideR.isBusy()) && (intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) && (intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
                 intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
 

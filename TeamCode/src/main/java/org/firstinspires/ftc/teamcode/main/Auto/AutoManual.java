@@ -42,7 +42,7 @@ public class AutoManual extends LinearOpMode {
 
         sleep(500);
         Robot.HardwareDevices.depositSlide.setTargetPositionTolerance(3);
-        Robot.HardwareDevices.depositSlide.setTargetPosition(20);
+        Robot.HardwareDevices.depositSlide.setTargetPosition(40);
         Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move);
         sleep(750);
@@ -50,9 +50,9 @@ public class AutoManual extends LinearOpMode {
         waitForStart();
 
         robot.intake.down();
-        sleep(100);
+        sleep(250);
         robot.claw.close();
-        sleep(100);
+        sleep(250);
         robot.claw.forwards();
 
         Actions.runBlocking(new SequentialAction(

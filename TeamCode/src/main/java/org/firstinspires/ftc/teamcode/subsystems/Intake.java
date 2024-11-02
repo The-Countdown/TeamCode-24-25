@@ -9,6 +9,8 @@ public class Intake extends Robot.HardwareDevices {
         public static double upR = 0.63;
         public static double downL = 0.61;
         public static double downR = 0.54;
+        public static double alignL = 0.58;
+        public static double alignR = 0.57;
         public static double back = 0.1;
         public static double center = 0.615;
     }
@@ -30,6 +32,10 @@ public class Intake extends Robot.HardwareDevices {
     public void down() {
         intakePitchL.setPosition(IntakePosition.downL);
         intakePitchR.setPosition(IntakePosition.downR);
+    }
+    public void align() {
+        intakePitchL.setPosition(IntakePosition.alignL);
+        intakePitchR.setPosition(IntakePosition.alignR);
     }
     public void back() {
         intakePitchL.setPosition(IntakePosition.back);
