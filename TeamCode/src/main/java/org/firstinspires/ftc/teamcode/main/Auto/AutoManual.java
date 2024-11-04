@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.in
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -55,24 +56,24 @@ public class AutoManual extends LinearOpMode {
         intakePitchL.setPosition(0.595);
         intakePitchR.setPosition(0.555);
         sleep(250);
-        robot.claw.close();
+        robot.claw.hand.close();
         sleep(250);
-        robot.claw.forwards();
+        robot.claw.arm.forwards();
 
         Actions.runBlocking(new SequentialAction(
                 toPlace.build(),
                 new DepositActionHigh(),
                 new ClawOpen(),
-                new Wait(200),
+                new SleepAction(200),
                 new DepositCondense(),
                 toFirstSample.build(),
                 new IntakeGround(),
-                new Wait(2000),
+                new SleepAction(2000),
                 new IntakeCondense(),
                 toPlace.build(),
                 new DepositActionHigh(),
                 new ClawOpen(),
-                new Wait(200),
+                new SleepAction(200),
                 new DepositCondense()
         ));
     }

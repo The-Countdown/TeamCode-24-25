@@ -60,9 +60,10 @@ public class ProtoTeleOp extends LinearOpMode {
 
 //        Pose2d beginPos = robot.drive.getRobotPos();
 
-        claw.setPosition(Claw.ClawPosition.open);
-        clawArm.setPosition(Claw.ClawPosition.down);
-        clawAngle.setPosition(Claw.ClawPosition.vertical);
+        robot.claw.hand.open();
+        robot.claw.arm.down();
+        robot.claw.elbow.vertical();
+
         intakePitchL.setPosition(0.595);
         intakePitchR.setPosition(0.555);
 
@@ -158,19 +159,19 @@ public class ProtoTeleOp extends LinearOpMode {
                 robot.arm.stop();
 
             if (gamepad2.dpad_left) {
-                claw.setPosition(Claw.ClawPosition.open);
+                robot.claw.hand.open();
             }
 
             if (gamepad1.square) {
-                robot.claw.vertical();
+                robot.claw.elbow.vertical();
             }
             if (gamepad1.triangle) {
-                robot.claw.horizontal();
+                robot.claw.elbow.horizontal();
             }
 
             if (gamepad2.dpad_right && (depositSlide.getCurrentPosition() < 100)) {
-                claw.setPosition(Claw.ClawPosition.open);
-                clawArm.setPosition(Claw.ClawPosition.down);
+                robot.claw.hand.open();
+                robot.claw.arm.down();
             }
 
             if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) && (depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
@@ -223,7 +224,7 @@ public class ProtoTeleOp extends LinearOpMode {
             telemetry.addData("Claw", claw.getPosition());
             telemetry.addData("Claw Rotation", clawAngle.getPosition());
             telemetry.addData("ClawArm", clawArm.getPosition());
-            telemetry.addData("BackPos", Claw.ClawPosition.back);
+            telemetry.addData("BackPos", Claw.Position.Arm.back);
             telemetry.addLine();
             telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
             telemetry.addLine();

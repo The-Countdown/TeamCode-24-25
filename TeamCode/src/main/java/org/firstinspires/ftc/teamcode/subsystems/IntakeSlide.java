@@ -74,8 +74,8 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
     public void pickUpGround() {
         try {
-            clawArm.setPosition(Claw.ClawPosition.down);
-            claw.setPosition(Claw.ClawPosition.open);
+            rb.claw.arm.down();
+            rb.claw.hand.open();
             Thread.sleep(250);
             ground();
             while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.ground - IntakeSlidePosition.stepRange))) {
@@ -90,8 +90,8 @@ public class IntakeSlide extends Robot.HardwareDevices {
     public void pickUp() {
         try {
             rb.depositSlide.retract();
-            clawArm.setPosition(Claw.ClawPosition.down);
-            claw.setPosition(Claw.ClawPosition.open);
+            rb.claw.arm.down();
+            rb.claw.hand.open();
             Thread.sleep(250);
             intakePitchL.setPosition(Intake.IntakePosition.upL);
             intakePitchR.setPosition(Intake.IntakePosition.upR);
@@ -110,8 +110,8 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
     public void condense() {
         try {
-            clawArm.setPosition(Claw.ClawPosition.down);
-            claw.setPosition(Claw.ClawPosition.open);
+            rb.claw.arm.down();
+            rb.claw.hand.open();
             Thread.sleep(1000);
             intakePitchL.setPosition(Intake.IntakePosition.upL);
             intakePitchR.setPosition(Intake.IntakePosition.upR);
@@ -126,13 +126,14 @@ public class IntakeSlide extends Robot.HardwareDevices {
             intakePitchL.setPosition(Intake.IntakePosition.downL - 0.005);
             intakePitchR.setPosition(Intake.IntakePosition.downR + 0.005);
             Thread.sleep(500);
-            claw.setPosition(Claw.ClawPosition.closed);
+            rb.claw.hand.close();
             Thread.sleep(500);
-            clawArm.setPosition(Claw.ClawPosition.forwards);
-            depositSlide.setTargetPositionTolerance(3);
-            depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.retracted);
-            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+            rb.claw.arm.forwards();
+            rb.depositSlide.retract();
+//            depositSlide.setTargetPositionTolerance(3);
+//            depositSlide.setTargetPosition(DepositSlide.DepositSlidePosition.retracted);
+//            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//            depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             Thread.sleep(750);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 
@@ -47,22 +46,22 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 }
 
                 if (gamepad1.circle) {
-                    claw.setPosition(Claw.ClawPosition.open);
+                    robot.claw.hand.open();
                 } else if (gamepad1.cross) {
-                    claw.setPosition(Claw.ClawPosition.closed);
+                    robot.claw.hand.close();
                     Thread.sleep(250);
-                    clawArm.setPosition(Claw.ClawPosition.upLift);
+                    robot.claw.arm.upLift();
                 }
 
                 if (gamepad2.dpad_up) {
                     while (!depositMagnet.isPressed()) {
-                        clawArm.setPosition(Claw.ClawPosition.down);
-                        claw.setPosition(Claw.ClawPosition.closed);
+                        robot.claw.arm.down();
+                        robot.claw.hand.close();
                         Thread.sleep(750);
                         depositSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         depositSlide.setPower(-0.7);
                     }
-                    claw.setPosition(Claw.ClawPosition.open);
+                    robot.claw.hand.open();
                     depositSlide.setPower(0);
                     depositSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
