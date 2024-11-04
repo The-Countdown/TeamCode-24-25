@@ -50,11 +50,11 @@ public class ProtoTeleOp extends LinearOpMode {
 
         ElapsedTime runtime = new ElapsedTime();
 
-        DepositThread depositRunnable = new DepositThread("depSequences", hardwareMap, gamepad1, gamepad2, this, robot);
+        DepositThread depositRunnable = new DepositThread(this);
         Thread depositThread = new Thread(depositRunnable);
         depositThread.start();
 
-        IntakeThread intakeRunnable = new IntakeThread("inSequences", hardwareMap, gamepad2, this, robot);
+        IntakeThread intakeRunnable = new IntakeThread(this);
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 

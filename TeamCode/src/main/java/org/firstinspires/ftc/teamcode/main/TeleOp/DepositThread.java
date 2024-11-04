@@ -11,20 +11,16 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 
 public class DepositThread extends Robot.HardwareDevices implements Runnable {
-    private final String depSequences;
-    private final HardwareMap hardwareMap;
+    private final LinearOpMode opMode;
     private final Gamepad gamepad1;
     private final Gamepad gamepad2;
-    private final LinearOpMode opMode;
     private final Robot robot;
 
-    public DepositThread(String depSequences, HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, LinearOpMode opMode, Robot robot) {
-        this.depSequences = depSequences;
-        this.hardwareMap = hardwareMap;
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+    public DepositThread(LinearOpMode opMode) {
         this.opMode = opMode;
-        this.robot = robot;
+        this.gamepad1 = opMode.gamepad1;
+        this.gamepad2 = opMode.gamepad2;
+        robot = Robot.rb;
     }
 
     @Override

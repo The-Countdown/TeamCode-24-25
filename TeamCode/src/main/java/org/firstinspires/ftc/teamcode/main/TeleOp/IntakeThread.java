@@ -11,18 +11,14 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 
 public class IntakeThread extends Robot.HardwareDevices implements Runnable {
-    private final String inSequences;
-    private final HardwareMap hardwareMap;
-    private final Gamepad gamepad2;
     private final LinearOpMode opMode;
+    private final Gamepad gamepad2;
     private final Robot robot;
 
-    public IntakeThread(String inSequences, HardwareMap hardwareMap, Gamepad gamepad2, LinearOpMode opMode, Robot robot) {
-        this.inSequences = inSequences;
-        this.hardwareMap = hardwareMap;
-        this.gamepad2 = gamepad2;
+    public IntakeThread(LinearOpMode opMode) {
         this.opMode = opMode;
-        this.robot = robot;
+        this.gamepad2 = opMode.gamepad2;
+        this.robot = Robot.rb;
     }
 
     @Override
