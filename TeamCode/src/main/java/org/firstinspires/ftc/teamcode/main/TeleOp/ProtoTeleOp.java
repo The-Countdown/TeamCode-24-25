@@ -63,7 +63,8 @@ public class ProtoTeleOp extends LinearOpMode {
         claw.setPosition(Claw.ClawPosition.open);
         clawArm.setPosition(Claw.ClawPosition.down);
         clawAngle.setPosition(Claw.ClawPosition.vertical);
-        robot.intake.down();
+        intakePitchL.setPosition(0.595);
+        intakePitchR.setPosition(0.555);
 
         while (opModeIsActive()) {
 

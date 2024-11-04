@@ -112,6 +112,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
         try {
             clawArm.setPosition(Claw.ClawPosition.down);
             claw.setPosition(Claw.ClawPosition.open);
+            Thread.sleep(1000);
             intakePitchL.setPosition(Intake.IntakePosition.upL);
             intakePitchR.setPosition(Intake.IntakePosition.upR);
             Thread.sleep(750);

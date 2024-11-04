@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.main.Auto;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchL;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchR;
+
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -49,7 +52,8 @@ public class AutoManual extends LinearOpMode {
 
         waitForStart();
 
-        robot.intake.down();
+        intakePitchL.setPosition(0.595);
+        intakePitchR.setPosition(0.555);
         sleep(250);
         robot.claw.close();
         sleep(250);

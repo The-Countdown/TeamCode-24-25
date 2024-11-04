@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.main.TeleOp;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -51,6 +52,19 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                     claw.setPosition(Claw.ClawPosition.closed);
                     Thread.sleep(250);
                     clawArm.setPosition(Claw.ClawPosition.upLift);
+                }
+
+                if (gamepad2.dpad_up) {
+                    while (!depositMagnet.isPressed()) {
+                        clawArm.setPosition(Claw.ClawPosition.down);
+                        claw.setPosition(Claw.ClawPosition.closed);
+                        Thread.sleep(750);
+                        depositSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        depositSlide.setPower(-0.7);
+                    }
+                    claw.setPosition(Claw.ClawPosition.open);
+                    depositSlide.setPower(0);
+                    depositSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
             } catch (Exception e) {
                 telemetry.addData("Error", e.getMessage());
