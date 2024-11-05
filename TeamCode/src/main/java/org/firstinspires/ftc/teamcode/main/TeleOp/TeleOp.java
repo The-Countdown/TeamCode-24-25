@@ -56,7 +56,6 @@ public class TeleOp extends LinearOpMode {
         robot.claw.hand.open();
         robot.claw.arm.down();
         robot.claw.elbow.vertical();
-
         intakePitchL.setPosition(0.595);
         intakePitchR.setPosition(0.555);
 

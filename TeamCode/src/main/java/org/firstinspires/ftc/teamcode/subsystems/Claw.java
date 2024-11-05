@@ -35,7 +35,7 @@ public class Claw extends Robot.HardwareDevices {
             claw.setPosition(Position.Hand.open);
         }
         public void close() {
-            claw.setPosition(Position.Hand.halfOpen);
+            claw.setPosition(Position.Hand.closed);
         }
         public void halfOpen() {
             claw.setPosition(Position.Hand.halfOpen);

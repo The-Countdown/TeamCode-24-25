@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeCondense;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeGround;
 
 @Autonomous
-public class AutoLeft extends LinearOpMode {
+public class AutoTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -41,37 +41,10 @@ public class AutoLeft extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(15, -10, Math.toRadians(90)), Math.toRadians(0))
                 .splineToLinearHeading(new Pose2d(54, -3, Math.toRadians(90)), Math.toRadians(0));
 
-        sleep(500);
-        Robot.HardwareDevices.depositSlide.setTargetPositionTolerance(3);
-        Robot.HardwareDevices.depositSlide.setTargetPosition(50);
-        Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-        sleep(750);
-
         waitForStart();
 
-        intakePitchL.setPosition(0.595);
-        intakePitchR.setPosition(0.555);
-        sleep(250);
-        robot.claw.hand.close();
-        sleep(250);
-        robot.claw.arm.forwards();
-
         Actions.runBlocking(new SequentialAction(
-                toBasket.build(),
-                new DepositActionHigh(),
-                new ClawOpen(),
-                new Wait(200),
-                new DepositCondense()//,
-//                toFirstSample.build(),
-//                new IntakeGround(),
-//                new Wait(2000),
-//                new IntakeCondense(),
-//                toBasket.build(),
-//                new DepositActionHigh(),
-//                new ClawOpen(),
-//                new Wait(200),
-//                new DepositCondense()
+
         ));
     }
 }
