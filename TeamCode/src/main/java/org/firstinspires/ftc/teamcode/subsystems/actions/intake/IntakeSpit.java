@@ -14,4 +14,3 @@ public class IntakeSpit implements Action {
         return false;
     }
 }
-

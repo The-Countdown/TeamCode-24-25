@@ -18,7 +18,9 @@ public class DepositCondense implements Action {
         rb.claw.elbow.vertical();
         rb.depositSlide.retract();
         while (depositSlide.isBusy()) {
-            new Wait(10);
+            if (!rb.safeSleep(10)) {
+                return true;
+            }
         }
         return false;
     }

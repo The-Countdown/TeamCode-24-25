@@ -16,21 +16,18 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "ProtoTeleOp", group = "TeleOp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
 @Config
-public class ProtoTeleOp extends LinearOpMode {
+public class TeleOp extends LinearOpMode {
     public static double intakeYawThreshold = 0.1;
     public static double intakeYawMulti = 0.001;
 
@@ -48,8 +45,6 @@ public class ProtoTeleOp extends LinearOpMode {
 
         waitForStart();
 
-        ElapsedTime runtime = new ElapsedTime();
-
         DepositThread depositRunnable = new DepositThread(this);
         Thread depositThread = new Thread(depositRunnable);
         depositThread.start();
@@ -57,8 +52,6 @@ public class ProtoTeleOp extends LinearOpMode {
         IntakeThread intakeRunnable = new IntakeThread(this);
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
-
-//        Pose2d beginPos = robot.drive.getRobotPos();
 
         robot.claw.hand.open();
         robot.claw.arm.down();
@@ -68,15 +61,10 @@ public class ProtoTeleOp extends LinearOpMode {
         intakePitchR.setPosition(0.555);
 
         while (opModeIsActive()) {
+            robot.drive.roadRunner.updatePoseEstimate();
 
             int yStickRInt  = (int) (gamepad2.right_stick_y * 30);
             int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
-
-//            Pose2d robotPosition = robot.drive.getRobotPos();
-
-//            double x = robotPosition.position.x;
-//            double y = robotPosition.position.y;
-//            double heading = robotPosition.heading.real;
 
             if (depositMagnet.isPressed()) {
                 if (!depositMagnetPressed) {
@@ -90,7 +78,7 @@ public class ProtoTeleOp extends LinearOpMode {
             }
 
             //region Driving
-             robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
+            robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
             double imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
             if (imuYaw < 0) {
                 imuYaw += 360;
@@ -174,13 +162,16 @@ public class ProtoTeleOp extends LinearOpMode {
                 robot.claw.arm.down();
             }
 
-            if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) && (depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
+            if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
+                    (depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
                 robot.depositSlide.stop();
             }
-            if ((!intakeSlideL.isBusy()) && (intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) && (intakeSlideL.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!intakeSlideL.isBusy()) && (intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
+                    (intakeSlideL.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
                 intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
-            if ((!intakeSlideR.isBusy()) && (intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) && (intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!intakeSlideR.isBusy()) && (intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
+                    (intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
                 intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
 
@@ -188,9 +179,6 @@ public class ProtoTeleOp extends LinearOpMode {
 
             //region Telemetry
             TelemetryPacket packet = new TelemetryPacket();
-//            packet.put("X Position", x);
-//            packet.put("Y Position", y);
-//            packet.put("Rotation", heading);
             packet.put("Heading", Math.toDegrees(robot.drive.roadRunner.pose.heading.real));
             packet.put("PoseX", (robot.drive.roadRunner.pose.position.x));
             packet.put("PoseY", (robot.drive.roadRunner.pose.position.y));
@@ -215,8 +203,6 @@ public class ProtoTeleOp extends LinearOpMode {
             packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
             dashboard.sendTelemetryPacket(packet);
 
-//            telemetry.addData("Robot Position", String.format(Locale.US,"X: %.2f, Y: %.2f, Heading: %.2f", x, y, heading));
-            robot.drive.roadRunner.updatePoseEstimate();
             telemetry.addData("Heading", Math.toDegrees(robot.drive.roadRunner.pose.heading.real));
             telemetry.addData("PoseX", (robot.drive.roadRunner.pose.position.x));
             telemetry.addData("PoseY", (robot.drive.roadRunner.pose.position.y));
@@ -253,4 +239,3 @@ public class ProtoTeleOp extends LinearOpMode {
         }
     }
 }
-

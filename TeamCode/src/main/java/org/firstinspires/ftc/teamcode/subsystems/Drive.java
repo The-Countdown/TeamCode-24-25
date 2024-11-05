@@ -4,7 +4,10 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Drive extends Robot.HardwareDevices {
@@ -17,6 +20,14 @@ public class Drive extends Robot.HardwareDevices {
             initialPose = new Pose2d(0, 0, 0);
         }
         this.roadRunner = new MecanumDrive(hardwareMap, initialPose);
+    }
+
+    public void move(double stickX, double stickY) {
+
+    }
+
+    public void moveField(double stickX, double stickY) {
+
     }
 
     public Pose2d getRobotPosLimeLight() {
@@ -55,48 +66,4 @@ public class Drive extends Robot.HardwareDevices {
 
         return new Pose2d(avgX, avgY, avgHeading);
     }
-
-    public class Blue {
-        public void basket() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        roadRunner.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(57.88, 56.86, Math.toRadians(45)), Math.toRadians(45))
-                                .build());
-            }
-        }
-        public void specimen() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        roadRunner.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(0, 35, Math.toRadians(90)), Math.toRadians(90))
-                                .build());
-            }
-        }
-    }
-    public class Red {
-        public void basket() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        roadRunner.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(-57.88, -56.86, Math.toRadians(45)), Math.toRadians(45)) // Flipped signs
-                                .build());
-            }
-        }
-
-        public void specimen() {
-            Pose2d currentPose = getRobotPos();
-            {
-                Actions.runBlocking(
-                        roadRunner.actionBuilder(currentPose)
-                                .splineToSplineHeading(new Pose2d(0, -35, Math.toRadians(90)), Math.toRadians(90)) // Flipped sign on Y
-                                .build());
-            }
-        }
-    }
-    public Blue blue = new Blue();
-    public Red red = new Red();
 }

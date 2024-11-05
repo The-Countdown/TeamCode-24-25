@@ -3,19 +3,16 @@ package org.firstinspires.ftc.teamcode.main.Auto;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchL;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchR;
 
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
@@ -26,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeCondense;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeGround;
 
 @Autonomous
-public class AutoManual extends LinearOpMode {
+public class AutoLeft extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -64,17 +61,17 @@ public class AutoManual extends LinearOpMode {
                 toPlace.build(),
                 new DepositActionHigh(),
                 new ClawOpen(),
-                new SleepAction(200),
-                new DepositCondense(),
-                toFirstSample.build(),
-                new IntakeGround(),
-                new SleepAction(2000),
-                new IntakeCondense(),
-                toPlace.build(),
-                new DepositActionHigh(),
-                new ClawOpen(),
-                new SleepAction(200),
-                new DepositCondense()
+                new Wait(200),
+                new DepositCondense()//,
+//                toFirstSample.build(),
+//                new IntakeGround(),
+//                new Wait(2000),
+//                new IntakeCondense(),
+//                toPlace.build(),
+//                new DepositActionHigh(),
+//                new ClawOpen(),
+//                new Wait(200),
+//                new DepositCondense()
         ));
     }
 }

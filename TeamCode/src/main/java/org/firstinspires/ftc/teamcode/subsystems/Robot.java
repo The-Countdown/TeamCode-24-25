@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.CheckResult;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -126,6 +128,18 @@ public class Robot {
         HardwareDevices.imu.resetYaw();
 
         drive = new Drive(hardwareMap);
+    }
+    @CheckResult
+    public boolean safeSleep(double milliseconds) {
+        double startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < milliseconds) {
+            opMode.idle();
+            if (opMode.isStopRequested()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public Drive drive;

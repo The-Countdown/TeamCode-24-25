@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.actions;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -15,8 +17,6 @@ public class Wait implements Action {
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        double durationInSeconds = duration / 1000.0;
-        new SleepAction(durationInSeconds);
-        return false;
+        return !rb.safeSleep(duration);
     }
 }

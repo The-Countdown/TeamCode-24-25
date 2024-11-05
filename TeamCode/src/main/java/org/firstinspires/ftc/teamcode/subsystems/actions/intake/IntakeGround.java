@@ -17,9 +17,13 @@ public class IntakeGround implements Action {
         rb.intakeSlide.ground();
         rb.intake.spinIn();
         while (intakeSlideL.isBusy() || intakeSlideR.isBusy()) {
-            new Wait(10);
+            if (!rb.safeSleep(10)) {
+                return true;
+            }
         }
-        new Wait(100);
+        if (!rb.safeSleep(100)) {
+            return true;
+        }
         return false;
     }
 }

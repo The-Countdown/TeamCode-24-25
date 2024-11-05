@@ -17,15 +17,23 @@ public class IntakeCondense implements Action {
         rb.claw.arm.down();
         rb.claw.hand.close();
         rb.intake.up();
-        new Wait(750);
+        if (!rb.safeSleep(750)) {
+            return true;
+        }
         rb.intakeSlide.retract();
         while (intakeSlideL.isBusy() || intakeSlideR.isBusy()) {
-            new Wait(10);
+            if (!rb.safeSleep(10)) {
+                return true;
+            }
         }
         rb.intake.down();
-        new Wait(500);
+        if (!rb.safeSleep(500)) {
+            return true;
+        }
         rb.claw.hand.close();
-        new Wait(100);
+        if (!rb.safeSleep(100)) {
+            return true;
+        }
         rb.claw.arm.forwards();
         rb.intake.spinStop();
         return false;

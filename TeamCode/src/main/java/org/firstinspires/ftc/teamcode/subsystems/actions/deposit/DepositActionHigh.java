@@ -15,11 +15,15 @@ public class DepositActionHigh implements Action {
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         rb.claw.hand.close();
         rb.depositSlide.highBasket();
-        new Wait(300);
+        if (!rb.safeSleep(300)) {
+            return true;
+        }
         rb.claw.arm.back();
         rb.claw.elbow.horizontal();
         while (Robot.HardwareDevices.depositSlide.isBusy()) {
-            new Wait(10);
+            if (!rb.safeSleep(10)) {
+                return true;
+            }
         }
         return false;
     }
