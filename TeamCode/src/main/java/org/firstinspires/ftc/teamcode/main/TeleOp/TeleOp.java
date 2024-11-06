@@ -17,6 +17,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -116,16 +118,30 @@ public class TeleOp extends LinearOpMode {
 
             if (driveToggle) {
                 // Field Drive
-                Robot.HardwareDevices.leftFront.setPower(newYStickL + newXStickL + xStickR);
-                Robot.HardwareDevices.leftBack.setPower(newYStickL - newXStickL + xStickR);
-                Robot.HardwareDevices.rightFront.setPower(newYStickL - newXStickL - xStickR);
-                Robot.HardwareDevices.rightBack.setPower(newYStickL + newXStickL - xStickR);
+                rb.dreadDrive.setDrivePowers(new PoseVelocity2d(
+                        new Vector2d(
+                                newYStickL,
+                                -newXStickL
+                        ),
+                        -xStickR
+                ));
+//                Robot.HardwareDevices.leftFront.setPower(newYStickL + newXStickL + xStickR);
+//                Robot.HardwareDevices.leftBack.setPower(newYStickL - newXStickL + xStickR);
+//                Robot.HardwareDevices.rightFront.setPower(newYStickL - newXStickL - xStickR);
+//                Robot.HardwareDevices.rightBack.setPower(newYStickL + newXStickL - xStickR);
             } else {
                 // Normal Drive
-                Robot.HardwareDevices.leftFront.setPower(yStickL + xStickL + xStickR);
-                Robot.HardwareDevices.leftBack.setPower(yStickL - xStickL + xStickR);
-                Robot.HardwareDevices.rightFront.setPower(yStickL - xStickL - xStickR);
-                Robot.HardwareDevices.rightBack.setPower(yStickL + xStickL - xStickR);
+                rb.dreadDrive.setDrivePowers(new PoseVelocity2d(
+                        new Vector2d(
+                                yStickL,
+                                -xStickL
+                        ),
+                        -xStickR
+                ));
+//                Robot.HardwareDevices.leftFront.setPower(yStickL + xStickL + xStickR);
+//                Robot.HardwareDevices.leftBack.setPower(yStickL - xStickL + xStickR);
+//                Robot.HardwareDevices.rightFront.setPower(yStickL - xStickL - xStickR);
+//                Robot.HardwareDevices.rightBack.setPower(yStickL + xStickL - xStickR);
             }
             //endregion
 
