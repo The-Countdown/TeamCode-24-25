@@ -11,8 +11,8 @@ public class SpecimenDown implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         rb.depositSlide.specimenWall();
-        rb.claw.arm.forwards();
-        rb.claw.hand.open();
+        rb.depositClaw.arm.forwards();
+        rb.depositClaw.hand.open();
         return false;
     }
 }

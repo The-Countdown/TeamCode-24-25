@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import androidx.annotation.CheckResult;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -15,9 +16,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Robot {
     public static Robot rb;
+    public static Pose2d currentPose;
+    public Pose2d beginPose;
+    public MecanumDrive dreadDrive;
     HardwareMap hardwareMap;
     Telemetry telemetry;
     LinearOpMode opMode;
@@ -127,7 +132,8 @@ public class Robot {
         );
         HardwareDevices.imu.resetYaw();
 
-        drive = new Drive(hardwareMap);
+        beginPose = new Pose2d(0, 0, Math.toRadians(0));
+        dreadDrive = new MecanumDrive(hardwareMap, beginPose);
     }
     @CheckResult
     public boolean safeSleep(double milliseconds) {
@@ -142,11 +148,15 @@ public class Robot {
         return true;
     }
 
+    public void updatePose() {
+        currentPose = dreadDrive.pose;
+    }
+
     public Drive drive;
     public IntakeSlide intakeSlide = new IntakeSlide();
     public DepositSlide depositSlide = new DepositSlide();
-    public Intake intake = new Intake();
-    public Claw claw = new Claw();
+    public IntakeClaw intakeClaw = new IntakeClaw();
+    public DepositClaw depositClaw = new DepositClaw();
     public Arm arm = new Arm();
 }
 

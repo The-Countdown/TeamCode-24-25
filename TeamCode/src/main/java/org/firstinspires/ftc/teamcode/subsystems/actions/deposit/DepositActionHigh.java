@@ -12,13 +12,13 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 public class DepositActionHigh implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        rb.claw.hand.close();
+        rb.depositClaw.hand.close();
         rb.depositSlide.highBasket();
         if (!rb.safeSleep(300)) {
             return true;
         }
-        rb.claw.arm.back();
-        rb.claw.elbow.horizontal();
+        rb.depositClaw.arm.back();
+        rb.depositClaw.elbow.horizontal();
         while (Robot.HardwareDevices.depositSlide.isBusy()) {
             if (!rb.safeSleep(10)) {
                 return true;

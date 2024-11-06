@@ -1,26 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Drive extends Robot.HardwareDevices {
-
-    public MecanumDrive roadRunner;
-
-    public Drive(HardwareMap hardwareMap) {
-        Pose2d initialPose/* = getRobotPosLimeLight()*/ = null;
-        if (initialPose == null) {
-            initialPose = new Pose2d(0, 0, 0);
-        }
-        this.roadRunner = new MecanumDrive(hardwareMap, initialPose);
-    }
 
     public void move(double stickX, double stickY) {
 
@@ -30,7 +18,7 @@ public class Drive extends Robot.HardwareDevices {
 
     }
 
-    public Pose2d getRobotPosLimeLight() {
+    public Pose2d getLimeLightPos() {
         Robot.HardwareDevices.limelight.setPollRateHz(100);
         Robot.HardwareDevices.limelight.start();
         Robot.HardwareDevices.limelight.pipelineSwitch(3);
@@ -48,22 +36,10 @@ public class Drive extends Robot.HardwareDevices {
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);
     }
 
-    public Pose2d getRobotPosRoadRunner() {
-        return roadRunner.pose;
-    }
-
-    public Pose2d getRobotPos() {
-        Pose2d limelightPose = getRobotPosLimeLight();
-        Pose2d roadRunnerPose = getRobotPosRoadRunner();
-
-        if (limelightPose == null || roadRunnerPose == null) {
-            return null;
-        }
-
-        double avgX = (limelightPose.position.x + roadRunnerPose.position.x) / 2;
-        double avgY = (limelightPose.position.y + roadRunnerPose.position.y) / 2;
-        double avgHeading = (limelightPose.heading.real + roadRunnerPose.heading.real) / 2;
-
-        return new Pose2d(avgX, avgY, avgHeading);
+    public void toPose (double x, double y, double angle) {
+        rb.updatePose();
+        Actions.runBlocking(rb.dreadDrive.actionBuilder(rb.dreadDrive.pose)
+                .splineToSplineHeading(new Pose2d(x, y, Math.toRadians(angle)), Math.toRadians(0))
+                .build());
     }
 }

@@ -11,9 +11,9 @@ import com.acmerobotics.roadrunner.Action;
 public class DepositCondense implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        rb.claw.arm.down();
-        rb.claw.hand.close();
-        rb.claw.elbow.vertical();
+        rb.depositClaw.arm.down();
+        rb.depositClaw.hand.close();
+        rb.depositClaw.elbow.vertical();
         rb.depositSlide.retract();
         while (depositSlide.isBusy()) {
             if (!rb.safeSleep(10)) {

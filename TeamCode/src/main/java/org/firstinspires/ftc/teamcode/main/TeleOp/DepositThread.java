@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
@@ -41,27 +38,26 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
             }
 
             if (gamepad1.circle) {
-                robot.claw.hand.open();
+                robot.depositClaw.hand.open();
             } else if (gamepad1.cross) {
-                robot.claw.hand.close();
+                robot.depositClaw.hand.close();
                 if (!robot.safeSleep(250)) {
                     return;
                 }
-                robot.claw.arm.upLift();
+                robot.depositClaw.arm.upLift();
             }
 
             if (gamepad2.dpad_up) {
                 while (!depositMagnet.isPressed()) {
-                    robot.claw.arm.down();
-                    robot.claw.hand.close();
+                    robot.depositClaw.arm.down();
+                    robot.depositClaw.hand.close();
                     if (!robot.safeSleep(750)) {
                         return;
                     }
-
                     depositSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     depositSlide.setPower(-0.7);
                 }
-                robot.claw.hand.open();
+                robot.depositClaw.hand.open();
                 depositSlide.setPower(0);
                 depositSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }

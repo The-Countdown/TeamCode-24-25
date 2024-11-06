@@ -74,15 +74,15 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
     public void pickUpGround() {
         try {
-            rb.claw.arm.down();
-            rb.claw.hand.open();
+            rb.depositClaw.arm.down();
+            rb.depositClaw.hand.open();
             Thread.sleep(250);
             ground();
             while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.ground - IntakeSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            intakePitchL.setPosition(Intake.IntakePosition.downL);
-            intakePitchR.setPosition(Intake.IntakePosition.downR);
+            intakePitchL.setPosition(IntakeClaw.IntakePosition.downL);
+            intakePitchR.setPosition(IntakeClaw.IntakePosition.downR);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -90,11 +90,11 @@ public class IntakeSlide extends Robot.HardwareDevices {
     public void pickUp() {
         try {
             rb.depositSlide.retract();
-            rb.claw.arm.down();
-            rb.claw.hand.open();
+            rb.depositClaw.arm.down();
+            rb.depositClaw.hand.open();
             Thread.sleep(250);
-            intakePitchL.setPosition(Intake.IntakePosition.upL);
-            intakePitchR.setPosition(Intake.IntakePosition.upR);
+            intakePitchL.setPosition(IntakeClaw.IntakePosition.upL);
+            intakePitchR.setPosition(IntakeClaw.IntakePosition.upR);
             Thread.sleep(750);
             extend();
             while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.extended - IntakeSlidePosition.stepRange))) {
@@ -102,35 +102,22 @@ public class IntakeSlide extends Robot.HardwareDevices {
             }
             intakeSlideL.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
             intakeSlideR.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
-            intakePitchL.setPosition(Intake.IntakePosition.downL);
-            intakePitchR.setPosition(Intake.IntakePosition.downR);
+            intakePitchL.setPosition(IntakeClaw.IntakePosition.downL);
+            intakePitchR.setPosition(IntakeClaw.IntakePosition.downR);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
     public void condense() {
         try {
-            rb.claw.arm.down();
-            rb.claw.hand.open();
-            Thread.sleep(1000);
-            intakePitchL.setPosition(Intake.IntakePosition.upL);
-            intakePitchR.setPosition(Intake.IntakePosition.upR);
-            Thread.sleep(750);
+            rb.depositClaw.arm.down();
+            rb.depositClaw.hand.open();
+            Thread.sleep(500);
             retract();
-            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 200)) {
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 100)) {
                 Thread.sleep(10);
             }
-            intakePitchL.setPosition(Intake.IntakePosition.downL - 0.04);
-            intakePitchR.setPosition(Intake.IntakePosition.downR + 0.04);
-            Thread.sleep(500);
-            intakePitchL.setPosition(Intake.IntakePosition.downL - 0.005);
-            intakePitchR.setPosition(Intake.IntakePosition.downR + 0.005);
-            Thread.sleep(500);
-            rb.claw.hand.close();
-            Thread.sleep(500);
-            rb.claw.arm.forwards();
-            rb.depositSlide.retract();
-            Thread.sleep(750);
+            rb.depositClaw.hand.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

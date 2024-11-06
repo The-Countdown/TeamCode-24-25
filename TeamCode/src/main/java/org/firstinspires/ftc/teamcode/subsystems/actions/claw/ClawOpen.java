@@ -10,7 +10,7 @@ import com.acmerobotics.roadrunner.Action;
 public class ClawOpen implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        rb.claw.hand.open();
+        rb.depositClaw.hand.open();
         return false;
     }
 }

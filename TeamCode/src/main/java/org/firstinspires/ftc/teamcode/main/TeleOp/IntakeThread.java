@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 
@@ -40,13 +36,10 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                 if (((intakeSlideL.getTargetPosition() + intakeSlideR.getTargetPosition()) / 2) <= 1500) {
                     intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
                     intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
-                    robot.intake.align();
                 }
             } else {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
-                intakePitchL.setPosition(Intake.IntakePosition.downL - 0.005);
-                intakePitchR.setPosition(Intake.IntakePosition.downR + 0.005);
             }
         }
     }

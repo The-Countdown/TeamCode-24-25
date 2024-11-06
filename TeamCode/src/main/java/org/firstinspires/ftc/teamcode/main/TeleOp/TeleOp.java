@@ -11,6 +11,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.in
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideL;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideR;
 import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeYaw;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.currentPose;
+import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -20,7 +22,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.DepositClaw;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -39,6 +42,7 @@ public class TeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this);
+
         YawPitchRollAngles robotOrientation;
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -53,14 +57,16 @@ public class TeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-        robot.claw.hand.open();
-        robot.claw.arm.down();
-        robot.claw.elbow.vertical();
-        intakePitchL.setPosition(0.595);
-        intakePitchR.setPosition(0.555);
+        DriveThread driveRunnable = new DriveThread(this);
+        Thread driveThread = new Thread(driveRunnable);
+        driveThread.start();
+
+        robot.depositClaw.hand.open();
+        robot.depositClaw.arm.down();
+        robot.depositClaw.elbow.vertical();
 
         while (opModeIsActive()) {
-            robot.drive.roadRunner.updatePoseEstimate();
+            rb.updatePose();
 
             int yStickRInt  = (int) (gamepad2.right_stick_y * 30);
             int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
@@ -125,11 +131,11 @@ public class TeleOp extends LinearOpMode {
 
             //region Subsystem Controls
             if (gamepad2.right_bumper) {
-                robot.intake.spinIn();
+                robot.intakeClaw.spinIn();
             } else if (gamepad2.left_bumper) {
-                robot.intake.spinOut();
+                robot.intakeClaw.spinOut();
             } else {
-                robot.intake.spinStop();
+                robot.intakeClaw.spinStop();
             }
 
             if (gamepad2.right_stick_y != 0) {
@@ -146,19 +152,12 @@ public class TeleOp extends LinearOpMode {
                 robot.arm.stop();
 
             if (gamepad2.dpad_left) {
-                robot.claw.hand.open();
-            }
-
-            if (gamepad1.square) {
-                robot.claw.elbow.vertical();
-            }
-            if (gamepad1.triangle) {
-                robot.claw.elbow.horizontal();
+                robot.depositClaw.hand.open();
             }
 
             if (gamepad2.dpad_right && (depositSlide.getCurrentPosition() < 100)) {
-                robot.claw.hand.open();
-                robot.claw.arm.down();
+                robot.depositClaw.hand.open();
+                robot.depositClaw.arm.down();
             }
 
             if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
@@ -177,10 +176,11 @@ public class TeleOp extends LinearOpMode {
             //endregion
 
             //region Telemetry
+            rb.updatePose();
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading", Math.toDegrees(robot.drive.roadRunner.pose.heading.real));
-            packet.put("PoseX", (robot.drive.roadRunner.pose.position.x));
-            packet.put("PoseY", (robot.drive.roadRunner.pose.position.y));
+            packet.put("Heading", Math.toDegrees(rb.dreadDrive.pose.heading.real));
+            packet.put("PoseX", (rb.dreadDrive.pose.position.x));
+            packet.put("PoseY", (rb.dreadDrive.pose.position.y));
             packet.put("Claw Position", claw.getPosition());
             packet.put("Claw Rotation", clawAngle.getPosition());
             packet.put("Deposit Height", depositSlide.getCurrentPosition());
@@ -202,14 +202,14 @@ public class TeleOp extends LinearOpMode {
             packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Heading", Math.toDegrees(robot.drive.roadRunner.pose.heading.real));
-            telemetry.addData("PoseX", (robot.drive.roadRunner.pose.position.x));
-            telemetry.addData("PoseY", (robot.drive.roadRunner.pose.position.y));
+            telemetry.addData("Heading", Math.toDegrees(rb.dreadDrive.pose.heading.real));
+            telemetry.addData("PoseX", (rb.dreadDrive.pose.position.x));
+            telemetry.addData("PoseY", (rb.dreadDrive.pose.position.y));
             telemetry.addLine();
             telemetry.addData("Claw", claw.getPosition());
             telemetry.addData("Claw Rotation", clawAngle.getPosition());
             telemetry.addData("ClawArm", clawArm.getPosition());
-            telemetry.addData("BackPos", Claw.Position.Arm.back);
+            telemetry.addData("BackPos", DepositClaw.DepositClawPosition.Arm.back);
             telemetry.addLine();
             telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
             telemetry.addLine();

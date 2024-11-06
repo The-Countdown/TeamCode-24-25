@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 
-public class Intake extends Robot.HardwareDevices {
+public class IntakeClaw extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
         public static double upL = 0.52;

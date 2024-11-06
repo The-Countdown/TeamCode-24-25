@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.in
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,8 +18,6 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.claw.ClawOpen;
 import org.firstinspires.ftc.teamcode.subsystems.actions.deposit.DepositActionHigh;
 import org.firstinspires.ftc.teamcode.subsystems.actions.deposit.DepositCondense;
-import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeCondense;
-import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeGround;
 
 @Autonomous
 public class AutoLeft extends LinearOpMode {
@@ -53,9 +50,9 @@ public class AutoLeft extends LinearOpMode {
         intakePitchL.setPosition(0.595);
         intakePitchR.setPosition(0.555);
         sleep(250);
-        robot.claw.hand.close();
+        robot.depositClaw.hand.close();
         sleep(250);
-        robot.claw.arm.forwards();
+        robot.depositClaw.arm.forwards();
 
         Actions.runBlocking(new SequentialAction(
                 toBasket.build(),
