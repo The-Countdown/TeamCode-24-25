@@ -14,19 +14,15 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class ToPose implements Action {
-    private final double x;
-    private final double y;
-    private final double angle;
+    private final Pose2d pose;
 
-    public ToPose(double x, double y, double angle) {
-        this.x = x;
-        this.y = y;
-        this.angle = angle;
+    public ToPose(Pose2d pose) {
+        this.pose = pose;
     }
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        rb.drive.toPose(x,y,angle);
+        rb.drive.toPose(pose);
         return false;
     }
 }

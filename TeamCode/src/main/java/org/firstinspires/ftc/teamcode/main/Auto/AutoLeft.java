@@ -50,9 +50,7 @@ public class AutoLeft extends LinearOpMode {
         intakePitchL.setPosition(0.595);
         intakePitchR.setPosition(0.555);
         sleep(250);
-        robot.depositClaw.hand.close();
-        sleep(250);
-        robot.depositClaw.arm.forwards();
+        robot.outtake.hand.close();
 
         Actions.runBlocking(new SequentialAction(
                 toBasket.build(),

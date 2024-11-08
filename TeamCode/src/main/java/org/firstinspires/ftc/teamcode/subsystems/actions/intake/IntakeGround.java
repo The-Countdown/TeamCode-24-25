@@ -13,7 +13,6 @@ public class IntakeGround implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         rb.intakeSlide.ground();
-        rb.intakeClaw.spinIn();
         while (intakeSlideL.isBusy() || intakeSlideR.isBusy()) {
             if (!rb.safeSleep(10)) {
                 return true;

@@ -32,7 +32,7 @@ public class AutoTesting extends LinearOpMode {
 
         Actions.runBlocking(new ParallelAction(
                 new SequentialAction(
-                        new ToPose(15,0,0)
+                        new ToPose(new Pose2d(15,15,0))
                 ),
                 new UpdatePose(this)
         ));

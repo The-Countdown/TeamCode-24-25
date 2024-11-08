@@ -36,10 +36,15 @@ public class Drive extends Robot.HardwareDevices {
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);
     }
 
-    public void toPose (double x, double y, double angle) {
+    public void toPose (Pose2d pose, Double tangent) {
+        if (tangent == null) {
+            tangent = 0d;
+        }
         rb.updatePose();
         Actions.runBlocking(rb.dreadDrive.actionBuilder(rb.dreadDrive.pose)
-                .splineToSplineHeading(new Pose2d(x, y, Math.toRadians(angle)), Math.toRadians(0))
+                .splineToLinearHeading(pose, tangent)
                 .build());
     }
+
+    public void toPose (Pose2d pose) {toPose(pose, null);}
 }

@@ -74,50 +74,27 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
     public void pickUpGround() {
         try {
-            rb.depositClaw.arm.down();
-            rb.depositClaw.hand.open();
-            Thread.sleep(250);
-            ground();
-            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.ground - IntakeSlidePosition.stepRange))) {
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.extended - IntakeSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            intakePitchL.setPosition(IntakeClaw.IntakePosition.downL);
-            intakePitchR.setPosition(IntakeClaw.IntakePosition.downR);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
     public void pickUp() {
         try {
-            rb.depositSlide.retract();
-            rb.depositClaw.arm.down();
-            rb.depositClaw.hand.open();
-            Thread.sleep(250);
-            intakePitchL.setPosition(IntakeClaw.IntakePosition.upL);
-            intakePitchR.setPosition(IntakeClaw.IntakePosition.upR);
-            Thread.sleep(750);
-            extend();
             while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.extended - IntakeSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            intakeSlideL.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
-            intakeSlideR.setPower(IntakeSlidePower.move / IntakeSlidePosition.tolerance);
-            intakePitchL.setPosition(IntakeClaw.IntakePosition.downL);
-            intakePitchR.setPosition(IntakeClaw.IntakePosition.downR);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
     public void condense() {
         try {
-            rb.depositClaw.arm.down();
-            rb.depositClaw.hand.open();
-            Thread.sleep(500);
-            retract();
             while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 100)) {
                 Thread.sleep(10);
             }
-            rb.depositClaw.hand.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

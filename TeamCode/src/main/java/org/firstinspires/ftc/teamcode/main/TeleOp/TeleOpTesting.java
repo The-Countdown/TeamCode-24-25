@@ -24,10 +24,9 @@ import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpTesting")
 @Config
-public class TeleOp extends LinearOpMode {
+public class TeleOpTesting extends LinearOpMode {
     public static double intakeYawThreshold = 0.1;
     public static double intakeYawMulti = 0.001;
 
@@ -36,6 +35,7 @@ public class TeleOp extends LinearOpMode {
     public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
     boolean depositMagnetPressed = false;
+
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this);
@@ -46,23 +46,19 @@ public class TeleOp extends LinearOpMode {
 
         waitForStart();
 
-        DepositThread depositRunnable = new DepositThread(this);
-        Thread depositThread = new Thread(depositRunnable);
-        depositThread.start();
-
-        IntakeThread intakeRunnable = new IntakeThread(this);
-        Thread intakeThread = new Thread(intakeRunnable);
-        intakeThread.start();
-
         DriveThread driveRunnable = new DriveThread(this);
         Thread driveThread = new Thread(driveRunnable);
         driveThread.start();
+
+        TestingThread testingRunnable = new TestingThread(this);
+        Thread testingThread = new Thread(testingRunnable);
+        testingThread.start();
 
 
         while (opModeIsActive()) {
             rb.updatePose();
 
-            int yStickRInt  = (int) (gamepad2.right_stick_y * 30);
+            int yStickRInt = (int) (gamepad2.right_stick_y * 30);
             int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
 
             if (depositMagnet.isPressed()) {
@@ -110,13 +106,6 @@ public class TeleOp extends LinearOpMode {
 
             if (driveToggle) {
                 // Field Drive
-//                rb.dreadDrive.setDrivePowers(new PoseVelocity2d(
-//                        new Vector2d(
-//                                yStickL,
-//                                -xStickL
-//                        ),
-//                        -xStickR
-//                ));
                 Robot.HardwareDevices.leftFront.setPower(newYStickL + newXStickL + xStickR);
                 Robot.HardwareDevices.leftBack.setPower(newYStickL - newXStickL + xStickR);
                 Robot.HardwareDevices.rightFront.setPower(newYStickL - newXStickL - xStickR);
@@ -143,6 +132,7 @@ public class TeleOp extends LinearOpMode {
                 arm.setPower(gamepad2.left_trigger);
             } else
                 robot.arm.stop();
+            //endregion
 
             if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
                     (depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
@@ -156,8 +146,6 @@ public class TeleOp extends LinearOpMode {
                     (intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
                 intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
-
-            //endregion
 
             //region Telemetry
             rb.updatePose();

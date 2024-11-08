@@ -38,26 +38,26 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
             }
 
             if (gamepad1.circle) {
-                robot.depositClaw.hand.open();
+                robot.outtake.hand.open();
             } else if (gamepad1.cross) {
-                robot.depositClaw.hand.close();
+                robot.outtake.hand.close();
                 if (!robot.safeSleep(250)) {
                     return;
                 }
-                robot.depositClaw.arm.upLift();
+                robot.outtake.arm.upLift();
             }
 
             if (gamepad2.dpad_up) {
                 while (!depositMagnet.isPressed()) {
-                    robot.depositClaw.arm.down();
-                    robot.depositClaw.hand.close();
+                    robot.outtake.arm.down();
+                    robot.outtake.hand.close();
                     if (!robot.safeSleep(750)) {
                         return;
                     }
                     depositSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     depositSlide.setPower(-0.7);
                 }
-                robot.depositClaw.hand.open();
+                robot.outtake.hand.open();
                 depositSlide.setPower(0);
                 depositSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }

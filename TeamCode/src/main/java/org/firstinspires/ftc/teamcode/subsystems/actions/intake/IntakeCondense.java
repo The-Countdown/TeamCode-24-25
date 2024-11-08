@@ -12,9 +12,9 @@ import com.acmerobotics.roadrunner.Action;
 public class IntakeCondense implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        rb.depositClaw.arm.down();
-        rb.depositClaw.hand.close();
-        rb.intakeClaw.up();
+        rb.outtake.arm.down();
+        rb.outtake.hand.close();
+        rb.intake.up();
         if (!rb.safeSleep(750)) {
             return true;
         }
@@ -24,16 +24,14 @@ public class IntakeCondense implements Action {
                 return true;
             }
         }
-        rb.intakeClaw.down();
+        rb.intake.down();
         if (!rb.safeSleep(500)) {
             return true;
         }
-        rb.depositClaw.hand.close();
+        rb.outtake.hand.close();
         if (!rb.safeSleep(100)) {
             return true;
         }
-        rb.depositClaw.arm.forwards();
-        rb.intakeClaw.spinStop();
         return false;
     }
 }

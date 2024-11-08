@@ -8,7 +8,6 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -39,12 +38,14 @@ public class Robot {
 
         public static Servo intakePitchL;
         public static Servo intakePitchR;
-        public static Servo intakeYaw;
-        public static CRServo intakeRoller;
+        public static Servo intakeClawAngle;
+        public static Servo intakeCoaxialPitch;
+        public static Servo intakeClaw;
 
-        public static Servo claw;
-        public static Servo clawArm;
-        public static Servo clawAngle;
+        public static Servo depositClaw;
+        public static Servo depositClawArmTop;
+        public static Servo depositClawArmBottom;
+        public static Servo depositClawAngle;
 
         public static TouchSensor depositMagnet;
         public static Limelight3A limelight;
@@ -83,14 +84,16 @@ public class Robot {
         HardwareDevices.arm = hardwareMap.get(DcMotorEx.class, "arm");
 
         // Servos
-        HardwareDevices.intakeYaw = hardwareMap.get(Servo.class, "intakeYaw");
+        HardwareDevices.intakeClaw = hardwareMap.get(Servo.class, "intakeClaw");
         HardwareDevices.intakePitchL = hardwareMap.get(Servo.class, "intakePitchL");
         HardwareDevices.intakePitchR = hardwareMap.get(Servo.class, "intakePitchR");
-        HardwareDevices.intakeRoller = hardwareMap.get(CRServo.class, "intakeRoller");
+        HardwareDevices.intakeClawAngle = hardwareMap.get(Servo.class, "intakeClawAngle");
+        HardwareDevices.intakeCoaxialPitch = hardwareMap.get(Servo.class, "intakeCoaxialPitch");
 
-        HardwareDevices.clawArm = hardwareMap.get(Servo.class, "clawArm");
-        HardwareDevices.clawAngle = hardwareMap.get(Servo.class, "clawAngle");
-        HardwareDevices.claw = hardwareMap.get(Servo.class, "claw");
+        HardwareDevices.depositClawArmTop = hardwareMap.get(Servo.class, "depositClawArmTop");
+        HardwareDevices.depositClawArmBottom = hardwareMap.get(Servo.class, "depositClawArmBottom");
+        HardwareDevices.depositClawAngle = hardwareMap.get(Servo.class, "depositClawAngle");
+        HardwareDevices.depositClaw = hardwareMap.get(Servo.class, "depositClaw");
 
         // Motor Directions
         HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
@@ -155,8 +158,8 @@ public class Robot {
     public Drive drive;
     public IntakeSlide intakeSlide = new IntakeSlide();
     public DepositSlide depositSlide = new DepositSlide();
-    public IntakeClaw intakeClaw = new IntakeClaw();
-    public DepositClaw depositClaw = new DepositClaw();
+    public Intake intake = new Intake();
+    public Outtake outtake = new Outtake();
     public Arm arm = new Arm();
 }
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -21,10 +22,10 @@ public class DriveThread extends Robot.HardwareDevices implements Runnable {
     public void run() {
         while (opMode.opModeIsActive()) {
             if (gamepad1.square) {
-                robot.drive.toPose(15,0,0);
+                robot.drive.toPose(new Pose2d(15,0,0));
             }
             if (gamepad1.triangle) {
-                robot.drive.toPose(5,10,0);
+                robot.drive.toPose(new Pose2d(15,15,0));
             }
         }
     }
