@@ -182,7 +182,7 @@ public class TeleOpTesting extends LinearOpMode {
             telemetry.addData("Claw Rotation", depositClawAngle.getPosition());
             telemetry.addData("ClawArmTop", depositClawArmTop.getPosition());
             telemetry.addData("ClawArmBottom", depositClawArmBottom.getPosition());
-            telemetry.addData("BackPos", Outtake.OuttakePositions.Arm.back);
+            telemetry.addData("BackPos", Outtake.OuttakePositions.armBack);
             telemetry.addLine();
             telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
             telemetry.addLine();
