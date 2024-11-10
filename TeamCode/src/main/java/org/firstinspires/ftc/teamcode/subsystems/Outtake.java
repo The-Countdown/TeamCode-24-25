@@ -3,6 +3,12 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 
 public class Outtake extends Robot.HardwareDevices {
+    private Robot robot;
+
+    public Outtake(Robot robot) {
+        this.robot = robot;
+    }
+
     @Config
     public static class OuttakePositions {
         // Arm positions

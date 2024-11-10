@@ -4,6 +4,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class Arm extends Robot.HardwareDevices {
+    private Robot robot;
+
+    public Arm(Robot robot) {
+        this.robot = robot;
+    }
+
     @Config
     public static class ArmPosition {
         public static int retracted = 0;

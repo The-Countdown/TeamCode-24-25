@@ -11,10 +11,10 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
     private final Gamepad gamepad2;
     private final Robot robot;
 
-    public IntakeThread(LinearOpMode opMode) {
+    public IntakeThread(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
         this.gamepad2 = opMode.gamepad2;
-        this.robot = Robot.rb;
+        this.robot = robot;
     }
 
     @Override

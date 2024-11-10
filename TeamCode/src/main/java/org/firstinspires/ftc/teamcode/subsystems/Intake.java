@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
-
 import com.acmerobotics.dashboard.config.Config;
 
 public class Intake extends Robot.HardwareDevices {
+    private Robot robot;
+
+    public Intake(Robot robot) {
+        this.robot = robot;
+    }
+
     @Config
     public static class IntakePosition {
         // Arm positions
@@ -89,35 +93,35 @@ public class Intake extends Robot.HardwareDevices {
     }
 
     public void up() {
-        rb.intake.arm.up();
-        rb.intake.elbow.down();
+        robot.intake.arm.up();
+        robot.intake.elbow.down();
     }
 
     public void down() {
-        rb.intake.arm.down();
-        rb.intake.elbow.down();
+        robot.intake.arm.down();
+        robot.intake.elbow.down();
     }
 
     public void rest() {
-        rb.intake.arm.rest();
-        rb.intake.elbow.rest();
-        rb.intake.wrist.horizontal();
+        robot.intake.arm.rest();
+        robot.intake.elbow.rest();
+        robot.intake.wrist.horizontal();
     }
 
     public void transfer() {
-        rb.intake.arm.transfer();
-        rb.intake.elbow.transfer();
-        rb.intake.wrist.vertical();
+        robot.intake.arm.transfer();
+        robot.intake.elbow.transfer();
+        robot.intake.wrist.vertical();
     }
 
     public void transferPrep() {
         try {
-            rb.intake.wrist.vertical();
-            rb.intake.elbow.up();
+            robot.intake.wrist.vertical();
+            robot.intake.elbow.up();
             Thread.sleep(500);
-            rb.intake.hand.halfOpen();
+            robot.intake.hand.halfOpen();
             Thread.sleep(300);
-            rb.intake.hand.open();
+            robot.intake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

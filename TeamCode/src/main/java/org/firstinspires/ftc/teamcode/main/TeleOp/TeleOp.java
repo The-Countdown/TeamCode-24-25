@@ -1,17 +1,5 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.arm;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositClaw;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositClawAngle;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositClawArmBottom;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositClawArmTop;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositMagnet;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositSlide;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeClawAngle;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideL;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideR;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -38,7 +26,7 @@ public class TeleOp extends LinearOpMode {
     boolean depositMagnetPressed = false;
     @Override
     public void runOpMode() {
-        Robot robot = new Robot(this);
+        Robot robot = Robot.getInstance(this);
 
         YawPitchRollAngles robotOrientation;
 
@@ -46,26 +34,26 @@ public class TeleOp extends LinearOpMode {
 
         waitForStart();
 
-        DepositThread depositRunnable = new DepositThread(this);
+        DepositThread depositRunnable = new DepositThread(this, robot);
         Thread depositThread = new Thread(depositRunnable);
         depositThread.start();
 
-        IntakeThread intakeRunnable = new IntakeThread(this);
+        IntakeThread intakeRunnable = new IntakeThread(this, robot);
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-        DriveThread driveRunnable = new DriveThread(this);
+        DriveThread driveRunnable = new DriveThread(this, robot);
         Thread driveThread = new Thread(driveRunnable);
         driveThread.start();
 
 
         while (opModeIsActive()) {
-            rb.updatePose();
+            robot.updatePose();
 
             int yStickRInt  = (int) (gamepad2.right_stick_y * 30);
-            int intakeAvg = (int) ((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2);
+            int intakeAvg = (int) ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
 
-            if (depositMagnet.isPressed()) {
+            if (Robot.HardwareDevices.depositMagnet.isPressed()) {
                 if (!depositMagnetPressed) {
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -110,13 +98,6 @@ public class TeleOp extends LinearOpMode {
 
             if (driveToggle) {
                 // Field Drive
-//                rb.dreadDrive.setDrivePowers(new PoseVelocity2d(
-//                        new Vector2d(
-//                                yStickL,
-//                                -xStickL
-//                        ),
-//                        -xStickR
-//                ));
                 Robot.HardwareDevices.leftFront.setPower(newYStickL + newXStickL + xStickR);
                 Robot.HardwareDevices.leftBack.setPower(newYStickL - newXStickL + xStickR);
                 Robot.HardwareDevices.rightFront.setPower(newYStickL - newXStickL - xStickR);
@@ -132,49 +113,49 @@ public class TeleOp extends LinearOpMode {
 
             //region Subsystem Controls
             if (gamepad2.right_stick_y != 0) {
-                depositSlide.setTargetPosition(depositSlide.getTargetPosition() - yStickRInt);
+                Robot.HardwareDevices.depositSlide.setTargetPosition(Robot.HardwareDevices.depositSlide.getTargetPosition() - yStickRInt);
             } else {
-                depositSlide.setTargetPosition(depositSlide.getTargetPosition());
+                Robot.HardwareDevices.depositSlide.setTargetPosition(Robot.HardwareDevices.depositSlide.getTargetPosition());
             }
 
             if (gamepad2.right_trigger > 0) {
-                arm.setPower(-gamepad2.right_trigger);
+                Robot.HardwareDevices.arm.setPower(-gamepad2.right_trigger);
             } else if (gamepad2.left_trigger > 0) {
-                arm.setPower(gamepad2.left_trigger);
+                Robot.HardwareDevices.arm.setPower(gamepad2.left_trigger);
             } else
                 robot.arm.stop();
 
-            if ((depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
-                    (depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
+            if ((Robot.HardwareDevices.depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
+                    (Robot.HardwareDevices.depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
                 robot.depositSlide.stop();
             }
-            if ((!intakeSlideL.isBusy()) && (intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
-                    (intakeSlideL.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
-                intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
+            if ((!Robot.HardwareDevices.intakeSlideL.isBusy()) && (Robot.HardwareDevices.intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
+                    (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+                Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
-            if ((!intakeSlideR.isBusy()) && (intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
-                    (intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
-                intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
+            if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
+                    (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+                Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
 
             //endregion
 
             //region Telemetry
-            rb.updatePose();
+            robot.updatePose();
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading", Math.toDegrees(rb.dreadDrive.pose.heading.real));
-            packet.put("PoseX", (rb.dreadDrive.pose.position.x));
-            packet.put("PoseY", (rb.dreadDrive.pose.position.y));
-            packet.put("Claw Position", depositClaw.getPosition());
-            packet.put("Claw Rotation", depositClawAngle.getPosition());
-            packet.put("Deposit Height", depositSlide.getCurrentPosition());
+            packet.put("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
+            packet.put("PoseX", (robot.dreadDrive.pose.position.x));
+            packet.put("PoseY", (robot.dreadDrive.pose.position.y));
+            packet.put("Claw Position", Robot.HardwareDevices.depositClaw.getPosition());
+            packet.put("Claw Rotation", Robot.HardwareDevices.depositClawAngle.getPosition());
+            packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             packet.put("Intake Height Avg", (intakeAvg));
-            packet.put("IntakeL Height", (intakeSlideL.getCurrentPosition()));
-            packet.put("IntakeR Height", (intakeSlideR.getCurrentPosition()));
-            packet.put("Intake Angle", intakeClawAngle.getPosition());
-            packet.put("Intake Velocity", ((intakeSlideL.getVelocity() + intakeSlideR.getVelocity()) / 2));
-            packet.put("IntakeL Velocity", intakeSlideL.getVelocity());
-            packet.put("IntakeR Velocity", intakeSlideR.getVelocity());
+            packet.put("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
+            packet.put("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
+            packet.put("Intake Angle", Robot.HardwareDevices.intakeClawAngle.getPosition());
+            packet.put("Intake Velocity", ((Robot.HardwareDevices.intakeSlideL.getVelocity() + Robot.HardwareDevices.intakeSlideR.getVelocity()) / 2));
+            packet.put("IntakeL Velocity", Robot.HardwareDevices.intakeSlideL.getVelocity());
+            packet.put("IntakeR Velocity", Robot.HardwareDevices.intakeSlideR.getVelocity());
             packet.put("New Y Stick L", newYStickL);
             packet.put("New X Stick L", newXStickL);
             packet.put("IMU Yaw", imuYaw);
@@ -186,25 +167,25 @@ public class TeleOp extends LinearOpMode {
             packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Heading", Math.toDegrees(rb.dreadDrive.pose.heading.real));
-            telemetry.addData("PoseX", (rb.dreadDrive.pose.position.x));
-            telemetry.addData("PoseY", (rb.dreadDrive.pose.position.y));
+            telemetry.addData("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
+            telemetry.addData("PoseX", (robot.dreadDrive.pose.position.x));
+            telemetry.addData("PoseY", (robot.dreadDrive.pose.position.y));
             telemetry.addLine();
-            telemetry.addData("Claw", depositClaw.getPosition());
-            telemetry.addData("Claw Rotation", depositClawAngle.getPosition());
-            telemetry.addData("ClawArmTop", depositClawArmTop.getPosition());
-            telemetry.addData("ClawArmBottom", depositClawArmBottom.getPosition());
+            telemetry.addData("Claw", Robot.HardwareDevices.depositClaw.getPosition());
+            telemetry.addData("Claw Rotation", Robot.HardwareDevices.depositClawAngle.getPosition());
+            telemetry.addData("ClawArmTop", Robot.HardwareDevices.depositClawArmTop.getPosition());
+            telemetry.addData("ClawArmBottom", Robot.HardwareDevices.depositClawArmBottom.getPosition());
             telemetry.addData("BackPos", Outtake.OuttakePositions.armBack);
             telemetry.addLine();
-            telemetry.addData("Deposit Height", depositSlide.getCurrentPosition());
+            telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             telemetry.addLine();
-            telemetry.addData("IntakeL Height", (intakeSlideL.getCurrentPosition()));
-            telemetry.addData("IntakeR Height", (intakeSlideR.getCurrentPosition()));
+            telemetry.addData("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
+            telemetry.addData("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
             telemetry.addLine();
-            telemetry.addData("IntakeL Velocity", intakeSlideL.getVelocity());
-            telemetry.addData("IntakeR Velocity", intakeSlideR.getVelocity());
+            telemetry.addData("IntakeL Velocity", Robot.HardwareDevices.intakeSlideL.getVelocity());
+            telemetry.addData("IntakeR Velocity", Robot.HardwareDevices.intakeSlideR.getVelocity());
             telemetry.addLine();
-            telemetry.addData("Intake Angle", intakeClawAngle.getPosition());
+            telemetry.addData("Intake Angle", Robot.HardwareDevices.intakeClawAngle.getPosition());
             telemetry.addLine();
             telemetry.addData("newYStickL", newYStickL);
             telemetry.addData("newXStickL", newXStickL);
@@ -216,8 +197,8 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("Left Stick X", xStickL);
             telemetry.addData("Left Stick Y", yStickL);
             telemetry.addLine();
-            telemetry.addData("Deposit Magnet", depositMagnet.getValue());
-            telemetry.addData("Deposit Magnet", depositMagnet.isPressed());
+            telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.getValue());
+            telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
             telemetry.update();
             //endregion
         }

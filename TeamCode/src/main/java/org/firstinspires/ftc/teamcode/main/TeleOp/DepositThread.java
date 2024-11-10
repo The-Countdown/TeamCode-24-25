@@ -13,11 +13,11 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
     private final Gamepad gamepad2;
     private final Robot robot;
 
-    public DepositThread(LinearOpMode opMode) {
+    public DepositThread(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
         this.gamepad1 = opMode.gamepad1;
         this.gamepad2 = opMode.gamepad2;
-        robot = Robot.rb;
+        this.robot = robot;
     }
 
     @Override

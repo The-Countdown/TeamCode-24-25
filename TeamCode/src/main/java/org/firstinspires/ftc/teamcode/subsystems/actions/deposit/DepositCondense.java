@@ -1,22 +1,27 @@
 package org.firstinspires.ftc.teamcode.subsystems.actions.deposit;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.depositSlide;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
+
 public class DepositCondense implements Action {
+    private final Robot robot;
+
+    public DepositCondense(Robot robot) {
+        this.robot = robot;
+    }
+
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        rb.outtake.arm.down();
-        rb.outtake.hand.close();
-        rb.outtake.wrist.vertical();
-        rb.depositSlide.retract();
-        while (depositSlide.isBusy()) {
-            if (!rb.safeSleep(10)) {
+        robot.outtake.arm.down();
+        robot.outtake.hand.close();
+        robot.outtake.wrist.vertical();
+        robot.depositSlide.retract();
+        while (Robot.HardwareDevices.depositSlide.isBusy()) {
+            if (!robot.safeSleep(10)) {
                 return true;
             }
         }

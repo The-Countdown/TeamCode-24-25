@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class DepositSlide extends Robot.HardwareDevices {
+    private Robot robot;
+
+    public DepositSlide(Robot robot) {
+        this.robot = robot;
+    }
+
     @Config
     public static class DepositSlidePosition {
         public static int retracted = 0;
@@ -69,12 +73,12 @@ public class DepositSlide extends Robot.HardwareDevices {
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            rb.outtake.arm.upClip();
-            rb.outtake.wrist.horizontal();
+            robot.outtake.arm.upClip();
+            robot.outtake.wrist.horizontal();
             Thread.sleep(750);
             retract();
             depositSlide.setPower(DepositSlidePower.move/2);
-            rb.outtake.hand.open();
+            robot.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -91,13 +95,13 @@ public class DepositSlide extends Robot.HardwareDevices {
     }
     public void depositHigh() {
         try {
-            rb.outtake.hand.close();
+            robot.outtake.hand.close();
             highBasket();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            rb.outtake.arm.back();
-            rb.outtake.wrist.horizontal();
+            robot.outtake.arm.back();
+            robot.outtake.wrist.horizontal();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -108,8 +112,8 @@ public class DepositSlide extends Robot.HardwareDevices {
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.lowBasket - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            rb.outtake.arm.back();
-            rb.outtake.wrist.horizontal();
+            robot.outtake.arm.back();
+            robot.outtake.wrist.horizontal();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -122,9 +126,9 @@ public class DepositSlide extends Robot.HardwareDevices {
                     Thread.sleep(10);
                 }
             }
-            rb.outtake.arm.down();
-            rb.outtake.wrist.vertical();
-            rb.outtake.hand.close();
+            robot.outtake.arm.down();
+            robot.outtake.wrist.vertical();
+            robot.outtake.hand.close();
             Thread.sleep(1000);
             retract();
             while (!(depositSlide.getCurrentPosition() < 700)) {
@@ -134,7 +138,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             while (!(depositSlide.getCurrentPosition() < DepositSlidePosition.stepRange)) {
                 Thread.sleep(10);
             }
-            rb.outtake.hand.open();
+            robot.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

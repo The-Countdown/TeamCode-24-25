@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.main.Auto;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchL;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakePitchR;
-
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -47,17 +44,17 @@ public class AutoLeft extends LinearOpMode {
 
         waitForStart();
 
-        intakePitchL.setPosition(0.595);
-        intakePitchR.setPosition(0.555);
+        Robot.HardwareDevices.intakePitchL.setPosition(0.595);
+        Robot.HardwareDevices.intakePitchR.setPosition(0.555);
         sleep(250);
         robot.outtake.hand.close();
 
         Actions.runBlocking(new SequentialAction(
                 toBasket.build(),
-                new DepositActionHigh(),
-                new ClawOpen(),
-                new Wait(200),
-                new DepositCondense()//,
+                new DepositActionHigh(robot),
+                new ClawOpen(robot),
+                new Wait(robot, 200),
+                new DepositCondense(robot)//,
 //                toFirstSample.build(),
 //                new IntakeGround(),
 //                new Wait(2000),

@@ -12,10 +12,10 @@ public class DriveThread extends Robot.HardwareDevices implements Runnable {
     private final Gamepad gamepad1;
     private final Robot robot;
 
-    public DriveThread(LinearOpMode opMode) {
+    public DriveThread(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
         this.gamepad1 = opMode.gamepad1;
-        this.robot = Robot.rb;
+        this.robot = robot;
     }
 
     @Override

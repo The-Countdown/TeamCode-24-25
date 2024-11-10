@@ -1,35 +1,39 @@
 package org.firstinspires.ftc.teamcode.subsystems.actions.intake;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideL;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.HardwareDevices.intakeSlideR;
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
+
 public class IntakeCondense implements Action {
+    private final Robot robot;
+
+    public IntakeCondense(Robot robot) {
+        this.robot = robot;
+    }
+
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        rb.outtake.arm.down();
-        rb.outtake.hand.close();
-        rb.intake.up();
-        if (!rb.safeSleep(750)) {
+        robot.outtake.arm.down();
+        robot.outtake.hand.close();
+        robot.intake.up();
+        if (!robot.safeSleep(750)) {
             return true;
         }
-        rb.intakeSlide.retract();
-        while (intakeSlideL.isBusy() || intakeSlideR.isBusy()) {
-            if (!rb.safeSleep(10)) {
+        robot.intakeSlide.retract();
+        while (Robot.HardwareDevices.intakeSlideL.isBusy() || Robot.HardwareDevices.intakeSlideR.isBusy()) {
+            if (!robot.safeSleep(10)) {
                 return true;
             }
         }
-        rb.intake.down();
-        if (!rb.safeSleep(500)) {
+        robot.intake.down();
+        if (!robot.safeSleep(500)) {
             return true;
         }
-        rb.outtake.hand.close();
-        if (!rb.safeSleep(100)) {
+        robot.outtake.hand.close();
+        if (!robot.safeSleep(100)) {
             return true;
         }
         return false;

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Robot.rb;
-
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -9,6 +7,11 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 public class Drive extends Robot.HardwareDevices {
+    private Robot robot;
+
+    public Drive(Robot robot) {
+        this.robot = robot;
+    }
 
     public void move(double stickX, double stickY) {
 
@@ -40,8 +43,8 @@ public class Drive extends Robot.HardwareDevices {
         if (tangent == null) {
             tangent = 0d;
         }
-        rb.updatePose();
-        Actions.runBlocking(rb.dreadDrive.actionBuilder(rb.dreadDrive.pose)
+        robot.updatePose();
+        Actions.runBlocking(robot.dreadDrive.actionBuilder(robot.dreadDrive.pose)
                 .splineToLinearHeading(pose, tangent)
                 .build());
     }

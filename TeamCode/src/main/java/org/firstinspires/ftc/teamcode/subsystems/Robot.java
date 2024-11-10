@@ -18,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Robot {
-    public static Robot rb;
+    private static Robot instance;
     public static Pose2d currentPose;
     public Pose2d beginPose;
     public MecanumDrive dreadDrive;
@@ -53,8 +53,6 @@ public class Robot {
     }
 
     public Robot(LinearOpMode opMode) {
-        rb = this;
-
         this.opMode = opMode;
         this.hardwareMap = opMode.hardwareMap;
         this.telemetry = opMode.telemetry;
@@ -151,16 +149,23 @@ public class Robot {
         return true;
     }
 
+    public static Robot getInstance(LinearOpMode opMode) {
+        if (instance == null) {
+            instance = new Robot(opMode);
+        }
+        return instance;
+    }
+
     public void updatePose() {
         currentPose = dreadDrive.pose;
     }
 
-    public Drive drive;
+    public Drive drive = new Drive(this);
     public IntakeSlide intakeSlide = new IntakeSlide();
-    public DepositSlide depositSlide = new DepositSlide();
-    public Intake intake = new Intake();
-    public Outtake outtake = new Outtake();
-    public Arm arm = new Arm();
+    public DepositSlide depositSlide = new DepositSlide(this);
+    public Intake intake = new Intake(this);
+    public Outtake outtake = new Outtake(this);
+    public Arm arm = new Arm(this);
 }
 
 
