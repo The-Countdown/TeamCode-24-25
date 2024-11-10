@@ -47,7 +47,7 @@ public class TeleOpTesting extends LinearOpMode {
             robot.updatePose();
 
             int yStickRInt = (int) (gamepad2.right_stick_y * 30);
-            int intakeAvg = (int) ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
+            int intakeAvg = (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2;
 
             if (Robot.HardwareDevices.depositMagnet.isPressed()) {
                 if (!depositMagnetPressed) {
