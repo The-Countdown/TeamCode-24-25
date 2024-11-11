@@ -12,18 +12,19 @@ public class Outtake extends Robot.HardwareDevices {
     @Config
     public static class OuttakePositions {
         // Arm positions
-        public static double armUpClip = 0.5875;
-        public static double armUpLift = 0.5625;
-        public static double armTransfer = 0.66;
-        public static double armBack = 0.4075;
+        public static double armUpClip = 0.425;
+        public static double armUpLift = 0.4;
+        public static double armTransfer = 0.4;
+        public static double armBack = 0.25;
+        public static double armRest = 0.51;
 
         // Wrist positions
-        public static double wristVertical = 0.13;
-        public static double wristHorizontal = 0.5;
+        public static double wristVertical = 0.175;
+        public static double wristHorizontal = 0.53;
 
         // Hand positions
-        public static double handOpen = 0.65;
-        public static double handClosed = 0.3;
+        public static double handOpen = 0.25;
+        public static double handClosed = 0.55;
     }
 
     public class Arm {
@@ -35,13 +36,17 @@ public class Outtake extends Robot.HardwareDevices {
             depositClawArmBottom.setPosition(OuttakePositions.armUpLift);
             depositClawArmTop.setPosition(OuttakePositions.armUpLift);
         }
-        public void down() {
+        public void transfer() {
             depositClawArmBottom.setPosition(OuttakePositions.armTransfer);
             depositClawArmTop.setPosition(OuttakePositions.armTransfer);
         }
         public void back() {
             depositClawArmBottom.setPosition(OuttakePositions.armBack);
             depositClawArmTop.setPosition(OuttakePositions.armBack);
+        }
+        public void rest() {
+            depositClawArmBottom.setPosition(OuttakePositions.armRest);
+            depositClawArmTop.setPosition(OuttakePositions.armRest);
         }
     }
 

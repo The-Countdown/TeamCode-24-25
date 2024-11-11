@@ -12,29 +12,29 @@ public class Intake extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
         // Arm positions
-        public static double armUpL = 0;
-        public static double armUpR = 0;
-        public static double armDownL = 0;
-        public static double armDownR = 0;
-        public static double armRestL = 0;
-        public static double armRestR = 0;
-        public static double armTransferL = 0;
-        public static double armTransferR = 0;
+        public static double armUpL = 0.5225;
+        public static double armUpR = 0.4775;
+        public static double armDownL = 0.515;
+        public static double armDownR = 0.485;
+        public static double armRestL = 0.635;
+        public static double armRestR = 0.365;
+        public static double armTransferL = 0.5675;
+        public static double armTransferR = 0.4325;
 
         // Elbow positions
-        public static double elbowUp = 0;
-        public static double elbowRest = 0;
-        public static double elbowDown = 0;
-        public static double elbowTransfer = 0;
+        public static double elbowUp = 0.5;
+        public static double elbowRest = 0.11;
+        public static double elbowDown = 0.49;
+        public static double elbowTransfer = 0.26;
 
         // Wrist positions
-        public static double wristVertical = 0;
-        public static double wristHorizontal = 0;
+        public static double wristVertical = 0.545;
+        public static double wristHorizontal = 0.175;
 
         // Hand positions
-        public static double handOpen = 0;
-        public static double handClosed = 0;
-        public static double handHalfOpen = 0;
+        public static double handOpen = 0.5;
+        public static double handClosed = 0.775;
+        public static double handHalfOpen = 0.725;
     }
 
     public class Arm {
@@ -84,7 +84,7 @@ public class Intake extends Robot.HardwareDevices {
         public void open() {
             intakeClaw.setPosition(IntakePosition.handOpen);
         }
-        public void closed() {
+        public void close() {
             intakeClaw.setPosition(IntakePosition.handClosed);
         }
         public void halfOpen() {

@@ -126,7 +126,7 @@ public class DepositSlide extends Robot.HardwareDevices {
                     Thread.sleep(10);
                 }
             }
-            robot.outtake.arm.down();
+            robot.outtake.arm.transfer();
             robot.outtake.wrist.vertical();
             robot.outtake.hand.close();
             Thread.sleep(1000);

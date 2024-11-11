@@ -49,7 +49,7 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
 
             if (gamepad2.dpad_up) {
                 while (!depositMagnet.isPressed()) {
-                    robot.outtake.arm.down();
+                    robot.outtake.arm.transfer();
                     robot.outtake.hand.close();
                     if (!robot.safeSleep(750)) {
                         return;

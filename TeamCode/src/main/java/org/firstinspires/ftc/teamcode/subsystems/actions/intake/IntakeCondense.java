@@ -16,7 +16,7 @@ public class IntakeCondense implements Action {
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.outtake.arm.down();
+        robot.outtake.arm.transfer();
         robot.outtake.hand.close();
         robot.intake.up();
         if (!robot.safeSleep(750)) {
