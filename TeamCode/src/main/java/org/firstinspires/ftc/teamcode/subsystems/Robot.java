@@ -161,7 +161,7 @@ public class Robot {
     }
 
     public Drive drive = new Drive(this);
-    public IntakeSlide intakeSlide = new IntakeSlide();
+    public IntakeSlide intakeSlide = new IntakeSlide(this);
     public DepositSlide depositSlide = new DepositSlide(this);
     public Intake intake = new Intake(this);
     public Outtake outtake = new Outtake(this);

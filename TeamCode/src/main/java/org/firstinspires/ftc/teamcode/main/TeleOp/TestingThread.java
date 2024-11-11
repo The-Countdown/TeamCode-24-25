@@ -83,13 +83,16 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
             }
             while (gamepad2.left_bumper) {
                 if (gamepad2.cross) {
-                    robot.outtake.arm.upLift();
+                    robot.intakeSlide.pickUp();
                 }
                 if (gamepad2.circle) {
+                    robot.intake.up();
                 }
                 if (gamepad2.square) {
+                    robot.intakeSlide.greatHandOff();
                 }
                 if (gamepad2.triangle) {
+                    robot.intake.restEsc();
                 }
                 if (gamepad2.dpad_left) {
                     robot.outtake.wrist.vertical();
@@ -97,6 +100,17 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                 if (gamepad2.dpad_right) {
                     robot.outtake.wrist.horizontal();
                 }
+            }
+
+            int yStickLInt  = (int) (gamepad2.left_stick_y * 30);
+            if (gamepad2.left_stick_y != 0) {
+                if (((intakeSlideL.getTargetPosition() + intakeSlideR.getTargetPosition()) / 2) <= 1500) {
+                    intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
+                    intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
+                }
+            } else {
+                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
+                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
             }
         }
     }

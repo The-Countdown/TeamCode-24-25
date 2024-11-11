@@ -14,18 +14,20 @@ public class Intake extends Robot.HardwareDevices {
         // Arm positions
         public static double armUpL = 0.5225;
         public static double armUpR = 0.4775;
-        public static double armDownL = 0.515;
-        public static double armDownR = 0.485;
+        public static double armDownL = 0.51;
+        public static double armDownR = 0.49;
         public static double armRestL = 0.395;
         public static double armRestR = 0.605;
         public static double armTransferL = 0.5675;
         public static double armTransferR = 0.4325;
+        public static double armTransfer2L = 0.54;
+        public static double armTransfer2R = 0.46;
 
         // Elbow positions
-        public static double elbowUp = 0.5;
-        public static double elbowRest = 0.39;
-        public static double elbowDown = 0.49;
-        public static double elbowTransfer = 0.25;
+        public static double elbowUp = 0.37;
+        public static double elbowRest = 0.4;
+        public static double elbowDown = 0.46;
+        public static double elbowTransfer = 0.2075;
 
         // Wrist positions
         public static double wristVertical = 0.545;
@@ -53,6 +55,10 @@ public class Intake extends Robot.HardwareDevices {
         public void transfer() {
             intakePitchL.setPosition(IntakePosition.armTransferL);
             intakePitchR.setPosition(IntakePosition.armTransferR);
+        }
+        public void transfer2() {
+            intakePitchL.setPosition(IntakePosition.armTransfer2L);
+            intakePitchR.setPosition(IntakePosition.armTransfer2R);
         }
     }
 
@@ -94,7 +100,7 @@ public class Intake extends Robot.HardwareDevices {
 
     public void up() {
         robot.intake.arm.up();
-        robot.intake.elbow.down();
+        robot.intake.elbow.up();
     }
 
     public void down() {
@@ -111,17 +117,30 @@ public class Intake extends Robot.HardwareDevices {
     public void transfer() {
         robot.intake.arm.transfer();
         robot.intake.elbow.transfer();
-        robot.intake.wrist.vertical();
+        robot.intake.wrist.horizontal();
     }
 
     public void transferPrep() {
         try {
-            robot.intake.wrist.vertical();
+            robot.intake.wrist.horizontal();
             robot.intake.elbow.up();
-            Thread.sleep(500);
             robot.intake.hand.halfOpen();
-            Thread.sleep(300);
-            robot.intake.hand.open();
+            Thread.sleep(200);
+            robot.intake.hand.close();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void restEsc() {
+        // assuming elbow and arm are in the rest position
+        try {
+            robot.intakeSlide.move(300);
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > 290)) {
+                Thread.sleep(5);
+            }
+            robot.intake.arm.up();
+            robot.intake.elbow.up();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

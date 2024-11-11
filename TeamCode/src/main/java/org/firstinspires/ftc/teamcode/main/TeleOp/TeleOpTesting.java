@@ -32,6 +32,8 @@ public class TeleOpTesting extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
+        robot.intake.rest(); //illegal
+
         waitForStart();
 
         DriveThread driveRunnable = new DriveThread(this, robot);
