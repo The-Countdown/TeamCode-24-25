@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 
@@ -78,15 +81,21 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                     robot.outtake.hand.open();
                 }
                 if (gamepad2.dpad_right) {
-                    robot.outtake.hand.close();
+                    try {
+                        robot.outtake.hand.close();
+                        Thread.sleep(250);
+                        robot.outtake.arm.upLift();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             while (gamepad2.left_bumper) {
                 if (gamepad2.cross) {
-                    robot.intakeSlide.pickUp();
+                    robot.intake.rest();
                 }
                 if (gamepad2.circle) {
-                    robot.intake.up();
+                    robot.depositSlide.specimenGrab();
                 }
                 if (gamepad2.square) {
                     robot.intakeSlide.greatHandOff();
@@ -95,19 +104,29 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                     robot.intake.restEsc();
                 }
                 if (gamepad2.dpad_left) {
-                    robot.outtake.wrist.vertical();
+                    robot.depositSlide.condense();
                 }
                 if (gamepad2.dpad_right) {
-                    robot.outtake.wrist.horizontal();
+                    robot.depositSlide.depositHigh();
                 }
             }
 
             int yStickLInt  = (int) (gamepad2.left_stick_y * 30);
             if (gamepad2.left_stick_y != 0) {
-                if (((intakeSlideL.getTargetPosition() + intakeSlideR.getTargetPosition()) / 2) <= 1500) {
+                int averagePosition = (intakeSlideL.getTargetPosition() + intakeSlideR.getTargetPosition()) / 2;
+
+                if (averagePosition >= 5 && gamepad2.left_stick_y > 0) {
+                    intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
+                    intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
+                } else if (averagePosition <= 1500 && gamepad2.left_stick_y < 0) {
                     intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
                     intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
                 }
+
+                intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
+                intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
             } else {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());

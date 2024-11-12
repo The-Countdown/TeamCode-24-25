@@ -12,22 +12,22 @@ public class Intake extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
         // Arm positions
-        public static double armUpL = 0.5225;
-        public static double armUpR = 0.4775;
+        public static double armUpL = 0.53;
+        public static double armUpR = 0.47;
         public static double armDownL = 0.51;
         public static double armDownR = 0.49;
-        public static double armRestL = 0.395;
-        public static double armRestR = 0.605;
-        public static double armTransferL = 0.5675;
-        public static double armTransferR = 0.4325;
+        public static double armRestL = 0.405;
+        public static double armRestR = 0.595;
+        public static double armTransferL = 0.575;
+        public static double armTransferR = 0.425;
         public static double armTransfer2L = 0.54;
         public static double armTransfer2R = 0.46;
 
         // Elbow positions
-        public static double elbowUp = 0.37;
-        public static double elbowRest = 0.4;
-        public static double elbowDown = 0.46;
-        public static double elbowTransfer = 0.2075;
+        public static double elbowUp = 0.32;
+        public static double elbowRest = 0.35;
+        public static double elbowDown = 0.43;
+        public static double elbowTransfer = 0.175;
 
         // Wrist positions
         public static double wristVertical = 0.545;
@@ -112,6 +112,7 @@ public class Intake extends Robot.HardwareDevices {
         robot.intake.arm.rest();
         robot.intake.elbow.rest();
         robot.intake.wrist.horizontal();
+        robot.intake.hand.open();
     }
 
     public void transfer() {
@@ -133,17 +134,8 @@ public class Intake extends Robot.HardwareDevices {
     }
 
     public void restEsc() {
-        // assuming elbow and arm are in the rest position
-        try {
-            robot.intakeSlide.move(300);
-            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > 290)) {
-                Thread.sleep(5);
-            }
-            robot.intake.arm.up();
-            robot.intake.elbow.up();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        robot.intake.arm.up();
+        robot.intake.elbow.up();
     }
 
     public Arm arm = new Arm();

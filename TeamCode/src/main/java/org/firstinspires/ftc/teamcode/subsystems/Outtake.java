@@ -12,10 +12,10 @@ public class Outtake extends Robot.HardwareDevices {
     @Config
     public static class OuttakePositions {
         // Arm positions
-        public static double armUpClip = 0.425;
-        public static double armUpLift = 0.4;
-        public static double armTransfer = 0.4;
-        public static double armBack = 0.25;
+        public static double armUpClip = 0.4025;
+        public static double armUpLift = 0.39;
+        public static double armTransfer = 0.39;
+        public static double armBack = 0.23;
         public static double armRest = 0.51;
 
         // Wrist positions
@@ -66,6 +66,12 @@ public class Outtake extends Robot.HardwareDevices {
         public void close() {
             depositClaw.setPosition(OuttakePositions.handClosed);
         }
+    }
+
+    public void rest() {
+        robot.outtake.wrist.vertical();
+        robot.outtake.hand.close();
+        robot.outtake.arm.rest();
     }
 
     public Arm arm = new Arm();

@@ -13,14 +13,13 @@ public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
         public static int retracted = 0;
-        public static int transfer = 0; //TODO: Find
         public static int highBasket = 2500;
-        public static int lowBasket = 2500;
+        public static int lowBasket = 1500;
         public static int specimenWall = 700;
         public static int specimenBar = 1200;
         public static int tolerance = 5;
         public static int stepRange = 50;
-        public static int stopTolerance = 5;
+        public static int stopTolerance = 10;
     }
     @Config
     public static class DepositSlidePower {
@@ -69,15 +68,19 @@ public class DepositSlide extends Robot.HardwareDevices {
 
     public void specimenGrab() {
         try {
+            robot.intake.rest();
+            robot.intakeSlide.retract();
             specimenWall();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
+            depositSlide.setPower(DepositSlidePower.move/2);
             robot.outtake.arm.upClip();
             robot.outtake.wrist.horizontal();
             Thread.sleep(750);
             retract();
-            depositSlide.setPower(DepositSlidePower.move/2);
+            intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move/2);
+            intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move/2);
             robot.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -97,7 +100,8 @@ public class DepositSlide extends Robot.HardwareDevices {
         try {
             robot.outtake.hand.close();
             highBasket();
-            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - DepositSlidePosition.stepRange))) {
+            robot.intakeSlide.retract();
+            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300))) {
                 Thread.sleep(10);
             }
             robot.outtake.arm.back();
@@ -108,8 +112,10 @@ public class DepositSlide extends Robot.HardwareDevices {
     }
     public void depositLow() {
         try {
+            robot.outtake.hand.close();
             lowBasket();
-            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.lowBasket - DepositSlidePosition.stepRange))) {
+            robot.intakeSlide.retract();
+            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.lowBasket - 200))) {
                 Thread.sleep(10);
             }
             robot.outtake.arm.back();
@@ -120,25 +126,21 @@ public class DepositSlide extends Robot.HardwareDevices {
     }
     public void condense() {
         try {
-            if (depositSlide.getCurrentPosition() <= 700) {
-                move(700);
-                while (!(depositSlide.getCurrentPosition() > (700 - DepositSlidePosition.stepRange))) {
+            if (depositSlide.getCurrentPosition() <= 800) {
+                move(800);
+                while (!(depositSlide.getCurrentPosition() > (800 - DepositSlidePosition.stepRange))) {
                     Thread.sleep(10);
                 }
             }
-            robot.outtake.arm.transfer();
+            robot.outtake.arm.rest();
             robot.outtake.wrist.vertical();
             robot.outtake.hand.close();
             Thread.sleep(1000);
             retract();
-            while (!(depositSlide.getCurrentPosition() < 700)) {
+            while (!(depositSlide.getCurrentPosition() < 500)) {
                 Thread.sleep(10);
             }
             depositSlide.setPower(DepositSlidePower.move / 4);
-            while (!(depositSlide.getCurrentPosition() < DepositSlidePosition.stepRange)) {
-                Thread.sleep(10);
-            }
-            robot.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

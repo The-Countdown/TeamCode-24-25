@@ -14,7 +14,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
     public static class IntakeSlidePosition {
         public static int retracted = 0;
         public static int extended = 1000;
-        public static int handOff = 1025;
+        public static int handOff = 1150;
         public static int ground = 300;
         public static int minimum = 0;
         public static int maximum = 1500;
@@ -94,6 +94,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
             while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlidePosition.handOff - IntakeSlidePosition.stepRange) && (((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < (IntakeSlidePosition.handOff + IntakeSlidePosition.stepRange)))) {
                 Thread.sleep(10);
             }
+            robot.intake.wrist.horizontal();
             robot.intake.up();
             robot.outtake.arm.transfer();
             robot.outtake.hand.open();
@@ -102,10 +103,9 @@ public class IntakeSlide extends Robot.HardwareDevices {
             robot.intake.transferPrep();
             robot.intake.arm.transfer2();
             robot.intake.elbow.transfer();
-            robot.intake.wrist.horizontal();
-            Thread.sleep(1250);
+            Thread.sleep(1150);
             robot.intake.transfer();
-            Thread.sleep(500);
+            Thread.sleep(300);
             robot.outtake.hand.close();
             Thread.sleep(200);
             robot.intake.hand.open();
@@ -128,12 +128,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
         robot.intake.down();
     }
     public void condense() {
-        try {
-            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < 100)) {
-                Thread.sleep(10);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        robot.intakeSlide.retract();
+        robot.intake.rest();
     }
 }

@@ -23,6 +23,9 @@ public class TeleOpTesting extends LinearOpMode {
     public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
     boolean depositMagnetPressed = false;
+    boolean wasRightTriggerPressed = false;
+    boolean wasLeftTriggerPressed = false;
+    boolean toggleState = false;
 
     @Override
     public void runOpMode() {
@@ -33,6 +36,7 @@ public class TeleOpTesting extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
         robot.intake.rest(); //illegal
+        robot.outtake.rest(); //illegal
 
         waitForStart();
 
@@ -56,6 +60,7 @@ public class TeleOpTesting extends LinearOpMode {
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    robot.depositSlide.stop();
                     depositMagnetPressed = true;
                 }
             } else {
@@ -110,30 +115,41 @@ public class TeleOpTesting extends LinearOpMode {
             //endregion
 
             //region Subsystem Controls
-            if (gamepad2.right_stick_y != 0) {
-                Robot.HardwareDevices.depositSlide.setTargetPosition(Robot.HardwareDevices.depositSlide.getTargetPosition() - yStickRInt);
-            } else {
-                Robot.HardwareDevices.depositSlide.setTargetPosition(Robot.HardwareDevices.depositSlide.getTargetPosition());
+            boolean isRightTriggerPressed = gamepad2.right_trigger > 0.1;
+
+            if (isRightTriggerPressed && !wasRightTriggerPressed) {
+                robot.intake.down();
+            } else if (!isRightTriggerPressed && wasRightTriggerPressed) {
+                robot.intake.arm.up();
             }
 
-            if (gamepad2.right_trigger > 0) {
-                Robot.HardwareDevices.arm.setPower(-gamepad2.right_trigger);
-            } else if (gamepad2.left_trigger > 0) {
-                Robot.HardwareDevices.arm.setPower(gamepad2.left_trigger);
-            } else
-                robot.arm.stop();
-            //endregion
+            wasRightTriggerPressed = isRightTriggerPressed;
 
+            boolean isLeftTriggerPressed = gamepad2.left_trigger > 0.1;
+
+            if (isLeftTriggerPressed && !wasLeftTriggerPressed) {
+                toggleState = !toggleState;
+
+                if (toggleState) {
+                    robot.intake.wrist.vertical();
+                } else {
+                    robot.intake.wrist.horizontal();
+                }
+            }
+
+            wasLeftTriggerPressed = isLeftTriggerPressed;
+
+            //endregion
             if ((Robot.HardwareDevices.depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
                     (Robot.HardwareDevices.depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
                 robot.depositSlide.stop();
             }
-            if ((!Robot.HardwareDevices.intakeSlideL.isBusy()) && (Robot.HardwareDevices.intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
-                    (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!Robot.HardwareDevices.intakeSlideL.isBusy()) && (Robot.HardwareDevices.intakeSlideL.getTargetPosition() < 10) &&
+                    (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() < 10)) {
                 Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
-            if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
-                    (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < 10) &&
+                    (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < 10)) {
                 Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
 

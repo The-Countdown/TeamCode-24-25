@@ -32,6 +32,9 @@ public class TeleOp extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
+        robot.intake.rest(); //illegal
+        robot.outtake.rest(); //illegal
+
         waitForStart();
 
         DepositThread depositRunnable = new DepositThread(this, robot);
@@ -112,32 +115,18 @@ public class TeleOp extends LinearOpMode {
             //endregion
 
             //region Subsystem Controls
-            if (gamepad2.right_stick_y != 0) {
-                Robot.HardwareDevices.depositSlide.setTargetPosition(Robot.HardwareDevices.depositSlide.getTargetPosition() - yStickRInt);
-            } else {
-                Robot.HardwareDevices.depositSlide.setTargetPosition(Robot.HardwareDevices.depositSlide.getTargetPosition());
-            }
-
-            if (gamepad2.right_trigger > 0) {
-                Robot.HardwareDevices.arm.setPower(-gamepad2.right_trigger);
-            } else if (gamepad2.left_trigger > 0) {
-                Robot.HardwareDevices.arm.setPower(gamepad2.left_trigger);
-            } else
-                robot.arm.stop();
-
-            if ((Robot.HardwareDevices.depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
+            if ((!Robot.HardwareDevices.depositSlide.isBusy()) && (Robot.HardwareDevices.depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
                     (Robot.HardwareDevices.depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
-                robot.depositSlide.stop();
+                Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
             }
-            if ((!Robot.HardwareDevices.intakeSlideL.isBusy()) && (Robot.HardwareDevices.intakeSlideL.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
-                    (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!Robot.HardwareDevices.intakeSlideL.isBusy()) && (Robot.HardwareDevices.intakeSlideL.getTargetPosition() < 10) &&
+                    (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() < 10)) {
                 Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
-            if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < IntakeSlide.IntakeSlidePosition.tolerance) &&
-                    (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < IntakeSlide.IntakeSlidePosition.tolerance)) {
+            if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < 10) &&
+                    (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < 10)) {
                 Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
-
             //endregion
 
             //region Telemetry
