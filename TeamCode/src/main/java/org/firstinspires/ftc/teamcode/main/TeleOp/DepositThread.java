@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -32,8 +31,6 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 robot.depositSlide.condense();
             } else if (gamepad2.circle && (depositSlide.getCurrentPosition() < 75)) {
                 robot.depositSlide.depositHigh();
-            } else if (gamepad2.share && gamepad2.circle) {
-                robot.depositSlide.depositLow();
             }
 
             if (gamepad2.square) {
@@ -42,7 +39,7 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 robot.depositSlide.specimenHang();
             }
 
-            boolean isLeftBumperPressed = gamepad2.left_bumper;
+            boolean isLeftBumperPressed = gamepad1.left_bumper || gamepad2.left_bumper;
 
             if (isLeftBumperPressed && !wasLeftBumperPressed) {
                 toggleStateLB = !toggleStateLB;
@@ -58,21 +55,21 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 }
             }
             wasLeftBumperPressed = isLeftBumperPressed;
-        }
 
-        int yStickRInt = (int) (gamepad2.right_stick_y * 30);
-        if (gamepad2.right_stick_y != 0) {
-            int currentPosition = depositSlide.getTargetPosition();
+            int yStickRInt = (int) (gamepad2.right_stick_y * 30);
+            if (gamepad2.right_stick_y != 0) {
+                int currentPosition = depositSlide.getTargetPosition();
 
-            if (currentPosition >= 5 && gamepad2.right_stick_y > 0) {
-                depositSlide.setTargetPosition(currentPosition - yStickRInt);
-            } else if (currentPosition <= 2550 && gamepad2.right_stick_y < 0) {
-                depositSlide.setTargetPosition(currentPosition - yStickRInt);
+                if (currentPosition >= 5 && gamepad2.right_stick_y > 0) {
+                    depositSlide.setTargetPosition(currentPosition - yStickRInt);
+                } else if (currentPosition <= 2550 && gamepad2.right_stick_y < 0) {
+                    depositSlide.setTargetPosition(currentPosition - yStickRInt);
+                }
+                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+            } else {
+                depositSlide.setTargetPosition(depositSlide.getTargetPosition());
             }
-            depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-        } else {
-            depositSlide.setTargetPosition(depositSlide.getTargetPosition());
         }
     }
 }

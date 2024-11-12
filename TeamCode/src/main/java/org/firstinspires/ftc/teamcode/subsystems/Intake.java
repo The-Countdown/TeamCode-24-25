@@ -121,6 +121,33 @@ public class Intake extends Robot.HardwareDevices {
         robot.intake.wrist.horizontal();
     }
 
+    public void greatHandOff() {
+        try {
+            robot.intakeSlide.handOff();
+            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlide.IntakeSlidePosition.handOff - IntakeSlide.IntakeSlidePosition.stepRange) && (((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < (IntakeSlide.IntakeSlidePosition.handOff + IntakeSlide.IntakeSlidePosition.stepRange)))) {
+                Thread.sleep(10);
+            }
+            robot.intake.wrist.horizontal();
+            robot.intake.up();
+            robot.outtake.arm.transfer();
+            robot.outtake.hand.open();
+            robot.outtake.wrist.horizontal();
+            Thread.sleep(750);
+            robot.intake.transferPrep();
+            robot.intake.arm.transfer2();
+            robot.intake.elbow.transfer();
+            Thread.sleep(1150);
+            robot.intake.transfer();
+            Thread.sleep(300);
+            robot.outtake.hand.close();
+            Thread.sleep(200);
+            robot.intake.hand.open();
+            robot.intake.up();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void transferPrep() {
         try {
             robot.intake.wrist.horizontal();

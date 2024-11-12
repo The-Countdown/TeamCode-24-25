@@ -68,8 +68,7 @@ public class DepositSlide extends Robot.HardwareDevices {
 
     public void specimenGrab() {
         try {
-            robot.intake.rest();
-            robot.intakeSlide.retract();
+            robot.intakeSlide.condense();
             specimenWall();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);

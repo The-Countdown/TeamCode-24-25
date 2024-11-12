@@ -4,18 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 
 public class IntakeThread extends Robot.HardwareDevices implements Runnable {
     private final LinearOpMode opMode;
+    private final Gamepad gamepad1;
     private final Gamepad gamepad2;
     private final Robot robot;
 
     public IntakeThread(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
+        this.gamepad1 = opMode.gamepad1;
         this.gamepad2 = opMode.gamepad2;
         this.robot = robot;
     }
@@ -27,18 +28,25 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
         boolean wasRightTriggerPressed = false;
         boolean wasLeftTriggerPressed = false;
         boolean toggleStateLT = false;
+        boolean wasCrossPressed = false;
+        boolean toggleStateCross = false;
+
         while (opMode.opModeIsActive()) {
-            if (Math.abs(intakePitchL.getPosition() - Intake.IntakePosition.armRestL) <= 0.0001) {
-                if (gamepad2.cross) {
-                    robot.intake.restEsc();
-                    if (!robot.safeSleep(600)) {
-                        return;
-                    }
-                    robot.intake.elbow.down();
-                }
-            } else if (gamepad2.cross) {
-                robot.intake.rest();
+            if (gamepad2.share) {
+                robot.intake.greatHandOff();
             }
+
+            boolean isCrossPressed = gamepad2.cross;
+            if (isCrossPressed && !wasCrossPressed) {
+                toggleStateCross = !toggleStateCross;
+
+                if (toggleStateCross) {
+                        robot.intake.down();
+                }
+            } else {
+                robot.intake.up();
+            }
+            wasCrossPressed = isCrossPressed;
 
             boolean isRightBumperPressed = gamepad2.right_bumper;
 

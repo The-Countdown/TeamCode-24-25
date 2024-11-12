@@ -32,8 +32,8 @@ public class Drive extends Robot.HardwareDevices {
 
         Pose3D botPose_mt2 = result.getBotpose_MT2();
 
-        double xLimeLight = botPose_mt2.getPosition().x * 39.3700787402; // Convert from meters to inches
-        double yLimeLight = botPose_mt2.getPosition().y * 39.3700787402; // Convert from meters to inches
+        double xLimeLight = botPose_mt2.getPosition().x * 39.3700787402;
+        double yLimeLight = botPose_mt2.getPosition().y * 39.3700787402;
         double headingLimeLight = botPose_mt2.getOrientation().getYaw();
 
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);

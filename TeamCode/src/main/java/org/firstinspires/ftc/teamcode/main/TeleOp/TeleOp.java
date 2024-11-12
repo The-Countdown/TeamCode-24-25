@@ -37,6 +37,10 @@ public class TeleOp extends LinearOpMode {
 
         waitForStart();
 
+        robot.intake.restEsc();
+        sleep(600);
+        robot.intake.elbow.down();
+
         DepositThread depositRunnable = new DepositThread(this, robot);
         Thread depositThread = new Thread(depositRunnable);
         depositThread.start();

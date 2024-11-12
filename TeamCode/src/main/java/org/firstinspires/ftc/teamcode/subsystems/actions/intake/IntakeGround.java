@@ -16,7 +16,6 @@ public class IntakeGround implements Action {
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.intakeSlide.ground();
         while (Robot.HardwareDevices.intakeSlideL.isBusy() || Robot.HardwareDevices.intakeSlideR.isBusy()) {
             if (!robot.safeSleep(10)) {
                 return true;
