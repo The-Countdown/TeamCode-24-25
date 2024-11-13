@@ -40,10 +40,6 @@ public class TeleOpTesting extends LinearOpMode {
 
         waitForStart();
 
-        DriveThread driveRunnable = new DriveThread(this, robot);
-        Thread driveThread = new Thread(driveRunnable);
-        driveThread.start();
-
         TestingThread testingRunnable = new TestingThread(this, robot);
         Thread testingThread = new Thread(testingRunnable);
         testingThread.start();

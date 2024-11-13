@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
@@ -24,6 +23,7 @@ public class TeleOp extends LinearOpMode {
     public static double xStickRMulti = 0.4;
     public boolean driveToggle = false;
     boolean depositMagnetPressed = false;
+
     @Override
     public void runOpMode() {
         Robot robot = Robot.getInstance(this);
@@ -49,15 +49,10 @@ public class TeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-        DriveThread driveRunnable = new DriveThread(this, robot);
-        Thread driveThread = new Thread(driveRunnable);
-        driveThread.start();
-
-
         while (opModeIsActive()) {
             robot.updatePose();
 
-            int yStickRInt  = (int) (gamepad2.right_stick_y * 30);
+            int yStickRInt = (int) (gamepad2.right_stick_y * 30);
             int intakeAvg = (int) ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
 
             if (Robot.HardwareDevices.depositMagnet.isPressed()) {
@@ -139,56 +134,20 @@ public class TeleOp extends LinearOpMode {
             packet.put("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
             packet.put("PoseX", (robot.dreadDrive.pose.position.x));
             packet.put("PoseY", (robot.dreadDrive.pose.position.y));
-            packet.put("Claw Position", Robot.HardwareDevices.depositClaw.getPosition());
-            packet.put("Claw Rotation", Robot.HardwareDevices.depositClawAngle.getPosition());
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             packet.put("Intake Height Avg", (intakeAvg));
             packet.put("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
             packet.put("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
-            packet.put("Intake Angle", Robot.HardwareDevices.intakeClawAngle.getPosition());
-            packet.put("Intake Velocity", ((Robot.HardwareDevices.intakeSlideL.getVelocity() + Robot.HardwareDevices.intakeSlideR.getVelocity()) / 2));
-            packet.put("IntakeL Velocity", Robot.HardwareDevices.intakeSlideL.getVelocity());
-            packet.put("IntakeR Velocity", Robot.HardwareDevices.intakeSlideR.getVelocity());
-            packet.put("New Y Stick L", newYStickL);
-            packet.put("New X Stick L", newXStickL);
-            packet.put("IMU Yaw", imuYaw);
-            packet.put("Corrected Angle", correctedAngle);
-            packet.put("Joystick Angle", joystickAngle);
-            packet.put("Left Stick X", xStickL);
-            packet.put("Left Stick Y", yStickL);
-            packet.put("Touchpad X", gamepad2.touchpad_finger_1_x);
-            packet.put("Touchpad Y", gamepad2.touchpad_finger_1_y);
             dashboard.sendTelemetryPacket(packet);
 
             telemetry.addData("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
             telemetry.addData("PoseX", (robot.dreadDrive.pose.position.x));
             telemetry.addData("PoseY", (robot.dreadDrive.pose.position.y));
             telemetry.addLine();
-            telemetry.addData("Claw", Robot.HardwareDevices.depositClaw.getPosition());
-            telemetry.addData("Claw Rotation", Robot.HardwareDevices.depositClawAngle.getPosition());
-            telemetry.addData("ClawArmTop", Robot.HardwareDevices.depositClawArmTop.getPosition());
-            telemetry.addData("ClawArmBottom", Robot.HardwareDevices.depositClawArmBottom.getPosition());
-            telemetry.addData("BackPos", Outtake.OuttakePositions.armBack);
-            telemetry.addLine();
             telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             telemetry.addLine();
             telemetry.addData("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
             telemetry.addData("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
-            telemetry.addLine();
-            telemetry.addData("IntakeL Velocity", Robot.HardwareDevices.intakeSlideL.getVelocity());
-            telemetry.addData("IntakeR Velocity", Robot.HardwareDevices.intakeSlideR.getVelocity());
-            telemetry.addLine();
-            telemetry.addData("Intake Angle", Robot.HardwareDevices.intakeClawAngle.getPosition());
-            telemetry.addLine();
-            telemetry.addData("newYStickL", newYStickL);
-            telemetry.addData("newXStickL", newXStickL);
-            telemetry.addLine();
-            telemetry.addData("IMU Yaw", imuYaw);
-            telemetry.addData("Corrected Angle", correctedAngle);
-            telemetry.addData("Joystick Angle", joystickAngle);
-            telemetry.addLine();
-            telemetry.addData("Left Stick X", xStickL);
-            telemetry.addData("Left Stick Y", yStickL);
             telemetry.addLine();
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.getValue());
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
