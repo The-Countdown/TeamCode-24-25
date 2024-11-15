@@ -25,6 +25,8 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
     public void run() {
         boolean wasLeftBumperPressed = false;
         boolean toggleStateLB = false;
+        boolean wasRightBumperPressed = false;
+        boolean toggleStateRB = false;
 
         while (opMode.opModeIsActive()) {
             if (gamepad2.circle && (depositSlide.getCurrentPosition() > 75)) {
@@ -39,7 +41,7 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 robot.depositSlide.specimenHang();
             }
 
-            boolean isLeftBumperPressed = gamepad1.left_bumper || gamepad2.left_bumper;
+            boolean isLeftBumperPressed = gamepad1.left_bumper;
 
             if (isLeftBumperPressed && !wasLeftBumperPressed) {
                 toggleStateLB = !toggleStateLB;
@@ -55,6 +57,19 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 }
             }
             wasLeftBumperPressed = isLeftBumperPressed;
+
+            boolean isRightBumperPressed = gamepad1.right_bumper;
+
+            if (isRightBumperPressed && !wasRightBumperPressed) {
+                toggleStateRB = !toggleStateRB;
+
+                if (toggleStateRB) {
+                    robot.outtake.hand.open();
+                } else {
+                    robot.outtake.hand.close();
+                }
+            }
+            wasRightBumperPressed = isRightBumperPressed;
 
             int yStickRInt = (int) (gamepad2.right_stick_y * 30);
             if (gamepad2.right_stick_y != 0) {

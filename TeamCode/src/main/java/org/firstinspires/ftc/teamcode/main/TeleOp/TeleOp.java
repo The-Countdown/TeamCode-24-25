@@ -41,6 +41,10 @@ public class TeleOp extends LinearOpMode {
         sleep(600);
         robot.intake.elbow.down();
 
+        DriveThread driveRunnable = new DriveThread(this, robot);
+        Thread driveThread = new Thread(driveRunnable);
+        driveThread.start();
+
         DepositThread depositRunnable = new DepositThread(this, robot);
         Thread depositThread = new Thread(depositRunnable);
         depositThread.start();
@@ -52,8 +56,7 @@ public class TeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             robot.updatePose();
 
-            int yStickRInt = (int) (gamepad2.right_stick_y * 30);
-            int intakeAvg = (int) ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
+            int intakeAvg = ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
 
             if (Robot.HardwareDevices.depositMagnet.isPressed()) {
                 if (!depositMagnetPressed) {
@@ -67,50 +70,7 @@ public class TeleOp extends LinearOpMode {
             }
 
             //region Driving
-            robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
-            double imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
-            if (imuYaw < 0) {
-                imuYaw += 360;
-            }
 
-            double xStickR = gamepad1.right_stick_x * (xStickRMulti + (gamepad1.right_trigger * 0.3) - (gamepad1.left_trigger * 0.1));
-            double xStickL = gamepad1.left_stick_x * (xStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.2));
-            double yStickL = gamepad1.left_stick_y * -(yStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.2));
-
-            double joystickAngle = Math.atan2(yStickL, xStickL);
-            double magnitudeL = Math.hypot(xStickL, yStickL);
-            double correctedAngle = Math.toDegrees(joystickAngle) - imuYaw;
-
-            if (correctedAngle < 0) {
-                correctedAngle += 360;
-            }
-
-            correctedAngle = Math.toRadians(correctedAngle);
-
-            double newXStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
-            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
-
-            // Trigger driveToggle
-            if (gamepad1.right_bumper) {
-                driveToggle = true;
-            }
-            if (gamepad1.left_bumper) {
-                driveToggle = false;
-            }
-
-            if (driveToggle) {
-                // Field Drive
-                Robot.HardwareDevices.leftFront.setPower(newYStickL + newXStickL + xStickR);
-                Robot.HardwareDevices.leftBack.setPower(newYStickL - newXStickL + xStickR);
-                Robot.HardwareDevices.rightFront.setPower(newYStickL - newXStickL - xStickR);
-                Robot.HardwareDevices.rightBack.setPower(newYStickL + newXStickL - xStickR);
-            } else {
-                // Normal Drive
-                Robot.HardwareDevices.leftFront.setPower(yStickL + xStickL + xStickR);
-                Robot.HardwareDevices.leftBack.setPower(yStickL - xStickL + xStickR);
-                Robot.HardwareDevices.rightFront.setPower(yStickL - xStickL - xStickR);
-                Robot.HardwareDevices.rightBack.setPower(yStickL + xStickL - xStickR);
-            }
             //endregion
 
             //region Subsystem Controls
