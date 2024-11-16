@@ -12,16 +12,16 @@ public class Intake extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
         // Arm positions
-        public static double armUpL = 0.55;
-        public static double armUpR = 0.45;
-        public static double armDownL = 0.53;
-        public static double armDownR = 0.47;
-        public static double armRestL = 0.425;
-        public static double armRestR = 0.575;
-        public static double armTransferL = 0.6;
-        public static double armTransferR = 0.4;
-        public static double armTransfer2L = 0.56;
-        public static double armTransfer2R = 0.44;
+        public static double armUpL = 0.56;
+        public static double armUpR = 0.44;
+        public static double armDownL = 0.535;
+        public static double armDownR = 0.465;
+        public static double armRestL = 0.430;
+        public static double armRestR = 0.570;
+        public static double armTransferL = 0.605;
+        public static double armTransferR = 0.395;
+        public static double armTransfer2L = 0.565;
+        public static double armTransfer2R = 0.435;
 
         // Elbow positions
         public static double elbowUp = 0.32;

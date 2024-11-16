@@ -24,7 +24,7 @@ public class Outtake extends Robot.HardwareDevices {
 
         // Hand positions
         public static double handOpen = 0.25;
-        public static double handClosed = 0.55;
+        public static double handClosed = 0.6;
     }
 
     public class Arm {
