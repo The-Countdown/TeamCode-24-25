@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
@@ -34,7 +35,6 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
             if (gamepad2.triangle) {
                 robot.intake.arm.rest();
             }
-
             if (gamepad2.dpad_left) {
                 robot.intake.wrist.vertical();
             }
@@ -97,17 +97,34 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                     robot.depositSlide.specimenGrab();
                 }
                 if (gamepad2.square) {
-                    robot.intake.greatHandOff();
+                    robot.intake.actOne();
                 }
                 if (gamepad2.triangle) {
                     robot.intake.restEsc();
                 }
                 if (gamepad2.dpad_left) {
-                    robot.depositSlide.condense();
+                    robot.depositSlide.condensedMilk();
                 }
                 if (gamepad2.dpad_right) {
-                    robot.depositSlide.depositHigh();
+                    robot.depositSlide.actTwo();
                 }
+            }
+
+            int yStickRInt = (int) (gamepad2.right_stick_y * 15);
+            if (gamepad2.right_stick_y != 0) {
+                int currentPosition = depositSlide.getTargetPosition();
+
+                if (currentPosition >= 5 && gamepad2.right_stick_y > 0) {
+                    depositSlide.setTargetPosition(currentPosition - yStickRInt);
+                    depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+                } else if (currentPosition <= 2550 && gamepad2.right_stick_y < 0) {
+                    depositSlide.setTargetPosition(currentPosition - yStickRInt);
+                    depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+                }
+            } else {
+                depositSlide.setTargetPosition(depositSlide.getTargetPosition());
             }
 
             int yStickLInt  = (int) (gamepad2.left_stick_y * 30);
@@ -117,15 +134,18 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                 if (averagePosition >= 5 && gamepad2.left_stick_y > 0) {
                     intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
                     intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
+                    intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
+                    intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
                 } else if (averagePosition <= 1500 && gamepad2.left_stick_y < 0) {
                     intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
                     intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
+                    intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
+                    intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
                 }
-
-                intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
-                intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
             } else {
                 intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
                 intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());

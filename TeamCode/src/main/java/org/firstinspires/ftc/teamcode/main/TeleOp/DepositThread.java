@@ -24,15 +24,12 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
     @Override
     public void run() {
         boolean wasLeftBumperPressed = false;
-        boolean toggleStateLB = false;
         boolean wasRightBumperPressed = false;
         boolean toggleStateRB = false;
 
         while (opMode.opModeIsActive()) {
-            if (gamepad2.circle && (depositSlide.getCurrentPosition() > 75)) {
-                robot.depositSlide.condense();
-            } else if (gamepad2.circle && (depositSlide.getCurrentPosition() < 75)) {
-                robot.depositSlide.depositHigh();
+            if (gamepad2.circle) {
+                robot.depositSlide.condensedMilk();
             }
 
             if (gamepad2.square) {
@@ -44,18 +41,11 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
             boolean isLeftBumperPressed = gamepad1.left_bumper;
 
             if (isLeftBumperPressed && !wasLeftBumperPressed) {
-                toggleStateLB = !toggleStateLB;
-
-                if (toggleStateLB) {
-                    robot.outtake.hand.open();
-                } else {
-                    robot.outtake.hand.close();
-                    if (!robot.safeSleep(200)) {
-                        return;
-                    }
-                    robot.outtake.arm.upLift();
-                }
+                robot.outtake.arm.upClip();
+            } else if (!isLeftBumperPressed && wasLeftBumperPressed) {
+                robot.outtake.arm.upLift();
             }
+
             wasLeftBumperPressed = isLeftBumperPressed;
 
             boolean isRightBumperPressed = gamepad1.right_bumper;
@@ -64,26 +54,28 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 toggleStateRB = !toggleStateRB;
 
                 if (toggleStateRB) {
-                    robot.outtake.hand.open();
-                } else {
                     robot.outtake.hand.close();
+                } else {
+                    robot.outtake.hand.open();
                 }
             }
             wasRightBumperPressed = isRightBumperPressed;
 
-            int yStickRInt = (int) (gamepad2.right_stick_y * 30);
+            int yStickRInt = (int) (gamepad2.right_stick_y * 15);
             if (gamepad2.right_stick_y != 0) {
                 int currentPosition = depositSlide.getTargetPosition();
 
                 if (currentPosition >= 5 && gamepad2.right_stick_y > 0) {
                     depositSlide.setTargetPosition(currentPosition - yStickRInt);
+                    depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    depositSlide.setPower(DepositSlide.DepositSlidePower.move);
                 } else if (currentPosition <= 2550 && gamepad2.right_stick_y < 0) {
                     depositSlide.setTargetPosition(currentPosition - yStickRInt);
+                    depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+                } else {
+                    depositSlide.setTargetPosition(depositSlide.getTargetPosition());
                 }
-                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-            } else {
-                depositSlide.setTargetPosition(depositSlide.getTargetPosition());
             }
         }
     }

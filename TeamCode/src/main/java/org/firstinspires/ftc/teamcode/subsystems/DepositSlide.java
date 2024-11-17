@@ -13,10 +13,11 @@ public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
         public static int retracted = 0;
-        public static int highBasket = 2500;
+        public static int highBasket = 2432;
         public static int lowBasket = 1500;
         public static int specimenWall = 700;
         public static int specimenBar = 1200;
+        public static int transfer = 1325;
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 10;
@@ -53,6 +54,12 @@ public class DepositSlide extends Robot.HardwareDevices {
         depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         depositSlide.setPower(DepositSlidePower.move);
     }
+    public void transfer() {
+        depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
+        depositSlide.setTargetPosition(DepositSlidePosition.transfer);
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        depositSlide.setPower(DepositSlidePower.move);
+    }
     public void highBasket() {
         depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
         depositSlide.setTargetPosition(DepositSlidePosition.highBasket);
@@ -68,18 +75,22 @@ public class DepositSlide extends Robot.HardwareDevices {
 
     public void specimenGrab() {
         try {
-            robot.intakeSlide.condense();
+            robot.intake.wrist.horizontal();
+            robot.intake.hand.open();
+            robot.intakeSlide.retract();
+            robot.intake.elbow.up();
             specimenWall();
+            Thread.sleep(600);
+            robot.intake.arm.rest();
+            robot.intake.elbow.rest();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
-            depositSlide.setPower(DepositSlidePower.move/2);
             robot.outtake.arm.upClip();
             robot.outtake.wrist.horizontal();
             Thread.sleep(750);
             retract();
-            intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move/2);
-            intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move/2);
+            depositSlide.setPower(DepositSlidePower.move/2);
             robot.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -95,14 +106,20 @@ public class DepositSlide extends Robot.HardwareDevices {
             throw new RuntimeException(e);
         }
     }
-    public void depositHigh() {
+    public void actTwo() {
         try {
+            robot.intake.elbow.transfer();
+            Thread.sleep(1000);
             robot.outtake.hand.close();
+            Thread.sleep(250);
+            robot.intake.hand.open();
+            Thread.sleep(250);
             highBasket();
-            robot.intakeSlide.retract();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300))) {
                 Thread.sleep(10);
             }
+            robot.intake.arm.up();
+            robot.intake.elbow.down();
             robot.outtake.arm.back();
             robot.outtake.wrist.horizontal();
         } catch (InterruptedException e) {
@@ -123,7 +140,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             throw new RuntimeException(e);
         }
     }
-    public void condense() {
+    public void condensedMilk() {
         try {
             if (depositSlide.getCurrentPosition() <= 800) {
                 move(800);

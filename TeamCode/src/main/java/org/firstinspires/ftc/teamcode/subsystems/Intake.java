@@ -12,22 +12,22 @@ public class Intake extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
         // Arm positions
-        public static double armUpL = 0.56;
-        public static double armUpR = 0.44;
-        public static double armDownL = 0.535;
-        public static double armDownR = 0.465;
-        public static double armRestL = 0.430;
-        public static double armRestR = 0.570;
-        public static double armTransferL = 0.605;
-        public static double armTransferR = 0.395;
-        public static double armTransfer2L = 0.565;
-        public static double armTransfer2R = 0.435;
+        public static double armUpL = 0.6;
+        public static double armUpR = 0.4;
+        public static double armDownL = 0.58;
+        public static double armDownR = 0.42;
+        public static double armRestL = 0.465;
+        public static double armRestR = 0.535;
+        public static double armTransferL = 0.64;
+        public static double armTransferR = 0.36;
+        public static double armTransfer2L = 0.6;
+        public static double armTransfer2R = 0.4;
 
         // Elbow positions
-        public static double elbowUp = 0.32;
-        public static double elbowRest = 0.35;
-        public static double elbowDown = 0.43;
-        public static double elbowTransfer = 0.175;
+        public static double elbowUp = 0.285;
+        public static double elbowRest = 0.315;
+        public static double elbowDown = 0.39;
+        public static double elbowTransfer = 0.19;
 
         // Wrist positions
         public static double wristVertical = 0.545;
@@ -36,7 +36,7 @@ public class Intake extends Robot.HardwareDevices {
         // Hand positions
         public static double handOpen = 0.5;
         public static double handClosed = 0.775;
-        public static double handHalfOpen = 0.725;
+        public static double handHalfOpen = 0.7;
     }
 
     public class Arm {
@@ -121,40 +121,22 @@ public class Intake extends Robot.HardwareDevices {
         robot.intake.wrist.horizontal();
     }
 
-    public void greatHandOff() {
+    public void actOne() {
         try {
-            robot.intakeSlide.handOff();
-            while (!(((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) > (IntakeSlide.IntakeSlidePosition.handOff - IntakeSlide.IntakeSlidePosition.stepRange) && (((intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2) < (IntakeSlide.IntakeSlidePosition.handOff + IntakeSlide.IntakeSlidePosition.stepRange)))) {
-                Thread.sleep(10);
-            }
-            robot.intake.wrist.horizontal();
-            robot.intake.up();
-            robot.outtake.arm.transfer();
-            robot.outtake.hand.open();
+            robot.depositSlide.transfer();
             robot.outtake.wrist.horizontal();
-            Thread.sleep(750);
-            robot.intake.transferPrep();
-            robot.intake.arm.transfer2();
-            robot.intake.elbow.transfer();
-            Thread.sleep(1150);
-            robot.intake.transfer();
-            Thread.sleep(300);
-            robot.outtake.hand.close();
-            Thread.sleep(200);
-            robot.intake.hand.open();
-            robot.intake.up();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void transferPrep() {
-        try {
-            robot.intake.wrist.horizontal();
             robot.intake.elbow.up();
+            robot.intake.arm.transfer();
+            robot.intake.wrist.horizontal();
+            Thread.sleep(500);
             robot.intake.hand.halfOpen();
-            Thread.sleep(200);
+            Thread.sleep(500);
             robot.intake.hand.close();
+            robot.outtake.arm.forward();
+            robot.outtake.hand.open();
+            robot.intakeSlide.retract();
+            intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move/2);
+            intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move/2);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -20,13 +20,41 @@ public class TeleOp extends LinearOpMode {
 
     public static double yStickLMulti = 0.4;
     public static double xStickLMulti = 0.6;
-    public static double xStickRMulti = 0.4;
+    public static double xStickRMulti = 0.3;
     public boolean driveToggle = false;
     boolean depositMagnetPressed = false;
 
     @Override
     public void runOpMode() {
         Robot robot = Robot.getInstance(this);
+        // Motor Directions
+        Robot.HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
+
+        // Motor Modes and Settings
+        Robot.HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Robot.HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Robot.HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Robot.HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Robot.HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         YawPitchRollAngles robotOrientation;
 
@@ -69,10 +97,6 @@ public class TeleOp extends LinearOpMode {
                 depositMagnetPressed = false;
             }
 
-            //region Driving
-
-            //endregion
-
             //region Subsystem Controls
             if ((!Robot.HardwareDevices.depositSlide.isBusy()) && (Robot.HardwareDevices.depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
                     (Robot.HardwareDevices.depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
@@ -114,5 +138,6 @@ public class TeleOp extends LinearOpMode {
             telemetry.update();
             //endregion
         }
+        robot = null;
     }
 }

@@ -66,7 +66,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
         intakeSlideR.setPower(IntakeSlidePower.move);
     }
 
-    public void condense() {
+    public void condensedMilk() {
         robot.intakeSlide.retract();
         robot.intake.rest();
     }

@@ -32,8 +32,20 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
         boolean toggleStateCross = false;
 
         while (opMode.opModeIsActive()) {
-            if (gamepad2.share) {
-                robot.intake.greatHandOff();
+            if (gamepad2.left_bumper) {
+                robot.intake.restEsc();
+            }
+
+            try {
+                if (gamepad2.share) {
+                    robot.intake.actOne();
+                    while (!gamepad2.share) {
+                        Thread.sleep(10);
+                    }
+                    robot.depositSlide.actTwo();
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
 
             boolean isCrossPressed = gamepad2.cross;
@@ -54,9 +66,9 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                 toggleStateRB = !toggleStateRB;
 
                 if (toggleStateRB) {
-                    robot.intake.hand.close();
-                } else {
                     robot.intake.hand.open();
+                } else {
+                    robot.intake.hand.close();
                 }
             }
             wasRightBumperPressed = isRightBumperPressed;
@@ -92,17 +104,21 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                 if (averagePosition >= 5 && gamepad2.left_stick_y > 0) {
                     intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
                     intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
+                    intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
+                    intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
                 } else if (averagePosition <= 1500 && gamepad2.left_stick_y < 0) {
                     intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition() - yStickLInt);
                     intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition() - yStickLInt);
+                    intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
+                    intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
+                } else {
+                    intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
+                    intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
                 }
-                intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move);
-                intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move);
-            } else {
-                intakeSlideL.setTargetPosition(intakeSlideL.getTargetPosition());
-                intakeSlideR.setTargetPosition(intakeSlideR.getTargetPosition());
             }
         }
     }
