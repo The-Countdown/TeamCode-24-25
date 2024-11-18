@@ -24,8 +24,9 @@ public class Outtake extends Robot.HardwareDevices {
         public static double wristHorizontal = 0.53;
 
         // Hand positions
-        public static double handOpen = 0.25;
-        public static double handClosed = 0.6;
+        public static double handOpen = 0.275;
+        public static double handClosed = 0.575;
+        public static double handHalfOpen = 0.525;
     }
 
     public class Arm {
@@ -67,6 +68,9 @@ public class Outtake extends Robot.HardwareDevices {
     public class Hand {
         public void open() {
             depositClaw.setPosition(OuttakePositions.handOpen);
+        }
+        public void halfOpen() {
+            depositClaw.setPosition(OuttakePositions.handHalfOpen);
         }
         public void close() {
             depositClaw.setPosition(OuttakePositions.handClosed);

@@ -153,7 +153,47 @@ public class Robot {
         if (instance == null) {
             instance = new Robot(opMode);
         }
+        // Motor Directions
+        Robot.HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
+        Robot.HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
+
+        // Motor Modes and Settings
+        Robot.HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Robot.HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Robot.HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        Robot.HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        Robot.HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        HardwareDevices.imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        )
+                )
+        );
+
+        Robot.HardwareDevices.imu.resetYaw();
+
         return instance;
+    }
+
+    public void nullInstance() {
+            instance = null;
     }
 
     public void updatePose() {

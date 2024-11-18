@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.main.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
@@ -31,24 +33,11 @@ public class TeleOpTesting extends LinearOpMode {
     public void runOpMode() {
         Robot robot = new Robot(this);
 
-        Robot.HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
-
-        // Motor Modes and Settings
-        Robot.HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        YawPitchRollAngles robotOrientation;
+        Pose2d beginPose = new Pose2d(0, 0, 0);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        drive.updatePoseEstimate();
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
-
-//        robot.intake.rest(); //illegal
-//        robot.outtake.rest(); //illegal
 
         waitForStart();
 
@@ -61,7 +50,8 @@ public class TeleOpTesting extends LinearOpMode {
         driveThread.start();
 
         while (opModeIsActive()) {
-            robot.updatePose();
+            Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
+            drive.updatePoseEstimate();
 
             int intakeAvg = ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
 
@@ -92,20 +82,19 @@ public class TeleOpTesting extends LinearOpMode {
             //endregion
 
             //region Telemetry
-            robot.updatePose();
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
-            packet.put("PoseX", (robot.dreadDrive.pose.position.x));
-            packet.put("PoseY", (robot.dreadDrive.pose.position.y));
+            packet.put("Heading", Math.toDegrees(drive.pose.heading.real));
+            packet.put("PoseX", (drive.pose.position.x));
+            packet.put("PoseY", (drive.pose.position.y));
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             packet.put("Intake Height Avg", (intakeAvg));
             packet.put("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
             packet.put("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
-            telemetry.addData("PoseX", (robot.dreadDrive.pose.position.x));
-            telemetry.addData("PoseY", (robot.dreadDrive.pose.position.y));
+            telemetry.addData("Heading", Math.toDegrees(drive.pose.heading.real));
+            telemetry.addData("PoseX", (drive.pose.position.x));
+            telemetry.addData("PoseY", (drive.pose.position.y));
             telemetry.addLine();
             telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             telemetry.addLine();

@@ -77,9 +77,20 @@ public class MeepMeeping {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myThirdBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(270)))
-                .splineToSplineHeading(new Pose2d(27, -6, Math.toRadians(45)), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(6, -28), Math.toRadians(270.00))
+        myThirdBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(43, 0),0)
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(32, 0))
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(32, -55))
+                .waitSeconds(1)
+                .splineToLinearHeading(new Pose2d(75, -55, Math.toRadians(0)), Math.toRadians(0))
+                .waitSeconds(1)
+                .splineToLinearHeading(new Pose2d(75, -71, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(10, -69, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(74, -69, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(72, -87, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(11, -85, Math.toRadians(0)), Math.toRadians(0))
                 .build());
 
                 meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

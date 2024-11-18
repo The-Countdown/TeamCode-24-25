@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.actions.specimen;
+package org.firstinspires.ftc.teamcode.subsystems.actions.outtake;
 
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;

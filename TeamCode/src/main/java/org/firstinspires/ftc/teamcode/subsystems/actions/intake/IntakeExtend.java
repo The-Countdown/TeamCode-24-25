@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.actions.claw;
+package org.firstinspires.ftc.teamcode.subsystems.actions.intake;
 
 import androidx.annotation.NonNull;
 
@@ -7,17 +7,16 @@ import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-public class ClawOpen implements Action {
+public class IntakeExtend implements Action {
     private final Robot robot;
 
-    public ClawOpen(Robot robot) {
+    public IntakeExtend(Robot robot) {
         this.robot = robot;
     }
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.outtake.hand.open();
+        robot.intakeSlide.move(500);
         return false;
     }
 }
-

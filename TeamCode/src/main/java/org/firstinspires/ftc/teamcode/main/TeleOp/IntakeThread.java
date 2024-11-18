@@ -66,9 +66,9 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                 toggleStateRB = !toggleStateRB;
 
                 if (toggleStateRB) {
-                    robot.intake.hand.open();
-                } else {
                     robot.intake.hand.close();
+                } else {
+                    robot.intake.hand.open();
                 }
             }
             wasRightBumperPressed = isRightBumperPressed;

@@ -1,21 +1,23 @@
-package org.firstinspires.ftc.teamcode.subsystems.actions.specimen;
+package org.firstinspires.ftc.teamcode.subsystems.actions.outtake;
 
 import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-public class SpecimenDown implements Action {
+public class OuttakeClawClose implements Action {
     private final Robot robot;
 
-    public SpecimenDown(Robot robot) {
+    public OuttakeClawClose(Robot robot) {
         this.robot = robot;
     }
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.depositSlide.specimenWall();
-        robot.outtake.hand.open();
+        robot.outtake.hand.close();
         return false;
     }
 }
+

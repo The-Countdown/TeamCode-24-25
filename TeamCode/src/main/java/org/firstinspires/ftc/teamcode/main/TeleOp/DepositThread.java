@@ -54,9 +54,9 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 toggleStateRB = !toggleStateRB;
 
                 if (toggleStateRB) {
-                    robot.outtake.hand.close();
-                } else {
                     robot.outtake.hand.open();
+                } else {
+                    robot.outtake.hand.close();
                 }
             }
             wasRightBumperPressed = isRightBumperPressed;

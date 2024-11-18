@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.actions.deposit;
+package org.firstinspires.ftc.teamcode.subsystems.actions.outtake;
 
 import androidx.annotation.NonNull;
 
@@ -7,19 +7,22 @@ import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-public class DepositCondense implements Action {
+public class OuttakeHighNet implements Action {
     private final Robot robot;
 
-    public DepositCondense(Robot robot) {
+    public OuttakeHighNet(Robot robot) {
         this.robot = robot;
     }
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.outtake.arm.transfer();
         robot.outtake.hand.close();
-        robot.outtake.wrist.vertical();
-        robot.depositSlide.retract();
+        robot.depositSlide.highBasket();
+        if (!robot.safeSleep(300)) {
+            return true;
+        }
+        robot.outtake.arm.back();
+        robot.outtake.wrist.horizontal();
         while (Robot.HardwareDevices.depositSlide.isBusy()) {
             if (!robot.safeSleep(10)) {
                 return true;

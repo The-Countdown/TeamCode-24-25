@@ -124,13 +124,15 @@ public class Intake extends Robot.HardwareDevices {
     public void actOne() {
         try {
             robot.depositSlide.transfer();
+            Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move/2);
             robot.outtake.wrist.horizontal();
             robot.intake.elbow.up();
             robot.intake.arm.transfer();
             robot.intake.wrist.horizontal();
-            Thread.sleep(500);
+            Thread.sleep(400);
+            Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             robot.intake.hand.halfOpen();
-            Thread.sleep(500);
+            Thread.sleep(400);
             robot.intake.hand.close();
             robot.outtake.arm.forward();
             robot.outtake.hand.open();

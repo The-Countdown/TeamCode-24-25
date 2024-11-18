@@ -27,36 +27,6 @@ public class TeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = Robot.getInstance(this);
-        // Motor Directions
-        Robot.HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
-
-        // Motor Modes and Settings
-        Robot.HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        Robot.HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        Robot.HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        YawPitchRollAngles robotOrientation;
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -97,7 +67,7 @@ public class TeleOp extends LinearOpMode {
                 depositMagnetPressed = false;
             }
 
-            //region Subsystem Controls
+            //region Safety
             if ((!Robot.HardwareDevices.depositSlide.isBusy()) && (Robot.HardwareDevices.depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&
                     (Robot.HardwareDevices.depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
                 Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
@@ -109,6 +79,11 @@ public class TeleOp extends LinearOpMode {
             if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < 10) &&
                     (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < 10)) {
                 Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
+            }
+
+            if (gamepad1.guide || gamepad2.ps) {
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
             }
             //endregion
 
@@ -138,6 +113,6 @@ public class TeleOp extends LinearOpMode {
             telemetry.update();
             //endregion
         }
-        robot = null;
+        robot.nullInstance();
     }
 }

@@ -13,10 +13,10 @@ public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
         public static int retracted = 0;
-        public static int highBasket = 2432;
+        public static int highBasket = 2550;
         public static int lowBasket = 1500;
         public static int specimenWall = 700;
-        public static int specimenBar = 1200;
+        public static int specimenBar = 1062;
         public static int transfer = 1325;
         public static int tolerance = 5;
         public static int stepRange = 50;
@@ -115,6 +115,9 @@ public class DepositSlide extends Robot.HardwareDevices {
             robot.intake.hand.open();
             Thread.sleep(250);
             highBasket();
+            Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/2);
+            Thread.sleep(400);
+            Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move);
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300))) {
                 Thread.sleep(10);
             }
