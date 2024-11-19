@@ -17,6 +17,7 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int lowBasket = 1500;
         public static int specimenWall = 700;
         public static int specimenBar = 1062;
+        public static int specimenBarAlt = 1062; //TODO: Find
         public static int transfer = 1325;
         public static int tolerance = 5;
         public static int stepRange = 50;
@@ -51,6 +52,12 @@ public class DepositSlide extends Robot.HardwareDevices {
     public void specimenBar() {
         depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
         depositSlide.setTargetPosition(DepositSlidePosition.specimenBar);
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        depositSlide.setPower(DepositSlidePower.move);
+    }
+    public void specimenBarAlt() {
+        depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
+        depositSlide.setTargetPosition(DepositSlidePosition.specimenBarAlt);
         depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         depositSlide.setPower(DepositSlidePower.move);
     }

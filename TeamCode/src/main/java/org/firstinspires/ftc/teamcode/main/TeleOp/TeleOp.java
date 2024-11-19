@@ -6,8 +6,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -81,22 +80,39 @@ public class TeleOp extends LinearOpMode {
                 Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
 
+            if (Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS) > 5000) {
+                Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
+            }
+
+            if (Robot.HardwareDevices.intakeSlideL.getCurrent(CurrentUnit.MILLIAMPS) > 5000) {
+                Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
+            }
+
+            if (Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS) > 5000) {
+                Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
+            }
+
             if (gamepad1.guide || gamepad2.ps) {
-                gamepad1.rumble(500);
-                gamepad2.rumble(500);
+                Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
+                Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
+                Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
             //endregion
 
             //region Telemetry
             robot.updatePose();
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
-            packet.put("PoseX", (robot.dreadDrive.pose.position.x));
-            packet.put("PoseY", (robot.dreadDrive.pose.position.y));
+            packet.put("Heading (deg)", Math.toDegrees(robot.dreadDrive.pose.heading.real));
+            packet.put("PoseX", robot.dreadDrive.pose.position.x);
+            packet.put("PoseY", robot.dreadDrive.pose.position.y);
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
-            packet.put("Intake Height Avg", (intakeAvg));
-            packet.put("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
-            packet.put("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
+            packet.put("Deposit Current (mA)", Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS));
+            packet.put("IntakeL Height", Robot.HardwareDevices.intakeSlideL.getCurrentPosition());
+            packet.put("IntakeL Current (mA)", Robot.HardwareDevices.intakeSlideL.getCurrent(CurrentUnit.MILLIAMPS));
+            packet.put("IntakeR Height", Robot.HardwareDevices.intakeSlideR.getCurrentPosition());
+            packet.put("IntakeR Current (mA)", Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS));
+            packet.put("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
+
             dashboard.sendTelemetryPacket(packet);
 
             telemetry.addData("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
@@ -104,11 +120,14 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("PoseY", (robot.dreadDrive.pose.position.y));
             telemetry.addLine();
             telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
+            telemetry.addData("Deposit Current (mA)", Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addLine();
             telemetry.addData("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
-            telemetry.addData("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
+            telemetry.addData("IntakeL Current (mA)", Robot.HardwareDevices.intakeSlideL.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addLine();
-            telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.getValue());
+            telemetry.addData("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
+            telemetry.addData("IntakeR Current (mA)", Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS));
+            telemetry.addLine();
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
             telemetry.update();
             //endregion

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.main.Auto;
 
+import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -11,12 +13,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
-import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeExtend;
-import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeRetract;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeWait;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeClawClose;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeClawHalfOpen;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondense;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 
 @Autonomous
 public class AutoRight extends LinearOpMode {
@@ -24,11 +24,10 @@ public class AutoRight extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this);
-        Pose2d beginPose = new Pose2d(0, 0, 0);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, robot.beginPose);
         drive.updatePoseEstimate();
 
-        TrajectoryActionBuilder toSubmersible = drive.actionBuilder(beginPose)
+        TrajectoryActionBuilder toSubmersibleFromStart = drive.actionBuilder(robot.beginPose)
                 .strafeTo(new Vector2d(43, 0));
 
         TrajectoryActionBuilder toFirstSample = drive.actionBuilder(new Pose2d(43, 0, 0))
@@ -42,10 +41,33 @@ public class AutoRight extends LinearOpMode {
 
         TrajectoryActionBuilder toSecondSample = drive.actionBuilder(new Pose2d(10, -69, 0))
                 .strafeTo(new Vector2d(74, -69))
-                .strafeTo(new Vector2d(72, -87));
+                .strafeTo(new Vector2d(72, -85));
 
-        TrajectoryActionBuilder toWallFromSecondSample = drive.actionBuilder(new Pose2d(72, -87, 0))
+        TrajectoryActionBuilder toWallFromSecondSample = drive.actionBuilder(new Pose2d(72, -85, 0))
                 .strafeTo(new Vector2d(11, -85));
+
+        TrajectoryActionBuilder toAwayFromWallAfterPush = drive.actionBuilder(new Pose2d(11, -85, 0))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(21, -73, Math.toRadians(180)), Math.toRadians(0));
+
+        TrajectoryActionBuilder toSpecimenFromAwayFromWall = drive.actionBuilder(new Pose2d(21, -73, 180))
+                .strafeTo(new Vector2d(11, -73));
+
+        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = drive.actionBuilder(new Pose2d(11, -73, 180))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(37, -6, Math.toRadians(0)), Math.toRadians(0))
+                .strafeTo(new Vector2d(43, -6));
+
+        TrajectoryActionBuilder toSpecimenFromSubmersibleFirst = drive.actionBuilder(new Pose2d(43, -6, 0))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(21, -73, Math.toRadians(180)), Math.toRadians(0))
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(11, -73));
+
+        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = drive.actionBuilder(new Pose2d(11, -73, 180))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(37, 0, Math.toRadians(0)), Math.toRadians(0))
+                .strafeTo(new Vector2d(43, 0));
 
         robot.intake.rest();
         robot.outtake.rest();
@@ -53,19 +75,53 @@ public class AutoRight extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                toSubmersible.build(),
+                new ParallelAction(
+                        new InstantAction(() -> robot.intakeSlide.move(500)),
+                        new IntakeWait(robot),
+                        new OuttakePreloadEsc(robot),
+                        new InstantAction(() -> robot.intakeSlide.retract()),
+                        new InstantAction(() -> robot.outtake.hand.halfOpen()),
+                        new Wait(robot,700),
+                        new InstantAction(() -> robot.outtake.hand.close())
+                ),
+                new Wait(robot,500),
+                toSubmersibleFromStart.build(),
+                new Wait(robot,250),
+                new InstantAction(() -> robot.outtake.hand.open()),
+                new ParallelAction(
+                        new Wait(robot,500),
+                        new OuttakeCondense(robot)
+                ),
                 toFirstSample.build(),
                 toWallFromFirstSample.build(),
                 toSecondSample.build(),
-                toWallFromSecondSample.build()
-//                new IntakeExtend(robot),
-//                new IntakeWait(robot),
-//                new OuttakePreloadEsc(robot),
-//                new IntakeRetract(robot),
-//                new OuttakeClawHalfOpen(robot),
-//                new Wait(robot,700),
-//                new OuttakeClawClose(robot),
-//                new Wait(robot, 300000)
+                toWallFromSecondSample.build(),
+                new ParallelAction(
+                        new OuttakeSpecimen(robot)
+                ),
+                toAwayFromWallAfterPush.build(),
+                new Wait(robot,1000),
+                toSpecimenFromAwayFromWall.build(),
+                new InstantAction(() -> robot.outtake.hand.close()),
+                new Wait(robot,300),
+                new InstantAction(() -> robot.outtake.arm.upLift()),
+                new Wait(robot,200),
+                new InstantAction(() -> robot.depositSlide.specimenBar()),
+                toSubmersibleFromSpecimenFirst.build(),
+                new InstantAction(() -> robot.outtake.hand.open()),
+                new Wait(robot,250),
+                new ParallelAction(
+                        new Wait(robot,400),
+                        new OuttakeSpecimen(robot)
+                ),
+                toSpecimenFromSubmersibleFirst.build(),
+                new InstantAction(() -> robot.outtake.hand.close()),
+                new Wait(robot,300),
+                new InstantAction(() -> robot.outtake.arm.upLift()),
+                new Wait(robot,200),
+                new InstantAction(() -> robot.depositSlide.specimenBar()),
+                toSubmersibleFromSpecimenSecond.build(),
+                new Wait(robot, 300000)
         ));
     }
 }

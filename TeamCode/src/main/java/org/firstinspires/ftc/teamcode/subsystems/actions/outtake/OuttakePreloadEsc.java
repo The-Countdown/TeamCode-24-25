@@ -16,8 +16,8 @@ public class OuttakePreloadEsc implements Action {
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.depositSlide.specimenBar();
-        while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.specimenBar - 300))) {
+        robot.depositSlide.specimenBarAlt();
+        while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.specimenBarAlt - 300))) {
             if (!robot.safeSleep(10)) {
                 return true;
             }
