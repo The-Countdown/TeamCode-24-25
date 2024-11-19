@@ -167,15 +167,19 @@ public class Robot {
         Robot.HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.intakeSlideL.setTargetPosition(0);
         Robot.HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.intakeSlideR.setTargetPosition(0);
         Robot.HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.depositSlide.setTargetPosition(0);
         Robot.HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         Robot.HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        Robot.HardwareDevices.arm.setTargetPosition(0);
         Robot.HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.imu.initialize(
