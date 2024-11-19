@@ -16,9 +16,12 @@ public class OuttakeCondense implements Action {
 
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.outtake.arm.transfer();
+        robot.outtake.arm.rest();
         robot.outtake.hand.close();
         robot.outtake.wrist.vertical();
+        if (!robot.safeSleep(300)) {
+            return true;
+        }
         robot.depositSlide.retract();
         while (Robot.HardwareDevices.depositSlide.isBusy()) {
             if (!robot.safeSleep(10)) {

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
@@ -11,14 +10,6 @@ public class Drive extends Robot.HardwareDevices {
 
     public Drive(Robot robot) {
         this.robot = robot;
-    }
-
-    public void move(double stickX, double stickY) {
-
-    }
-
-    public void moveField(double stickX, double stickY) {
-
     }
 
     public Pose2d getLimeLightPos() {
@@ -38,16 +29,4 @@ public class Drive extends Robot.HardwareDevices {
 
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);
     }
-
-    public void toPose (Pose2d pose, Double tangent) {
-        if (tangent == null) {
-            tangent = 0d;
-        }
-        robot.updatePose();
-        Actions.runBlocking(robot.dreadDrive.actionBuilder(robot.dreadDrive.pose)
-                .splineToLinearHeading(pose, tangent)
-                .build());
-    }
-
-    public void toPose (Pose2d pose) {toPose(pose, null);}
 }

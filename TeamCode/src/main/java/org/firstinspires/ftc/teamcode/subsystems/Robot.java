@@ -108,18 +108,22 @@ public class Robot {
 
         HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.intakeSlideL.setTargetPosition(HardwareDevices.intakeSlideL.getCurrentPosition());
         HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.intakeSlideR.setTargetPosition(HardwareDevices.intakeSlideR.getCurrentPosition());
         HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.depositSlide.setTargetPosition(HardwareDevices.depositSlide.getCurrentPosition());
         HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.arm.setTargetPosition(HardwareDevices.arm.getCurrentPosition());
         HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.imu = hardwareMap.get(IMU.class, "imu");
@@ -154,33 +158,33 @@ public class Robot {
             instance = new Robot(opMode);
         }
         // Motor Directions
-        Robot.HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
-        Robot.HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
+        HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+        HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
+        HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
+        HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
+        HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Motor Modes and Settings
-        Robot.HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        Robot.HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.intakeSlideL.setTargetPosition(0);
-        Robot.HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.intakeSlideL.setTargetPosition(HardwareDevices.intakeSlideL.getCurrentPosition());
+        HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.intakeSlideR.setTargetPosition(0);
-        Robot.HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.intakeSlideR.setTargetPosition(HardwareDevices.intakeSlideR.getCurrentPosition());
+        HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.depositSlide.setTargetPosition(0);
-        Robot.HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.depositSlide.setTargetPosition(HardwareDevices.depositSlide.getCurrentPosition());
+        HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        Robot.HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        Robot.HardwareDevices.arm.setTargetPosition(0);
-        Robot.HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.arm.setTargetPosition(HardwareDevices.arm.getCurrentPosition());
+        HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.imu.initialize(
                 new IMU.Parameters(

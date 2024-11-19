@@ -42,6 +42,7 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                     while (!gamepad2.share) {
                         if (gamepad2.right_bumper) {
                             robot.intake.hand.open();
+                            Thread.sleep(500);
                             break;
                         }
                         Thread.sleep(10);
