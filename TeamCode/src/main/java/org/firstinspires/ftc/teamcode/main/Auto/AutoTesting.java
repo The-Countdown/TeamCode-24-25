@@ -30,21 +30,15 @@ public class AutoTesting extends LinearOpMode {
         TrajectoryActionBuilder toSubmersibleFromStart = drive.actionBuilder(robot.beginPose)
                 .strafeTo(new Vector2d(43, 0));
 
-        TrajectoryActionBuilder toFirstSample = drive.actionBuilder(new Pose2d(43, 0, 0))
+        TrajectoryActionBuilder toWallFromSecondSample = drive.actionBuilder(new Pose2d(43, 0, 0))
                 .strafeTo(new Vector2d(32, 0))
                 .strafeTo(new Vector2d(32, -55))
                 .strafeTo(new Vector2d(75, -55))
-                .strafeTo(new Vector2d(75, -71));
-
-        TrajectoryActionBuilder toWallFromFirstSample = drive.actionBuilder(new Pose2d(75, -71, 0))
-                .strafeTo(new Vector2d(10, -69));
-
-        TrajectoryActionBuilder toSecondSample = drive.actionBuilder(new Pose2d(10, -69, 0))
-                .strafeTo(new Vector2d(74, -69))
-                .strafeTo(new Vector2d(72, -83));
-
-        TrajectoryActionBuilder toWallFromSecondSample = drive.actionBuilder(new Pose2d(72, -83, 0))
-                .strafeTo(new Vector2d(11, -83));
+                .splineToConstantHeading(new Vector2d(75, -71), 0)
+                .splineToConstantHeading(new Vector2d(10, -69), 0)
+                .splineToConstantHeading(new Vector2d(75, -69), 0)
+                .splineToConstantHeading(new Vector2d(75, -83), 0)
+                .splineToConstantHeading(new Vector2d(11, -83), 0);
 
         TrajectoryActionBuilder toAwayFromWallAfterPush = drive.actionBuilder(new Pose2d(11, -83, 0))
                 .setReversed(true)
@@ -76,9 +70,6 @@ public class AutoTesting extends LinearOpMode {
 
         Actions.runBlocking(new SequentialAction(
                 toSubmersibleFromStart.build(),
-                toFirstSample.build(),
-                toWallFromFirstSample.build(),
-                toSecondSample.build(),
                 toWallFromSecondSample.build(),
                 toAwayFromWallAfterPush.build(),
                 toSpecimenFromAwayFromWall.build(),
