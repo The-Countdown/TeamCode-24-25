@@ -61,7 +61,6 @@ public class AutoRight extends LinearOpMode {
         TrajectoryActionBuilder toSpecimenFromSubmersibleFirst = drive.actionBuilder(new Pose2d(43, -6, 0))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(21, -73, Math.toRadians(180)), Math.toRadians(0))
-                .waitSeconds(1)
                 .strafeTo(new Vector2d(11, -73));
 
         TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = drive.actionBuilder(new Pose2d(11, -73, 180))

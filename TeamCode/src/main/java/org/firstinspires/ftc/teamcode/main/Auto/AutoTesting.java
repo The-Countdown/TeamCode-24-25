@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.main.Auto;
 
-import com.acmerobotics.roadrunner.InstantAction;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -12,11 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
-import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeWait;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondense;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 
 @Autonomous
 public class AutoTesting extends LinearOpMode {
@@ -42,25 +35,25 @@ public class AutoTesting extends LinearOpMode {
 
         TrajectoryActionBuilder toAwayFromWallAfterPush = drive.actionBuilder(new Pose2d(11, -83, 0))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(24, -73, Math.toRadians(180)), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(24, -73), Math.toRadians(180));
 
         TrajectoryActionBuilder toSpecimenFromAwayFromWall = drive.actionBuilder(new Pose2d(24, -73, Math.toRadians(180)))
                 .strafeTo(new Vector2d(11, -73));
 
         TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = drive.actionBuilder(new Pose2d(11, -73, Math.toRadians(180)))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(37, -6, Math.toRadians(0)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(37, -6), Math.toRadians(0))
                 .strafeTo(new Vector2d(43, -6));
 
         TrajectoryActionBuilder toSpecimenFromSubmersibleFirst = drive.actionBuilder(new Pose2d(43, -6, 0))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(24, -73, Math.toRadians(180)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(24, -73), Math.toRadians(180))
                 .waitSeconds(1)
                 .strafeTo(new Vector2d(11, -73));
 
         TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = drive.actionBuilder(new Pose2d(11, -73, Math.toRadians(180)))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(37, 0, Math.toRadians(0)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(37, 0), Math.toRadians(0))
                 .strafeTo(new Vector2d(43, 0));
 
         robot.intake.rest();

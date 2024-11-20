@@ -8,7 +8,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeeping {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(700);
+        MeepMeep meepMeep = new MeepMeep(900);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -78,19 +78,28 @@ public class MeepMeeping {
                 .build();
 
         myThirdBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(0)))
-                .splineToConstantHeading(new Vector2d(43, 0),0)
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(32, 0))
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(32, -55))
-                .waitSeconds(1)
-                .splineToLinearHeading(new Pose2d(75, -55, Math.toRadians(0)), Math.toRadians(0))
-                .waitSeconds(1)
-                .splineToLinearHeading(new Pose2d(75, -71, Math.toRadians(0)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(10, -69, Math.toRadians(0)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(74, -69, Math.toRadians(0)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(72, -87, Math.toRadians(0)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(11, -85, Math.toRadians(0)), Math.toRadians(0))
+                .strafeTo(new Vector2d(43, 0)) // Move to Submersible
+                .strafeTo(new Vector2d(32, 0)) // First step of toWallFromSecondSample
+                .strafeTo(new Vector2d(32, -55)) // Second step of toWallFromSecondSample
+                .strafeTo(new Vector2d(75, -55)) // Third step of toWallFromSecondSample
+                .splineToConstantHeading(new Vector2d(75, -71), 0) // Fourth step of toWallFromSecondSample
+                .splineToConstantHeading(new Vector2d(10, -69), 0) // Fifth step of toWallFromSecondSample
+                .splineToConstantHeading(new Vector2d(75, -69), 0) // Sixth step of toWallFromSecondSample
+                .splineToConstantHeading(new Vector2d(75, -83), 0) // Seventh step of toWallFromSecondSample
+                .splineToConstantHeading(new Vector2d(11, -83), 0) // Eighth step of toWallFromSecondSample
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(24, -73), Math.toRadians(180)) // toAwayFromWallAfterPush
+                .strafeTo(new Vector2d(11, -73)) // toSpecimenFromAwayFromWall
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(37, -6), Math.toRadians(0)) // toSubmersibleFromSpecimenFirst
+                .strafeTo(new Vector2d(43, -6)) // Second step of toSubmersibleFromSpecimenFirst
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(24, -73), Math.toRadians(180)) // toSpecimenFromSubmersibleFirst
+                .waitSeconds(1) // Wait step
+                .strafeTo(new Vector2d(11, -73)) // Final step of toSpecimenFromSubmersibleFirst
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(37, 0), Math.toRadians(0)) // toSubmersibleFromSpecimenSecond
+                .strafeTo(new Vector2d(43, 0))
                 .build());
 
                 meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
