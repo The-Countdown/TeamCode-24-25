@@ -23,47 +23,44 @@ public class AutoRight extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Robot robot = new Robot(this);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, robot.beginPose);
-        drive.updatePoseEstimate();
-
-        TrajectoryActionBuilder toSubmersibleFromStart = drive.actionBuilder(robot.beginPose)
+        Robot robot = new Robot(this, new Pose2d(0, 0, 0));
+        TrajectoryActionBuilder toSubmersibleFromStart = Robot.rb.roadRunner.actionBuilder(robot.beginPose)
                 .strafeTo(new Vector2d(43, 0));
 
-        TrajectoryActionBuilder toFirstSample = drive.actionBuilder(new Pose2d(43, 0, 0))
+        TrajectoryActionBuilder toFirstSample = Robot.rb.roadRunner.actionBuilder(new Pose2d(43, 0, 0))
                 .strafeTo(new Vector2d(32, 0))
                 .strafeTo(new Vector2d(32, -55))
                 .strafeTo(new Vector2d(75, -55))
                 .strafeTo(new Vector2d(75, -71));
 
-        TrajectoryActionBuilder toWallFromFirstSample = drive.actionBuilder(new Pose2d(75, -71, 0))
+        TrajectoryActionBuilder toWallFromFirstSample = Robot.rb.roadRunner.actionBuilder(new Pose2d(75, -71, 0))
                 .strafeTo(new Vector2d(10, -69));
 
-        TrajectoryActionBuilder toSecondSample = drive.actionBuilder(new Pose2d(10, -69, 0))
+        TrajectoryActionBuilder toSecondSample = Robot.rb.roadRunner.actionBuilder(new Pose2d(10, -69, 0))
                 .strafeTo(new Vector2d(74, -69))
                 .strafeTo(new Vector2d(72, -85));
 
-        TrajectoryActionBuilder toWallFromSecondSample = drive.actionBuilder(new Pose2d(72, -85, 0))
+        TrajectoryActionBuilder toWallFromSecondSample = Robot.rb.roadRunner.actionBuilder(new Pose2d(72, -85, 0))
                 .strafeTo(new Vector2d(11, -85));
 
-        TrajectoryActionBuilder toAwayFromWallAfterPush = drive.actionBuilder(new Pose2d(11, -85, 0))
+        TrajectoryActionBuilder toAwayFromWallAfterPush = Robot.rb.roadRunner.actionBuilder(new Pose2d(11, -85, 0))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(21, -73, Math.toRadians(180)), Math.toRadians(0));
 
-        TrajectoryActionBuilder toSpecimenFromAwayFromWall = drive.actionBuilder(new Pose2d(21, -73, 180))
+        TrajectoryActionBuilder toSpecimenFromAwayFromWall = Robot.rb.roadRunner.actionBuilder(new Pose2d(21, -73, 180))
                 .strafeTo(new Vector2d(11, -73));
 
-        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = drive.actionBuilder(new Pose2d(11, -73, 180))
+        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = Robot.rb.roadRunner.actionBuilder(new Pose2d(11, -73, 180))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(37, -6, Math.toRadians(0)), Math.toRadians(0))
                 .strafeTo(new Vector2d(43, -6));
 
-        TrajectoryActionBuilder toSpecimenFromSubmersibleFirst = drive.actionBuilder(new Pose2d(43, -6, 0))
+        TrajectoryActionBuilder toSpecimenFromSubmersibleFirst = Robot.rb.roadRunner.actionBuilder(new Pose2d(43, -6, 0))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(21, -73, Math.toRadians(180)), Math.toRadians(0))
                 .strafeTo(new Vector2d(11, -73));
 
-        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = drive.actionBuilder(new Pose2d(11, -73, 180))
+        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = Robot.rb.roadRunner.actionBuilder(new Pose2d(11, -73, 180))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(37, 0, Math.toRadians(0)), Math.toRadians(0))
                 .strafeTo(new Vector2d(43, 0));
@@ -77,25 +74,25 @@ public class AutoRight extends LinearOpMode {
                 new ParallelAction(
                         new SequentialAction(
                                 new InstantAction(() -> robot.intakeSlide.move(500)),
-                                new IntakeWait(robot),
-                                new OuttakePreloadEsc(robot),
+                                new IntakeWait(),
+                                new OuttakePreloadEsc(),
                                 new InstantAction(() -> robot.intakeSlide.retract()),
                                 new InstantAction(() -> robot.outtake.hand.halfOpen()),
-                                new Wait(robot,700),
+                                new Wait(700),
                                 new InstantAction(() -> robot.outtake.hand.close())
                         ),
                         new SequentialAction(
-                                new Wait(robot,500),
+                                new Wait(500),
                                 toSubmersibleFromStart.build()
                         )
                 ),
-                new Wait(robot,250),
+                new Wait(250),
                 new InstantAction(() -> robot.outtake.hand.open()),
-                new Wait(robot,250),
+                new Wait(250),
                 new ParallelAction(
                         new SequentialAction(
-                                new Wait(robot,500),
-                                new OuttakeCondense(robot)
+                                new Wait(500),
+                                new OuttakeCondense()
                         ),
                         new SequentialAction(
                                 toFirstSample.build(),
@@ -105,38 +102,38 @@ public class AutoRight extends LinearOpMode {
                         )
                 ),
                 new ParallelAction(
-                        new OuttakeSpecimen(robot),
+                        new OuttakeSpecimen(),
                         toAwayFromWallAfterPush.build()
                 ),
-                new Wait(robot,1000),
+                new Wait(1000),
                 toSpecimenFromAwayFromWall.build(),
                 new InstantAction(() -> robot.outtake.hand.close()),
-                new Wait(robot,300),
+                new Wait(300),
                 new InstantAction(() -> robot.outtake.arm.upLift()),
-                new Wait(robot,200),
+                new Wait(200),
                 new InstantAction(() -> robot.depositSlide.specimenBar()),
                 toSubmersibleFromSpecimenFirst.build(),
-                new Wait(robot,250),
+                new Wait(250),
                 new InstantAction(() -> robot.outtake.hand.open()),
-                new Wait(robot,250),
+                new Wait(250),
                 new ParallelAction(
                         new SequentialAction(
-                                new Wait(robot,400),
-                                new OuttakeSpecimen(robot)
+                                new Wait(400),
+                                new OuttakeSpecimen()
                         ),
                         new SequentialAction(
                                 toSpecimenFromSubmersibleFirst.build()
                         )
                 ),
                 new InstantAction(() -> robot.outtake.hand.close()),
-                new Wait(robot,300),
+                new Wait(300),
                 new InstantAction(() -> robot.outtake.arm.upLift()),
-                new Wait(robot,200),
+                new Wait(200),
                 new InstantAction(() -> robot.depositSlide.specimenBar()),
                 toSubmersibleFromSpecimenSecond.build(),
-                new Wait(robot,250),
+                new Wait(250),
                 new InstantAction(() -> robot.outtake.hand.open()),
-                new Wait(robot, 300000)
+                new Wait(300000)
         ));
     }
 }

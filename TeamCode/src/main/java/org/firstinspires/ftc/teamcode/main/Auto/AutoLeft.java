@@ -15,13 +15,9 @@ public class AutoLeft extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Robot robot = new Robot(this);
+        Robot robot = new Robot(this, new Pose2d(0, 0, 0));
 
-        Pose2d beginPose = new Pose2d(0, 0, Math.toRadians(0));
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-        drive.updatePoseEstimate();
-
-        TrajectoryActionBuilder toBasket = drive.actionBuilder(beginPose)
+        TrajectoryActionBuilder toBasket = robot.roadRunner.actionBuilder(robot.beginPose)
                 .splineToLinearHeading(new Pose2d(15, 0, Math.toRadians(-45)), Math.toRadians(-45))
                 .splineToLinearHeading(new Pose2d(7, 31, Math.toRadians(-45)), Math.toRadians(-45));
 

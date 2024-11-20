@@ -8,22 +8,16 @@ import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class OuttakePreloadEsc implements Action {
-    private final Robot robot;
-
-    public OuttakePreloadEsc(Robot robot) {
-        this.robot = robot;
-    }
-
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.depositSlide.specimenBarAlt();
+        Robot.rb.depositSlide.specimenBarAlt();
         while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.specimenBarAlt - 300))) {
-            if (!robot.safeSleep(10)) {
+            if (!Robot.rb.safeSleep(10)) {
                 return true;
             }
         }
-        robot.outtake.arm.upLift();
-        robot.outtake.wrist.horizontal();
+        Robot.rb.outtake.arm.upLift();
+        Robot.rb.outtake.wrist.horizontal();
         return false;
     }
 }

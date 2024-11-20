@@ -9,37 +9,31 @@ import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class OuttakeSpecimen implements Action {
-    private final Robot robot;
-
-    public OuttakeSpecimen(Robot robot) {
-        this.robot = robot;
-    }
-
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        robot.intake.wrist.horizontal();
-        robot.intake.hand.open();
-        robot.intakeSlide.retract();
-        robot.intake.elbow.up();
-        robot.depositSlide.specimenWall();
-        if (!robot.safeSleep(600)) {
+        Robot.rb.intake.wrist.horizontal();
+        Robot.rb.intake.hand.open();
+        Robot.rb.intakeSlide.retract();
+        Robot.rb.intake.elbow.up();
+        Robot.rb.depositSlide.specimenWall();
+        if (!Robot.rb.safeSleep(600)) {
             return true;
         }
-        robot.intake.arm.rest();
-        robot.intake.elbow.rest();
+        Robot.rb.intake.arm.rest();
+        Robot.rb.intake.elbow.rest();
         while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.specimenWall - DepositSlide.DepositSlidePosition.stepRange))) {
-            if (!robot.safeSleep(10)) {
+            if (!Robot.rb.safeSleep(10)) {
                 return true;
             }
         }
-        robot.outtake.arm.upClip();
-        robot.outtake.wrist.horizontal();
-        if (!robot.safeSleep(750)) {
+        Robot.rb.outtake.arm.upClip();
+        Robot.rb.outtake.wrist.horizontal();
+        if (!Robot.rb.safeSleep(750)) {
             return true;
         }
-        robot.depositSlide.retract();
+        Robot.rb.depositSlide.retract();
         Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move/2);
-        robot.outtake.hand.open();
+        Robot.rb.outtake.hand.open();
         return false;
     }
 }

@@ -18,10 +18,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Robot {
-    private static Robot instance;
-    public static Pose2d currentPose;
+    public static Robot rb;
+    public static boolean hasResetEncoders = false;
     public Pose2d beginPose;
-    public MecanumDrive dreadDrive;
+    public MecanumDrive roadRunner;
     HardwareMap hardwareMap;
     Telemetry telemetry;
     LinearOpMode opMode;
@@ -52,7 +52,9 @@ public class Robot {
         public static IMU imu;
     }
 
-    public Robot(LinearOpMode opMode) {
+    public Robot(LinearOpMode opMode, Pose2d beginPose) {
+        rb = this;
+
         this.opMode = opMode;
         this.hardwareMap = opMode.hardwareMap;
         this.telemetry = opMode.telemetry;
@@ -106,25 +108,30 @@ public class Robot {
         HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.intakeSlideL.setTargetPosition(HardwareDevices.intakeSlideL.getCurrentPosition());
         HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.intakeSlideR.setTargetPosition(HardwareDevices.intakeSlideR.getCurrentPosition());
         HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.depositSlide.setTargetPosition(HardwareDevices.depositSlide.getCurrentPosition());
         HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.arm.setTargetPosition(HardwareDevices.arm.getCurrentPosition());
         HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        if (beginPose != null || !hasResetEncoders) {
+            HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+            HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+            HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+            HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            hasResetEncoders = true;
+        }
+
+        HardwareDevices.intakeSlideL.setTargetPosition(HardwareDevices.intakeSlideL.getCurrentPosition());
+        HardwareDevices.intakeSlideR.setTargetPosition(HardwareDevices.intakeSlideR.getCurrentPosition());
+        HardwareDevices.depositSlide.setTargetPosition(HardwareDevices.depositSlide.getCurrentPosition());
+        HardwareDevices.arm.setTargetPosition(HardwareDevices.arm.getCurrentPosition());
 
         HardwareDevices.imu = hardwareMap.get(IMU.class, "imu");
         HardwareDevices.imu.initialize(
@@ -137,9 +144,17 @@ public class Robot {
         );
         HardwareDevices.imu.resetYaw();
 
-        beginPose = new Pose2d(0, 0, Math.toRadians(0));
-        dreadDrive = new MecanumDrive(hardwareMap, beginPose);
+        if (beginPose != null) {
+            beginPose = new Pose2d(0, 0, Math.toRadians(0));
+        }
+        roadRunner = new MecanumDrive(hardwareMap, beginPose);
+        roadRunner.updatePoseEstimate();
     }
+
+    public Robot(LinearOpMode opMode) {
+        this(opMode, null);
+    }
+
     @CheckResult
     public boolean safeSleep(double milliseconds) {
         double startTime = System.currentTimeMillis();
@@ -151,61 +166,6 @@ public class Robot {
         }
 
         return true;
-    }
-
-    public static Robot getInstance(LinearOpMode opMode) {
-        if (instance == null) {
-            instance = new Robot(opMode);
-        }
-        // Motor Directions
-        HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-        HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
-        HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
-        HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
-        HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
-
-        // Motor Modes and Settings
-        HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        HardwareDevices.rightFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        HardwareDevices.leftBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        HardwareDevices.rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.intakeSlideL.setTargetPosition(HardwareDevices.intakeSlideL.getCurrentPosition());
-        HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.intakeSlideR.setTargetPosition(HardwareDevices.intakeSlideR.getCurrentPosition());
-        HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.depositSlide.setTargetPosition(HardwareDevices.depositSlide.getCurrentPosition());
-        HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        HardwareDevices.arm.setTargetPosition(HardwareDevices.arm.getCurrentPosition());
-        HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        HardwareDevices.imu.initialize(
-                new IMU.Parameters(
-                        new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                                RevHubOrientationOnRobot.UsbFacingDirection.UP
-                        )
-                )
-        );
-
-        Robot.HardwareDevices.imu.resetYaw();
-
-        return instance;
-    }
-
-    public void nullInstance() {
-            instance = null;
-    }
-
-    public void updatePose() {
-        currentPose = dreadDrive.pose;
     }
 
     public Drive drive = new Drive(this);

@@ -25,7 +25,7 @@ public class TeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Robot robot = Robot.getInstance(this);
+        Robot robot = new Robot(this);
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -51,8 +51,6 @@ public class TeleOp extends LinearOpMode {
         intakeThread.start();
 
         while (opModeIsActive()) {
-            robot.updatePose();
-
             int intakeAvg = ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
 
             if (Robot.HardwareDevices.depositMagnet.isPressed()) {
@@ -100,11 +98,10 @@ public class TeleOp extends LinearOpMode {
             //endregion
 
             //region Telemetry
-            robot.updatePose();
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading (deg)", Math.toDegrees(robot.dreadDrive.pose.heading.real));
-            packet.put("PoseX", robot.dreadDrive.pose.position.x);
-            packet.put("PoseY", robot.dreadDrive.pose.position.y);
+            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            packet.put("PoseX", robot.roadRunner.pose.position.x);
+            packet.put("PoseY", robot.roadRunner.pose.position.y);
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             packet.put("Deposit Current (mA)", Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS));
             packet.put("IntakeL Height", Robot.HardwareDevices.intakeSlideL.getCurrentPosition());
@@ -115,9 +112,9 @@ public class TeleOp extends LinearOpMode {
 
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Heading", Math.toDegrees(robot.dreadDrive.pose.heading.real));
-            telemetry.addData("PoseX", (robot.dreadDrive.pose.position.x));
-            telemetry.addData("PoseY", (robot.dreadDrive.pose.position.y));
+            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
+            telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
             telemetry.addLine();
             telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             telemetry.addData("Deposit Current (mA)", Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS));
@@ -132,6 +129,5 @@ public class TeleOp extends LinearOpMode {
             telemetry.update();
             //endregion
         }
-        robot.nullInstance();
     }
 }
