@@ -144,9 +144,12 @@ public class Robot {
         );
         HardwareDevices.imu.resetYaw();
 
-        if (beginPose != null) {
+        if (beginPose == null) {
             beginPose = new Pose2d(0, 0, Math.toRadians(0));
         }
+
+        this.beginPose = beginPose;
+
         roadRunner = new MecanumDrive(hardwareMap, beginPose);
         roadRunner.updatePoseEstimate();
     }

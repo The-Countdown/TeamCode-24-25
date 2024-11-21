@@ -78,18 +78,6 @@ public class TeleOp extends LinearOpMode {
                 Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
             }
 
-            if (Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS) > 5000) {
-                Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
-            }
-
-            if (Robot.HardwareDevices.intakeSlideL.getCurrent(CurrentUnit.MILLIAMPS) > 5000) {
-                Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
-            }
-
-            if (Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS) > 5000) {
-                Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
-            }
-
             if (gamepad1.guide || gamepad2.ps) {
                 Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
                 Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
@@ -112,6 +100,7 @@ public class TeleOp extends LinearOpMode {
 
             dashboard.sendTelemetryPacket(packet);
 
+            robot.roadRunner.updatePoseEstimate();
             telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real));
             telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
             telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
