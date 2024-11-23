@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeWait;
-import org.firstinspires.ftc.teamcode.subsystems.actions.intake.OuttakeWait;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeWait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondense;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondenseEnd;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
