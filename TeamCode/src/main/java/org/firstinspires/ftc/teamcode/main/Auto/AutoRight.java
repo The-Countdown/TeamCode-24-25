@@ -41,16 +41,16 @@ public class AutoRight extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(27, -70), 0)
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(27, -70, Math.toRadians(180)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(5.5, -70, Math.toRadians(180)), Math.toRadians(180));
+                .splineToLinearHeading(new Pose2d(6.5, -70, Math.toRadians(180)), Math.toRadians(180));
 
-        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = robot.roadRunner.actionBuilder(new Pose2d(5.5, -70, Math.toRadians(180)))
+        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = robot.roadRunner.actionBuilder(new Pose2d(6.5, -70, Math.toRadians(180)))
                 .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(35, -6), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(37.5, -6), Math.toRadians(0));
 
-        TrajectoryActionBuilder toIntoSubFirst = robot.roadRunner.actionBuilder(new Pose2d(35, -6, Math.toRadians(0)))
-                .strafeTo(new Vector2d(52, -6));
+        TrajectoryActionBuilder toIntoSubFirst = robot.roadRunner.actionBuilder(new Pose2d(37.5, -6, Math.toRadians(0)))
+                .strafeTo(new Vector2d(58, -6));
 
-        TrajectoryActionBuilder toBackItUpTwo = robot.roadRunner.actionBuilder(new Pose2d(52, -6, 0))
+        TrajectoryActionBuilder toBackItUpTwo = robot.roadRunner.actionBuilder(new Pose2d(58, -6, 0))
                 .setReversed(true)
                 .splineToConstantHeading(new Vector2d(30, -6), 0);
 
@@ -61,12 +61,12 @@ public class AutoRight extends LinearOpMode {
 
         TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = robot.roadRunner.actionBuilder(new Pose2d(4.3, -60, Math.toRadians(180)))
                 .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(35, 0), Math.toRadians(0));
+                .strafeToLinearHeading(new Vector2d(36.5, 0), Math.toRadians(0));
 
-        TrajectoryActionBuilder toIntoSubSecond = robot.roadRunner.actionBuilder(new Pose2d(35, 0, Math.toRadians(0)))
-                .strafeTo(new Vector2d(43, 0));
+        TrajectoryActionBuilder toIntoSubSecond = robot.roadRunner.actionBuilder(new Pose2d(36.5, 0, Math.toRadians(0)))
+                .strafeTo(new Vector2d(47, 0));
 
-        TrajectoryActionBuilder toBackItUpThree = robot.roadRunner.actionBuilder(new Pose2d(43, 0, Math.toRadians(0)))
+        TrajectoryActionBuilder toBackItUpThree = robot.roadRunner.actionBuilder(new Pose2d(47, 0, Math.toRadians(0)))
                 .strafeTo(new Vector2d(30, 0));
 
         robot.intake.rest();
@@ -108,7 +108,7 @@ public class AutoRight extends LinearOpMode {
                 new Wait(300),
                 new InstantAction(() -> robot.outtake.arm.upLift()),
                 new Wait(200),
-                new InstantAction(() -> robot.depositSlide.specimenBar()),
+                new InstantAction(() -> robot.depositSlide.move(1085)),
                 toSubmersibleFromSpecimenSecond.build(),
                 new InstantAction(() -> robot.depositSlide.specimenBarClip()),
                 toIntoSubSecond.build(),
