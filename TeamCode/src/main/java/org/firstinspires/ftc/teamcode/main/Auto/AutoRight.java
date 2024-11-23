@@ -29,9 +29,9 @@ public class AutoRight extends LinearOpMode {
         Robot robot = new Robot(this, new Pose2d(0, -14, 0));
 
         TrajectoryActionBuilder toSubmersibleFromStart = robot.roadRunner.actionBuilder(robot.beginPose)
-                .strafeTo(new Vector2d(43, -14));
+                .strafeTo(new Vector2d(45, -14));
 
-        TrajectoryActionBuilder toBackItUp = robot.roadRunner.actionBuilder(new Pose2d(43, -14, 0))
+        TrajectoryActionBuilder toBackItUp = robot.roadRunner.actionBuilder(new Pose2d(45, -14, 0))
                 .strafeTo(new Vector2d(29.4, -14));
 
         TrajectoryActionBuilder toPushSample = robot.roadRunner.actionBuilder(new Pose2d(29.4, -14, 0))
@@ -41,32 +41,32 @@ public class AutoRight extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(27, -70), 0)
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(27, -70, Math.toRadians(180)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(6, -70, Math.toRadians(180)), Math.toRadians(180));
+                .splineToLinearHeading(new Pose2d(5.5, -70, Math.toRadians(180)), Math.toRadians(180));
 
-        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = robot.roadRunner.actionBuilder(new Pose2d(6, -70, Math.toRadians(180)))
+        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = robot.roadRunner.actionBuilder(new Pose2d(5.5, -70, Math.toRadians(180)))
                 .setReversed(true)
                 .strafeToLinearHeading(new Vector2d(35, -6), Math.toRadians(0));
 
         TrajectoryActionBuilder toIntoSubFirst = robot.roadRunner.actionBuilder(new Pose2d(35, -6, Math.toRadians(0)))
-                .strafeTo(new Vector2d(50, -6));
+                .strafeTo(new Vector2d(52, -6));
 
-        TrajectoryActionBuilder toBackItUpTwo = robot.roadRunner.actionBuilder(new Pose2d(50, -6, 0))
+        TrajectoryActionBuilder toBackItUpTwo = robot.roadRunner.actionBuilder(new Pose2d(52, -6, 0))
                 .setReversed(true)
                 .splineToConstantHeading(new Vector2d(30, -6), 0);
 
         TrajectoryActionBuilder toSecondSpecimen = robot.roadRunner.actionBuilder(new Pose2d(30, -6, 0))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(21, -60, Math.toRadians(180)), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(3.5, -60, Math.toRadians(180)), Math.toRadians(180));
+                .splineToLinearHeading(new Pose2d(4.3, -60, Math.toRadians(180)), Math.toRadians(180));
 
-        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = robot.roadRunner.actionBuilder(new Pose2d(3.5, -60, Math.toRadians(180)))
+        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = robot.roadRunner.actionBuilder(new Pose2d(4.3, -60, Math.toRadians(180)))
                 .setReversed(true)
                 .strafeToLinearHeading(new Vector2d(35, 0), Math.toRadians(0));
 
         TrajectoryActionBuilder toIntoSubSecond = robot.roadRunner.actionBuilder(new Pose2d(35, 0, Math.toRadians(0)))
-                .strafeTo(new Vector2d(41, 0));
+                .strafeTo(new Vector2d(43, 0));
 
-        TrajectoryActionBuilder toBackItUpThree = robot.roadRunner.actionBuilder(new Pose2d(41, 0, Math.toRadians(0)))
+        TrajectoryActionBuilder toBackItUpThree = robot.roadRunner.actionBuilder(new Pose2d(43, 0, Math.toRadians(0)))
                 .strafeTo(new Vector2d(30, 0));
 
         robot.intake.rest();
@@ -84,6 +84,8 @@ public class AutoRight extends LinearOpMode {
                 new InstantAction(() -> robot.depositSlide.specimenBarAltDown()),
                 new Wait(100),
                 new InstantAction(() -> robot.outtake.hand.halfOpen()),
+                new Wait(300),
+                new InstantAction(() -> robot.outtake.hand.close()),
                 toBackItUp.build(),
                 new InstantAction(() -> robot.outtake.hand.open()),
                 new Wait(250),
