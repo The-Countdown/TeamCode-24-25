@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.actions.intake;
+package org.firstinspires.ftc.teamcode.subsystems.actions.outtake;
 
 import androidx.annotation.NonNull;
 
