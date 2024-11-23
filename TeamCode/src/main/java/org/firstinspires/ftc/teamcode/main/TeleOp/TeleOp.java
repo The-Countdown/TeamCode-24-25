@@ -14,14 +14,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
 @Config
 public class TeleOp extends LinearOpMode {
-    public static double intakeYawThreshold = 0.1;
-    public static double intakeYawMulti = 0.001;
-
     public static double yStickLMulti = 0.4;
     public static double xStickLMulti = 0.6;
     public static double xStickRMulti = 0.3;
-    public boolean driveToggle = false;
-    boolean depositMagnetPressed = false;
+    public static boolean depositMagnetPressed = false;
 
     @Override
     public void runOpMode() {
@@ -29,14 +25,10 @@ public class TeleOp extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
-        robot.intake.rest(); //illegal
-        robot.outtake.rest(); //illegal
-
         waitForStart();
 
-        robot.intake.restEsc();
-        sleep(600);
-        robot.intake.elbow.down();
+        robot.intake.rest();
+        robot.outtake.rest();
 
         DriveThread driveRunnable = new DriveThread(this, robot);
         Thread driveThread = new Thread(driveRunnable);
@@ -51,8 +43,6 @@ public class TeleOp extends LinearOpMode {
         intakeThread.start();
 
         while (opModeIsActive()) {
-            int intakeAvg = ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
-
             if (Robot.HardwareDevices.depositMagnet.isPressed()) {
                 if (!depositMagnetPressed) {
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -86,8 +76,10 @@ public class TeleOp extends LinearOpMode {
             //endregion
 
             //region Telemetry
+            robot.roadRunner.updatePoseEstimate();
+
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real) - Math.toRadians(1));
             packet.put("PoseX", robot.roadRunner.pose.position.x);
             packet.put("PoseY", robot.roadRunner.pose.position.y);
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
@@ -97,11 +89,9 @@ public class TeleOp extends LinearOpMode {
             packet.put("IntakeR Height", Robot.HardwareDevices.intakeSlideR.getCurrentPosition());
             packet.put("IntakeR Current (mA)", Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS));
             packet.put("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
-
             dashboard.sendTelemetryPacket(packet);
 
-            robot.roadRunner.updatePoseEstimate();
-            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real) - Math.toRadians(1));
             telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
             telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
             telemetry.addLine();

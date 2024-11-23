@@ -80,13 +80,13 @@ public final class MecanumDrive {
         public double kA = 0.000121;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 50;
-        public double minProfileAccel = -50;
-        public double maxProfileAccel = 50;
+        public double maxWheelVel = 60;
+        public double minProfileAccel = -60;
+        public double maxProfileAccel = 60;
 
         // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
-        public double maxAngAccel = Math.PI;
+        public double maxAngVel = Math.PI * 7; // shared with path
+        public double maxAngAccel = Math.PI * 7;
 
         // path controller gains
         public double axialGain = 7;
@@ -303,9 +303,9 @@ public final class MecanumDrive {
             PoseVelocity2d robotVelRobot = updatePoseEstimate();
             Pose2d error = txWorldTarget.value().minusExp(pose);
 
-            if ((t >= timeTrajectory.duration && error.position.norm() < 2.5
-                    && robotVelRobot.linearVel.norm() < 0.5)
-                    || t >= timeTrajectory.duration + 0.5) {
+            if ((t >= timeTrajectory.duration && error.position.norm() < 1.5
+                    && robotVelRobot.linearVel.norm() < 0.4)
+                    || t >= timeTrajectory.duration + 0.1) {
                 leftFront.setPower(0);
                 leftBack.setPower(0);
                 rightBack.setPower(0);

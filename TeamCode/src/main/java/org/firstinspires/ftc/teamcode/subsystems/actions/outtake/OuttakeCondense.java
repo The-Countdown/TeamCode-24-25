@@ -17,11 +17,6 @@ public class OuttakeCondense implements Action {
             return true;
         }
         Robot.rb.depositSlide.retract();
-        while (Robot.HardwareDevices.depositSlide.isBusy()) {
-            if (!Robot.rb.safeSleep(10)) {
-                return true;
-            }
-        }
         return false;
     }
 }

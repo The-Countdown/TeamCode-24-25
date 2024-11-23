@@ -8,18 +8,12 @@ import com.acmerobotics.roadrunner.Action;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-public class OuttakeHighNet implements Action {
+public class OuttakeTransferPrep implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        Robot.rb.outtake.hand.close();
-        Robot.rb.depositSlide.highBasket();
-        while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.highBasket - 1500))) {
-            if (!Robot.rb.safeSleep(10)) {
-                return true;
-            }
-        }
-        Robot.rb.outtake.arm.back();
-        Robot.rb.outtake.wrist.horizontal();
+        Robot.rb.outtake.hand.open();
+        Robot.rb.depositSlide.transfer();
+        Robot.rb.outtake.arm.forward();
         return false;
     }
 }

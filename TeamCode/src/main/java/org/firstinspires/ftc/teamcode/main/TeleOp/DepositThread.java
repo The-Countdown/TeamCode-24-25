@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -60,6 +61,27 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 }
             }
             wasRightBumperPressed = isRightBumperPressed;
+
+            if (gamepad2.dpad_down) {
+                try {
+                    robot.outtake.rest();
+                    Thread.sleep(500);
+                    Robot.HardwareDevices.depositSlide.setPower(-0.4);
+                    Robot.HardwareDevices.depositSlide.setTargetPosition(-5000);
+                    double startTime = System.currentTimeMillis();
+                    while (!TeleOp.depositMagnetPressed && ((System.currentTimeMillis() - startTime) < 5000)) {
+                        Thread.sleep(10);
+                    }
+                    robot.depositSlide.stop();
+                    robot.depositSlide.retract();
+                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    TeleOp.depositMagnetPressed = true;
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
             int yStickRInt = (int) (gamepad2.right_stick_y * 15);
             if (gamepad2.right_stick_y != 0) {

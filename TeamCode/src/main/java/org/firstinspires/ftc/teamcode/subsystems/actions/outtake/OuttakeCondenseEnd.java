@@ -5,21 +5,24 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
-import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-public class OuttakeHighNet implements Action {
+public class OuttakeCondenseEnd implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        Robot.rb.outtake.hand.close();
-        Robot.rb.depositSlide.highBasket();
-        while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.highBasket - 1500))) {
+        Robot.rb.depositSlide.specimenWall();
+        while (Robot.HardwareDevices.depositSlide.isBusy()) {
             if (!Robot.rb.safeSleep(10)) {
                 return true;
             }
         }
-        Robot.rb.outtake.arm.back();
-        Robot.rb.outtake.wrist.horizontal();
+        Robot.rb.outtake.arm.rest();
+        Robot.rb.outtake.wrist.vertical();
+        Robot.rb.outtake.hand.close();
+        if (!Robot.rb.safeSleep(500)) {
+            return true;
+        }
+        Robot.rb.depositSlide.retract();
         return false;
     }
 }

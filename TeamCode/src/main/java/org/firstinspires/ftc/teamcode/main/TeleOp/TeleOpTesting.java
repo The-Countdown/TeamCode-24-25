@@ -33,10 +33,6 @@ public class TeleOpTesting extends LinearOpMode {
     public void runOpMode() {
         Robot robot = new Robot(this);
 
-        Pose2d beginPose = new Pose2d(0, 0, 0);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-        drive.updatePoseEstimate();
-
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
         waitForStart();
@@ -51,7 +47,7 @@ public class TeleOpTesting extends LinearOpMode {
 
         while (opModeIsActive()) {
             Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
-            drive.updatePoseEstimate();
+            robot.roadRunner.updatePoseEstimate();
 
             int intakeAvg = ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
 
@@ -83,18 +79,18 @@ public class TeleOpTesting extends LinearOpMode {
 
             //region Telemetry
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading", Math.toDegrees(drive.pose.heading.real));
-            packet.put("PoseX", (drive.pose.position.x));
-            packet.put("PoseY", (drive.pose.position.y));
+            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            packet.put("PoseX", robot.roadRunner.pose.position.x);
+            packet.put("PoseY", robot.roadRunner.pose.position.y);
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             packet.put("Intake Height Avg", (intakeAvg));
             packet.put("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
             packet.put("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Heading", Math.toDegrees(drive.pose.heading.real));
-            telemetry.addData("PoseX", (drive.pose.position.x));
-            telemetry.addData("PoseY", (drive.pose.position.y));
+            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
+            telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
             telemetry.addLine();
             telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             telemetry.addLine();

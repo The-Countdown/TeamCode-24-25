@@ -58,6 +58,7 @@ public class Robot {
         this.opMode = opMode;
         this.hardwareMap = opMode.hardwareMap;
         this.telemetry = opMode.telemetry;
+        this.beginPose = beginPose;
 
         HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
 
@@ -147,8 +148,6 @@ public class Robot {
         if (beginPose == null) {
             beginPose = new Pose2d(0, 0, Math.toRadians(0));
         }
-
-        this.beginPose = beginPose;
 
         roadRunner = new MecanumDrive(hardwareMap, beginPose);
         roadRunner.updatePoseEstimate();

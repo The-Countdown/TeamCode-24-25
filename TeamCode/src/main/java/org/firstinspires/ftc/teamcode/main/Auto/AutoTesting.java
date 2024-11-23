@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @Autonomous
@@ -22,11 +21,8 @@ public class AutoTesting extends LinearOpMode {
                 .strafeTo(new Vector2d(43, 0));
 
         TrajectoryActionBuilder toWallFromSecondSample = robot.roadRunner.actionBuilder(new Pose2d(43, 0, 0))
-//                .strafeTo(new Vector2d(32, 0))
                 .strafeTo(new Vector2d(32, -55))
                 .strafeTo(new Vector2d(75, -55))
-//                .strafeToLinearHeading(new Vector2d(18, -15), 0)
-//                .strafeToLinearHeading(new Vector2d(58, -55), 0)
                 .splineToConstantHeading(new Vector2d(75, -71), 0)
                 .splineToConstantHeading(new Vector2d(10, -69), 0)
                 .splineToConstantHeading(new Vector2d(75, -69), 0)
