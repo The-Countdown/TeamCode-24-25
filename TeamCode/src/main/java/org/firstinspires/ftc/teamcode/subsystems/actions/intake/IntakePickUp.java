@@ -11,11 +11,11 @@ public class IntakePickUp implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         Robot.rb.intake.arm.down();
-        if (!Robot.rb.safeSleep(100)) {
+        if (!Robot.rb.safeSleep(250)) {
             return true;
         }
         Robot.rb.intake.hand.halfOpen();
-        if (!Robot.rb.safeSleep(100)) {
+        if (!Robot.rb.safeSleep(250)) {
             return true;
         }
         Robot.rb.intake.arm.up();

@@ -12,8 +12,11 @@ public class OuttakeTransferPrep implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         Robot.rb.outtake.hand.open();
-        Robot.rb.depositSlide.transfer();
         Robot.rb.outtake.arm.forward();
+        if (!Robot.rb.safeSleep(200)) {
+            return true;
+        }
+        Robot.rb.depositSlide.transfer();
         return false;
     }
 }

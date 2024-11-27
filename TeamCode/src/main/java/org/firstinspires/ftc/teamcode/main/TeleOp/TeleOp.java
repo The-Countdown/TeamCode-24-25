@@ -78,7 +78,7 @@ public class TeleOp extends LinearOpMode {
             robot.roadRunner.updatePoseEstimate();
 
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real) - Math.toRadians(1));
+            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real));
             packet.put("PoseX", robot.roadRunner.pose.position.x);
             packet.put("PoseY", robot.roadRunner.pose.position.y);
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
@@ -90,7 +90,7 @@ public class TeleOp extends LinearOpMode {
             packet.put("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real) - Math.toRadians(1));
+            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real));
             telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
             telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
             telemetry.addLine();
