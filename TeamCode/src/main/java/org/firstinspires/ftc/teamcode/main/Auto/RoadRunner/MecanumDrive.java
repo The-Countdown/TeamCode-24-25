@@ -70,6 +70,7 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         public double timeout = 2;
+        public double timeoutDistance = 0.1;
 
         // drive model parameters
         public double inPerTick = 0.00445434298440979955456570155902;
@@ -305,8 +306,8 @@ public final class MecanumDrive {
             PoseVelocity2d robotVelRobot = updatePoseEstimate();
             Pose2d error = txWorldTarget.value().minusExp(pose);
 
-            if ((t >= timeTrajectory.duration && error.position.norm() < 0.5
-                    && robotVelRobot.linearVel.norm() < 0.5)
+            if ((t >= timeTrajectory.duration && error.position.norm() < PARAMS.timeoutDistance
+                    && robotVelRobot.linearVel.norm() < PARAMS.timeoutDistance)
                     || t >= timeTrajectory.duration + PARAMS.timeout) {
                 leftFront.setPower(0);
                 leftBack.setPower(0);
