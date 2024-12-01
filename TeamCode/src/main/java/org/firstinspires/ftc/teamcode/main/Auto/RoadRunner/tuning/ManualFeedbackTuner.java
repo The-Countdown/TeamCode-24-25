@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.TankDrive;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.TwoDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public final class ManualFeedbackTuner extends LinearOpMode {
     public static double DISTANCE = 64;
@@ -26,6 +27,7 @@ public final class ManualFeedbackTuner extends LinearOpMode {
                     throw new RuntimeException("Odometry wheel locations not set! Run AngularRampLogger to tune them.");
                 }
             }
+
             waitForStart();
 
             while (opModeIsActive()) {

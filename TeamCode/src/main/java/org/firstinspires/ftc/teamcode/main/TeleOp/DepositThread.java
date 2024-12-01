@@ -37,6 +37,7 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 robot.depositSlide.specimenGrab();
             } else if (gamepad2.triangle) {
                 robot.depositSlide.specimenHang();
+
             }
 
             boolean isLeftBumperPressed = gamepad1.left_bumper;

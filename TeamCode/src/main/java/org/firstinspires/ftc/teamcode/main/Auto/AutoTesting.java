@@ -1,56 +1,123 @@
 package org.firstinspires.ftc.teamcode.main.Auto;
 
+import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeEsc;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeClip;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 
 @Autonomous
 public class AutoTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Robot robot = new Robot(this);
+        Robot robot = new Robot(this, new Pose2d(0, -14, Math.toRadians(180)));
 
-        TrajectoryActionBuilder toSubmersibleFromStart = robot.roadRunner.actionBuilder(robot.beginPose)
-                .strafeTo(new Vector2d(43, 0));
-
-        TrajectoryActionBuilder toWallFromSecondSample = robot.roadRunner.actionBuilder(new Pose2d(43, 0, 0))
-                .strafeTo(new Vector2d(32, -55))
-                .strafeTo(new Vector2d(75, -55))
-                .splineToConstantHeading(new Vector2d(75, -71), 0)
-                .splineToConstantHeading(new Vector2d(10, -69), 0)
-                .splineToConstantHeading(new Vector2d(75, -69), 0)
-                .splineToConstantHeading(new Vector2d(75, -83), 0)
-                .splineToConstantHeading(new Vector2d(11, -83), 0);
-
-        TrajectoryActionBuilder toAwayFromWallAfterPush = robot.roadRunner.actionBuilder(new Pose2d(11, -83, 0))
-                .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(24, -73), Math.toRadians(180));
-
-        TrajectoryActionBuilder toSpecimenFromAwayFromWall = robot.roadRunner.actionBuilder(new Pose2d(24, -73, Math.toRadians(180)))
-                .strafeTo(new Vector2d(11, -73));
-
-        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = robot.roadRunner.actionBuilder(new Pose2d(11, -73, Math.toRadians(180)))
-                .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(37, -6), Math.toRadians(0))
-                .strafeTo(new Vector2d(43, -6));
-
-        TrajectoryActionBuilder toSpecimenFromSubmersibleFirst = robot.roadRunner.actionBuilder(new Pose2d(43, -6, 0))
-                .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(24, -73), Math.toRadians(180))
+        TrajectoryActionBuilder clip1 = robot.roadRunner.actionBuilder(robot.beginPose)
+                .afterTime(0, new OuttakePreloadEsc())
+                .afterDisp(40, new IntakeEsc())
+                .strafeTo(new Vector2d(32, -14))
                 .waitSeconds(1)
-                .strafeTo(new Vector2d(11, -73));
+                .strafeTo(new Vector2d(45, -14))
+                .stopAndAdd(new OuttakeClip())
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.elbow.down()))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.wrist.autoRight()))
+                .endTrajectory();
 
-        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = robot.roadRunner.actionBuilder(new Pose2d(11, -73, Math.toRadians(180)))
+        TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(45, -14, Math.toRadians(180)))
+                .afterTime(0.5, new InstantAction(() -> robot.intakeSlide.move(1400)))
+                .afterDisp(15, new OuttakeSpecimen())
+                .splineToLinearHeading(new Pose2d(21, -44.5, Math.toRadians(320)), Math.toRadians(320))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
+                .waitSeconds(0.15)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
+                .waitSeconds(0.15)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.up()))
+                .waitSeconds(0.1)
+                .endTrajectory();
+
+        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(21, -44.5, Math.toRadians(320)))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upLift()))
+                .splineToLinearHeading(new Pose2d(21, -44.4, Math.toRadians(240)), Math.toRadians(240))
+                .endTrajectory();
+
+        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(21, -44.4, Math.toRadians(240)))
+                .splineToLinearHeading(new Pose2d(19, -58.5, Math.toRadians(320)), Math.toRadians(320))
+                .waitSeconds(0.5)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
+                .waitSeconds(0.15)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
+                .waitSeconds(0.15)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.up()))
+                .waitSeconds(0.1)
+                .endTrajectory();
+
+        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19, -58.5, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(19, -58.6, Math.toRadians(240)), Math.toRadians(240))
+                .endTrajectory();
+
+        TrajectoryActionBuilder grab3 = robot.roadRunner.actionBuilder(new Pose2d(19, -58.6, Math.toRadians(240)))
+                .splineToLinearHeading(new Pose2d(18, -58.5, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(18, -71, Math.toRadians(320)), Math.toRadians(320))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
+                .waitSeconds(0.15)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
+                .waitSeconds(0.15)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.up()))
+                .waitSeconds(0.1)
+                .endTrajectory();
+
+        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(18, -71, Math.toRadians(320)))
+                .stopAndAdd(new InstantAction(() -> robot.intakeSlide.move(300)))
+                .waitSeconds(0.15)
+                .splineToLinearHeading(new Pose2d(18, -65, Math.toRadians(225)), Math.toRadians(225))
+                .endTrajectory();
+
+        TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(18, -65, Math.toRadians(225)))
                 .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(37, 0), Math.toRadians(0))
-                .strafeTo(new Vector2d(43, 0));
+                .splineToLinearHeading(new Pose2d(18, -60, Math.toRadians(180)), Math.toRadians(0))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.rest()))
+                .waitSeconds(1.5)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
+                .splineToLinearHeading(new Pose2d(4.3, -60, Math.toRadians(180)), Math.toRadians(0))
+                .endTrajectory();
+
+        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = robot.roadRunner.actionBuilder(new Pose2d(6.5, -70, Math.toRadians(0)))
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(37.5, -6), Math.toRadians(180));
+
+        TrajectoryActionBuilder toIntoSubFirst = robot.roadRunner.actionBuilder(new Pose2d(37.5, -6, Math.toRadians(180)))
+                .strafeTo(new Vector2d(58, -6));
+
+        TrajectoryActionBuilder toBackItUpTwo = robot.roadRunner.actionBuilder(new Pose2d(58, -6, Math.toRadians(180)))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(30, -6), 0);
+
+        TrajectoryActionBuilder toSecondSpecimen = robot.roadRunner.actionBuilder(new Pose2d(30, -6, Math.toRadians(180)))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(21, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(4.3, -60, Math.toRadians(180)), Math.toRadians(0));
+
+        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = robot.roadRunner.actionBuilder(new Pose2d(4.3, -60, Math.toRadians(0)))
+                .setReversed(true)
+                .strafeToLinearHeading(new Vector2d(36.5, 0), Math.toRadians(180));
+
+        TrajectoryActionBuilder toIntoSubSecond = robot.roadRunner.actionBuilder(new Pose2d(36.5, 0, Math.toRadians(180)))
+                .strafeTo(new Vector2d(47, 0));
+
+        TrajectoryActionBuilder toBackItUpThree = robot.roadRunner.actionBuilder(new Pose2d(47, 0, Math.toRadians(180)))
+                .strafeTo(new Vector2d(30, 0));
 
         robot.intake.rest();
         robot.outtake.rest();
@@ -58,13 +125,25 @@ public class AutoTesting extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                toSubmersibleFromStart.build(),
-                toWallFromSecondSample.build(),
-                toAwayFromWallAfterPush.build(),
-                toSpecimenFromAwayFromWall.build(),
-                toSubmersibleFromSpecimenFirst.build(),
-                toSpecimenFromSubmersibleFirst.build(),
-                toSubmersibleFromSpecimenSecond.build()
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.1),
+                clip1.build(),
+                new SleepAction(0.15),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 2),
+                grab1.build(),
+                drop1.build(),
+                new InstantAction(() -> Robot.rb.intake.hand.open()),
+                new SleepAction(0.15),
+                grab2.build(),
+                drop2.build(),
+                new InstantAction(() -> Robot.rb.intake.hand.open()),
+                new SleepAction(0.15),
+                grab3.build(),
+                drop3.build(),
+                new InstantAction(() -> Robot.rb.intake.hand.open()),
+                new SleepAction(0.15),
+                new InstantAction(() -> Robot.rb.intake.elbow.up()),
+                new InstantAction(() -> Robot.rb.intakeSlide.retract()),
+                specimen1.build()
         ));
     }
 }

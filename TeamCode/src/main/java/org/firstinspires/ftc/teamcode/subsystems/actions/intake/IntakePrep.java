@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.actions.outtake;
+package org.firstinspires.ftc.teamcode.subsystems.actions.intake;
 
 import androidx.annotation.NonNull;
 
@@ -7,14 +7,11 @@ import com.acmerobotics.roadrunner.Action;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-public class OuttakeWait implements Action {
+public class IntakePrep implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        while (Robot.HardwareDevices.depositSlide.isBusy()) {
-            if (!Robot.rb.safeSleep(10)) {
-                return true;
-            }
-        }
+        Robot.rb.intake.elbow.down();
+        Robot.rb.intake.wrist.autoRight();
         return false;
     }
 }

@@ -12,20 +12,20 @@ public class Outtake extends Robot.HardwareDevices {
     @Config
     public static class OuttakePositions {
         // Arm positions
-        public static double armUpClip = 0.397;
-        public static double armUpLift = 0.38;
-        public static double armTransfer = 0.38;
-        public static double armBack = 0.22;
-        public static double armRest = 0.495;
-        public static double armForward = 0.48;
+        public static double armUpClip = 0.425;
+        public static double armUpLift = 0.40;
+        public static double armTransfer = 0.5025;
+        public static double armBack = 0.25;
+        public static double armRest = 0.52;
 
         // Wrist positions
-        public static double wristVertical = 0.175;
-        public static double wristHorizontal = 0.53;
+        public static double wristVertical = 0.38;
+        public static double wristHorizontal = 0.02;
+        public static double wristHorizontalFlip = 0.745;
 
         // Hand positions
-        public static double handOpen = 0.275;
-        public static double handClosed = 0.6;
+        public static double handOpen = 0.35;
+        public static double handClosed = 0.675;
         public static double handHalfOpen = 0.53;
     }
 
@@ -46,10 +46,6 @@ public class Outtake extends Robot.HardwareDevices {
             depositClawArmBottom.setPosition(OuttakePositions.armBack);
             depositClawArmTop.setPosition(OuttakePositions.armBack);
         }
-        public void forward() {
-            depositClawArmBottom.setPosition(OuttakePositions.armForward);
-            depositClawArmTop.setPosition(OuttakePositions.armForward);
-        }
         public void rest() {
             depositClawArmBottom.setPosition(OuttakePositions.armRest);
             depositClawArmTop.setPosition(OuttakePositions.armRest);
@@ -62,6 +58,9 @@ public class Outtake extends Robot.HardwareDevices {
         }
         public void horizontal() {
             depositClawAngle.setPosition(OuttakePositions.wristHorizontal);
+        }
+        public void horizontalFlip() {
+            depositClawAngle.setPosition(OuttakePositions.wristHorizontalFlip);
         }
     }
 

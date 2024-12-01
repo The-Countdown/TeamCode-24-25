@@ -36,7 +36,7 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                 robot.intake.arm.rest();
             }
             if (gamepad2.dpad_left) {
-                robot.intake.wrist.vertical();
+                robot.intake.wrist.horizontalFlip();
             }
             if (gamepad2.dpad_right) {
                 robot.intake.wrist.horizontal();
@@ -80,13 +80,7 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                     robot.outtake.hand.open();
                 }
                 if (gamepad2.dpad_right) {
-                    try {
-                        robot.outtake.hand.close();
-                        Thread.sleep(250);
-                        robot.outtake.arm.upLift();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                    robot.outtake.hand.close();
                 }
             }
             while (gamepad2.left_bumper) {
@@ -97,16 +91,16 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                     robot.depositSlide.specimenGrab();
                 }
                 if (gamepad2.square) {
-                    robot.intake.actOne();
+                    robot.outtake.wrist.horizontalFlip();
                 }
                 if (gamepad2.triangle) {
                     robot.intake.restEsc();
                 }
                 if (gamepad2.dpad_left) {
-                    robot.depositSlide.condensedMilk();
+                    robot.outtake.wrist.horizontal();
                 }
                 if (gamepad2.dpad_right) {
-                    robot.depositSlide.actTwo();
+                    robot.outtake.wrist.vertical();
                 }
             }
 

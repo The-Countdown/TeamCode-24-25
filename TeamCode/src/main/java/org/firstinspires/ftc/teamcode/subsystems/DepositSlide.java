@@ -16,11 +16,12 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int highBasket = 2550;
         public static int lowBasket = 1500;
         public static int specimenWall = 700;
-        public static int specimenBar = 1062;
-        public static int specimenBarClip = 500;
+        public static int specimenBar = 800;
+        public static int specimenBarClip = 1150;
         public static int specimenBarAltUp = 1336;
         public static int specimenBarAltDown = 1240;
-        public static int transfer = 1325;
+        public static int transferUp = 1475;
+        public static int transferDown = 1350;
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 10;
@@ -75,9 +76,15 @@ public class DepositSlide extends Robot.HardwareDevices {
         depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         depositSlide.setPower(DepositSlidePower.move);
     }
-    public void transfer() {
+    public void transferUp() {
         depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
-        depositSlide.setTargetPosition(DepositSlidePosition.transfer);
+        depositSlide.setTargetPosition(DepositSlidePosition.transferUp);
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        depositSlide.setPower(DepositSlidePower.move);
+    }
+    public void transferDown() {
+        depositSlide.setTargetPositionTolerance(DepositSlidePosition.tolerance);
+        depositSlide.setTargetPosition(DepositSlidePosition.transferDown);
         depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         depositSlide.setPower(DepositSlidePower.move);
     }
@@ -120,6 +127,7 @@ public class DepositSlide extends Robot.HardwareDevices {
     public void specimenHang() {
         try {
             specimenBar();
+            robot.outtake.arm.back();
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenBar - DepositSlidePosition.stepRange))) {
                 Thread.sleep(10);
             }
@@ -131,6 +139,11 @@ public class DepositSlide extends Robot.HardwareDevices {
         try {
             robot.intake.elbow.transfer();
             Thread.sleep(1000);
+            transferDown();
+            Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/3);
+            while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.transferDown + 15))) {
+                Thread.sleep(10);
+            }
             robot.outtake.hand.close();
             Thread.sleep(250);
             robot.intake.hand.open();
@@ -143,6 +156,7 @@ public class DepositSlide extends Robot.HardwareDevices {
                 Thread.sleep(10);
             }
             robot.intake.arm.up();
+            robot.intake.wrist.horizontal();
             robot.intake.elbow.down();
             robot.outtake.arm.back();
             robot.outtake.wrist.horizontal();

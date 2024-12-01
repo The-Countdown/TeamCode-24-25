@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeWait;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeWait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondense;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondenseEnd;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
@@ -27,6 +26,7 @@ public class AutoRight extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this, new Pose2d(0, -14, 0));
+
 
         TrajectoryActionBuilder toSubmersibleFromStart = robot.roadRunner.actionBuilder(robot.beginPose)
                 .strafeTo(new Vector2d(45, -14));

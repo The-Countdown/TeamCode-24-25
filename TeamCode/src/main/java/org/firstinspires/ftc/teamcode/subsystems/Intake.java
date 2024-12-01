@@ -12,26 +12,26 @@ public class Intake extends Robot.HardwareDevices {
     @Config
     public static class IntakePosition {
         // Arm positions
-        public static double armUpL = 0.6025;
-        public static double armUpR = 0.3975;
-        public static double armDownL = 0.5825;
-        public static double armDownR = 0.4175;
-        public static double armRestL = 0.4675;
-        public static double armRestR = 0.5325;
-        public static double armTransferL = 0.64;
-        public static double armTransferR = 0.36;
-        public static double armTransfer2L = 0.6025;
-        public static double armTransfer2R = 0.3975;
+        public static double armUpL = 0.62;
+        public static double armUpR = 0.38;
+        public static double armDownL = 0.6075;
+        public static double armDownR = 0.3925;
+        public static double armRestL = 0.493;
+        public static double armRestR = 0.507;
+        public static double armTransferL = 0.67;
+        public static double armTransferR = 0.33;
 
         // Elbow positions
         public static double elbowUp = 0.265;
         public static double elbowRest = 0.295;
-        public static double elbowDown = 0.37;
-        public static double elbowTransfer = 0.17;
+        public static double elbowDown = 0.36;
+        public static double elbowTransfer = 0.185;
 
         // Wrist positions
-        public static double wristVertical = 0.545;
-        public static double wristHorizontal = 0.175;
+        public static double wristVertical = 0.375;
+        public static double wristHorizontal = 0.00;
+        public static double wristHorizontalFlip = 0.74;
+        public static double wristAutoRight = 0.2;
 
         // Hand positions
         public static double handOpen = 0.5;
@@ -56,10 +56,6 @@ public class Intake extends Robot.HardwareDevices {
             intakePitchL.setPosition(IntakePosition.armTransferL);
             intakePitchR.setPosition(IntakePosition.armTransferR);
         }
-        public void transferTwo() {
-            intakePitchL.setPosition(IntakePosition.armTransfer2L);
-            intakePitchR.setPosition(IntakePosition.armTransfer2R);
-        }
     }
 
     public class Elbow {
@@ -83,6 +79,12 @@ public class Intake extends Robot.HardwareDevices {
         }
         public void horizontal() {
             intakeClawAngle.setPosition(IntakePosition.wristHorizontal);
+        }
+        public void horizontalFlip() {
+            intakeClawAngle.setPosition(IntakePosition.wristHorizontalFlip);
+        }
+        public void autoRight() {
+            intakeClawAngle.setPosition(IntakePosition.wristAutoRight);
         }
     }
 
@@ -123,22 +125,23 @@ public class Intake extends Robot.HardwareDevices {
 
     public void actOne() {
         try {
-            robot.depositSlide.transfer();
+            robot.depositSlide.transferUp();
             Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move/2);
-            robot.outtake.wrist.horizontal();
             robot.intake.elbow.up();
             robot.intake.arm.transfer();
             robot.intake.wrist.horizontal();
             Thread.sleep(400);
             Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             robot.intake.hand.halfOpen();
+            robot.outtake.wrist.horizontal();
             Thread.sleep(400);
             robot.intake.hand.close();
-            robot.outtake.arm.forward();
+            robot.intake.wrist.horizontalFlip();
             robot.outtake.hand.open();
+            robot.outtake.arm.transfer();
             robot.intakeSlide.retract();
-            intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move/2);
-            intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move/2);
+            intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move/1.5);
+            intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move/1.5);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

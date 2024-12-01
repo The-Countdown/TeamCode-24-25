@@ -79,16 +79,17 @@ public class TeleOpTesting extends LinearOpMode {
 
             //region Telemetry
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real) - 57.2958);
             packet.put("PoseX", robot.roadRunner.pose.position.x);
             packet.put("PoseY", robot.roadRunner.pose.position.y);
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             packet.put("Intake Height Avg", (intakeAvg));
             packet.put("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
             packet.put("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
+            packet.put("Outtake Arm", (Robot.HardwareDevices.depositClawArmBottom.getPosition()));
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real));
+            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real) - 57.2958);
             telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
             telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
             telemetry.addLine();
