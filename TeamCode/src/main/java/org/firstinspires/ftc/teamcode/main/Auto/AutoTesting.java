@@ -28,7 +28,7 @@ public class AutoTesting extends LinearOpMode {
                 .afterTime(0, new OuttakePreloadEsc())
                 .afterDisp(40, new IntakeEsc())
                 .strafeTo(new Vector2d(32, -14))
-                .waitSeconds(1)
+                .waitSeconds(0.75)
                 .strafeTo(new Vector2d(45, -14))
                 .stopAndAdd(new OuttakeClip())
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.elbow.down()))
@@ -38,7 +38,7 @@ public class AutoTesting extends LinearOpMode {
         TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(45, -14, Math.toRadians(180)))
                 .afterTime(0.5, new InstantAction(() -> robot.intakeSlide.move(1400)))
                 .afterDisp(15, new OuttakeSpecimen())
-                .splineToLinearHeading(new Pose2d(21.1, -44.4, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(21.1, -44.2, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.15)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -47,14 +47,13 @@ public class AutoTesting extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(21.1, -44.4, Math.toRadians(320)))
+        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(21.1, -44.2, Math.toRadians(320)))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upLift()))
-                .splineToLinearHeading(new Pose2d(21.2, -44.4, Math.toRadians(240)), Math.toRadians(240))
+                .splineToLinearHeading(new Pose2d(21.2, -44.2, Math.toRadians(240)), Math.toRadians(240))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(21.2, -44.4, Math.toRadians(240)))
-                .splineToLinearHeading(new Pose2d(19.5, -59.1, Math.toRadians(320)), Math.toRadians(320))
-                .waitSeconds(0.5)
+        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(21.2, -44.2, Math.toRadians(240)))
+                .splineToLinearHeading(new Pose2d(19.5, -58.5, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.15)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -63,13 +62,13 @@ public class AutoTesting extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19.3, -59.1, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(19, -59.5, Math.toRadians(240)), Math.toRadians(240))
+        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19.5, -58.5, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(19, -59, Math.toRadians(240)), Math.toRadians(240))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab3 = robot.roadRunner.actionBuilder(new Pose2d(19, -59.5, Math.toRadians(240)))
-                .splineToLinearHeading(new Pose2d(18, -58.6, Math.toRadians(320)), Math.toRadians(320))
-                .splineToLinearHeading(new Pose2d(18.4, -71.2, Math.toRadians(320)), Math.toRadians(320))
+        TrajectoryActionBuilder grab3 = robot.roadRunner.actionBuilder(new Pose2d(19, -59, Math.toRadians(240)))
+                .splineToLinearHeading(new Pose2d(18, -59, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(18.2, -70.6, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.15)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -78,57 +77,65 @@ public class AutoTesting extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(18.4, -71.2, Math.toRadians(320)))
+        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(18.2, -70.6, Math.toRadians(320)))
                 .stopAndAdd(new InstantAction(() -> robot.intakeSlide.move(300)))
                 .waitSeconds(0.15)
                 .splineToLinearHeading(new Pose2d(10, -65, Math.toRadians(225)), Math.toRadians(225))
                 .endTrajectory();
 
-        TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(18, -65, Math.toRadians(225)))
+        TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(10, -65, Math.toRadians(225)))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(18, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(15, -60, Math.toRadians(180)), Math.toRadians(180))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.rest()))
-                .waitSeconds(1.5)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
-                .splineToLinearHeading(new Pose2d(6, -60, Math.toRadians(180)), Math.toRadians(0))
+                .waitSeconds(1)
+                .splineToConstantHeading(new Vector2d(2.5, -60), Math.toRadians(180))
                 .endTrajectory();
 
-        TrajectoryActionBuilder toSubmersibleFromSpecimenFirst = robot.roadRunner.actionBuilder(new Pose2d(6, -65, Math.toRadians(180)))
+        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -60, Math.toRadians(180)))
                 .setReversed(true)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.back()))
-                .strafeToLinearHeading(new Vector2d(37.5, -2), Math.toRadians(180));
-
-        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(37.5, -2, Math.toRadians(180)))
-                .afterTime(0, new OuttakePreloadEsc())
-                .waitSeconds(1)
-                .lineToX(45)
+                .strafeToConstantHeading(new Vector2d(35, -6))
+                .strafeToConstantHeading(new Vector2d(45, -6))
+                .stopAndAdd(new OuttakePreloadEsc())
+//                .waitSeconds(0.5)
                 .stopAndAdd(new OuttakeClip())
-                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.hand.close()))
-                .setReversed(true)
-                .lineToX(35)
+                .waitSeconds(0.15)
                 .endTrajectory();
 
-//        TrajectoryActionBuilder toIntoSubFirst = robot.roadRunner.actionBuilder(new Pose2d(37.5, -6, Math.toRadians(180)))
-//                .strafeTo(new Vector2d(58, -6));
-//
-//        TrajectoryActionBuilder toBackItUpTwo = robot.roadRunner.actionBuilder(new Pose2d(58, -6, Math.toRadians(180)))
+        TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(45, -6, Math.toRadians(180)))
+                .stopAndAdd(new OuttakeSpecimen())
+                .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(2.5, -60), Math.toRadians(180))
+                .endTrajectory();
+
+        TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -60, Math.toRadians(180)))
+                .setReversed(true)
+                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.back()))
+                .strafeToConstantHeading(new Vector2d(35, -2))
+                .strafeToConstantHeading(new Vector2d(45, -2))
+                .stopAndAdd(new OuttakePreloadEsc())
+//                .waitSeconds(0.5)
+                .stopAndAdd(new OuttakeClip())
+                .waitSeconds(0.15)
+                .endTrajectory();
+
+        TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(45, -2, Math.toRadians(180)))
+                .stopAndAdd(new OuttakeSpecimen())
+                .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(2.5, -60), Math.toRadians(180))
+                .endTrajectory();
+
+//        TrajectoryActionBuilder clip4 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -60, Math.toRadians(180)))
 //                .setReversed(true)
-//                .splineToConstantHeading(new Vector2d(30, -6), 0);
-
-        TrajectoryActionBuilder toSecondSpecimen = robot.roadRunner.actionBuilder(new Pose2d(30, -6, Math.toRadians(180)))
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(21, -60, Math.toRadians(180)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(4.3, -60, Math.toRadians(180)), Math.toRadians(0));
-
-        TrajectoryActionBuilder toSubmersibleFromSpecimenSecond = robot.roadRunner.actionBuilder(new Pose2d(4.3, -60, Math.toRadians(0)))
-                .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(36.5, 0), Math.toRadians(180));
-
-        TrajectoryActionBuilder toIntoSubSecond = robot.roadRunner.actionBuilder(new Pose2d(36.5, 0, Math.toRadians(180)))
-                .strafeTo(new Vector2d(47, 0));
-
-        TrajectoryActionBuilder toBackItUpThree = robot.roadRunner.actionBuilder(new Pose2d(47, 0, Math.toRadians(180)))
-                .strafeTo(new Vector2d(30, 0));
+//                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.back()))
+//                .strafeToConstantHeading(new Vector2d(35, 2))
+//                .strafeToConstantHeading(new Vector2d(45, 2))
+//                .stopAndAdd(new OuttakePreloadEsc())
+////                .waitSeconds(0.5)
+//                .stopAndAdd(new OuttakeClip())
+//                .waitSeconds(0.15)
+//                .endTrajectory();
 
         robot.intake.rest();
         robot.outtake.rest();
@@ -136,36 +143,57 @@ public class AutoTesting extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.3),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.1),
                 clip1.build(),
                 new SleepAction(0.15),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 2),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.4),
                 grab1.build(),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 drop1.build(),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
                 new SleepAction(0.15),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.4),
                 grab2.build(),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 drop2.build(),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
                 new SleepAction(0.15),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.4),
                 grab3.build(),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 drop3.build(),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
                 new SleepAction(0.15),
                 new InstantAction(() -> Robot.rb.intake.elbow.up()),
                 new InstantAction(() -> Robot.rb.intakeSlide.retract()),
-                specimen1.build(),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
+                specimen1.build(),
                 new InstantAction(() -> Robot.rb.outtake.hand.close()),
+                new SleepAction(0.3),
+                new InstantAction(() -> Robot.rb.outtake.arm.back()),
+                new InstantAction(() -> robot.depositSlide.specimenBar()),
                 new SleepAction(0.15),
-                new InstantAction(() -> Robot.rb.outtake.arm.upClip()),
-                toSubmersibleFromSpecimenFirst.build(),
-                new SleepAction(0.15),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 clip2.build(),
-                new SleepAction(2),
-                toSecondSpecimen.build(),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
+                specimen2.build(),
                 new InstantAction(() -> Robot.rb.outtake.hand.close()),
-                new SleepAction(0.15)
+                new SleepAction(0.3),
+                new InstantAction(() -> Robot.rb.outtake.arm.back()),
+                new InstantAction(() -> robot.depositSlide.specimenBar()),
+                new SleepAction(0.15),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
+                clip3.build(),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
+                specimen3.build(),
+                new InstantAction(() -> Robot.rb.outtake.hand.close()),
+                new SleepAction(0.3),
+                new InstantAction(() -> Robot.rb.outtake.arm.back()),
+                new InstantAction(() -> robot.depositSlide.specimenBar()),
+                new SleepAction(0.15),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
+//                clip4.build(),
+                new SleepAction(999999999)
         ));
     }
 }

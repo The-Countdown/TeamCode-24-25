@@ -150,6 +150,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             Thread.sleep(250);
             highBasket();
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/2);
+            robot.outtake.arm.upLift();
             Thread.sleep(400);
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move);
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300))) {
