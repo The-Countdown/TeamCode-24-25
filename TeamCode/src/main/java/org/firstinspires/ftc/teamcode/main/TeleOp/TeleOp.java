@@ -104,6 +104,10 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("IntakeR Current (mA)", Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addLine();
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
+            telemetry.addData("Joy angle", Math.toDegrees(DriveThread.joystickAngle));
+            telemetry.addData("Corrected angle", Math.toDegrees(DriveThread.correctedAngle));
+            telemetry.addData("IMU Angle", DriveThread.imuYaw);
+//            telemetry.addData("Joy angle", DriveThread.joystickAngle);
             telemetry.update();
             //endregion
         }

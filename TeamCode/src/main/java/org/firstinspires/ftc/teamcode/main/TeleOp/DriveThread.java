@@ -21,18 +21,28 @@ public class DriveThread extends Robot.HardwareDevices implements Runnable {
         this.robot = robot;
     }
 
+    public static double yStickLMulti;
+    public static double xStickLMulti;
+    public static double xStickRMulti;
+
+    public static double joystickAngle;
+    public static double magnitudeL;
+    public static double correctedAngle;
+
+    public static double imuYaw;
+
     @Override
     public void run() {
-        double yStickLMulti = TeleOp.yStickLMulti;
-        double xStickLMulti = TeleOp.xStickLMulti;
-        double xStickRMulti = TeleOp.xStickRMulti;
+        yStickLMulti = TeleOp.yStickLMulti;
+        xStickLMulti = TeleOp.xStickLMulti;
+        xStickRMulti = TeleOp.xStickRMulti;
         boolean wasSharePressed = false;
         boolean driveToggle = false;
         YawPitchRollAngles robotOrientation;
 
         while (opMode.opModeIsActive()) {
             robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
-            double imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
+            imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
             if (imuYaw < 0) {
                 imuYaw += 360;
             }
@@ -41,9 +51,9 @@ public class DriveThread extends Robot.HardwareDevices implements Runnable {
             double xStickL = gamepad1.left_stick_x * (xStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.2));
             double yStickL = gamepad1.left_stick_y * -(yStickLMulti + (gamepad1.right_trigger * 0.5) - (gamepad1.left_trigger * 0.2));
 
-            double joystickAngle = Math.atan2(yStickL, xStickL);
-            double magnitudeL = Math.hypot(xStickL, yStickL);
-            double correctedAngle = Math.toDegrees(joystickAngle) - imuYaw;
+            joystickAngle = Math.atan2(xStickL, yStickL);
+            magnitudeL = Math.hypot(xStickL, yStickL);
+            correctedAngle = Math.toDegrees(joystickAngle) - imuYaw + Math.toRadians(-90);
 
             if (correctedAngle < 0) {
                 correctedAngle += 360;
@@ -51,8 +61,11 @@ public class DriveThread extends Robot.HardwareDevices implements Runnable {
 
             correctedAngle = Math.toRadians(correctedAngle);
 
-            double newXStickL = (magnitudeL * Math.cos(correctedAngle)) * xStickLMulti;
-            double newYStickL = (magnitudeL * Math.sin(correctedAngle)) * yStickLMulti;
+            // does not work
+//            double newXStickL = ((magnitudeL * 4) * Math.cos(correctedAngle)) * xStickLMulti;
+//            double newYStickL = ((magnitudeL * 4) * Math.sin(correctedAngle)) * yStickLMulti;
+            double newXStickL = ((magnitudeL * 4) * Math.sin(correctedAngle)) * xStickLMulti;
+            double newYStickL = ((magnitudeL * 4) * Math.cos(correctedAngle)) * yStickLMulti;
 
             // Trigger driveToggle
             boolean isSharePressed = gamepad1.share;
