@@ -28,6 +28,7 @@ public class TeleOpTesting extends LinearOpMode {
     boolean wasRightTriggerPressed = false;
     boolean wasLeftTriggerPressed = false;
     boolean toggleState = false;
+    YawPitchRollAngles robotOrientation;
 
     @Override
     public void runOpMode() {
@@ -46,7 +47,7 @@ public class TeleOpTesting extends LinearOpMode {
         driveThread.start();
 
         while (opModeIsActive()) {
-            Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
+            robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
             robot.roadRunner.updatePoseEstimate();
 
             int intakeAvg = ((Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + Robot.HardwareDevices.intakeSlideR.getCurrentPosition()) / 2);
@@ -100,6 +101,10 @@ public class TeleOpTesting extends LinearOpMode {
             telemetry.addLine();
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.getValue());
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
+            telemetry.addLine();
+            telemetry.addData("Angle", robotOrientation.getYaw(AngleUnit.DEGREES));
+            telemetry.addData("Joystick Angle", Math.toDegrees(DriveThread.joystickAngle));
+            telemetry.addData("Corrected Angle", Math.toDegrees(DriveThread.correctedAngle));
             telemetry.update();
             //endregion
         }

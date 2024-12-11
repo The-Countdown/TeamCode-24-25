@@ -104,8 +104,11 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("IntakeR Current (mA)", Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS));
             telemetry.addLine();
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
+            telemetry.addLine();
+            telemetry.addData("Magnitude", DriveThread.magnitudeL);
             telemetry.update();
             //endregion
         }
+        Robot.hasResetEncoders = false;
     }
 }

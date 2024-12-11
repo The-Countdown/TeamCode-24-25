@@ -24,7 +24,6 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
 
     @Override
     public void run() {
-        boolean wasLeftBumperPressed = false;
         boolean wasRightBumperPressed = false;
         boolean toggleStateRB = false;
 
@@ -37,18 +36,11 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 robot.depositSlide.specimenGrab();
             } else if (gamepad2.triangle) {
                 robot.depositSlide.specimenHang();
-
             }
 
-            boolean isLeftBumperPressed = gamepad1.left_bumper;
-
-            if (isLeftBumperPressed && !wasLeftBumperPressed) {
+            if (gamepad1.y) {
                 robot.outtake.arm.upClip();
-            } else if (!isLeftBumperPressed && wasLeftBumperPressed) {
-                robot.outtake.arm.upLift();
             }
-
-            wasLeftBumperPressed = isLeftBumperPressed;
 
             boolean isRightBumperPressed = gamepad1.right_bumper;
 

@@ -16,7 +16,7 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int highBasket = 2550;
         public static int lowBasket = 1500;
         public static int specimenWall = 700;
-        public static int specimenBar = 800;
+        public static int specimenBar = 780;
         public static int specimenBarClip = 1150;
         public static int specimenBarAltUp = 1336;
         public static int specimenBarAltDown = 1240;
@@ -150,7 +150,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             Thread.sleep(250);
             highBasket();
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/2);
-            robot.outtake.arm.upLift();
+            robot.outtake.arm.upClip();
             Thread.sleep(400);
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move);
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300))) {
@@ -181,9 +181,9 @@ public class DepositSlide extends Robot.HardwareDevices {
     }
     public void condensedMilk() {
         try {
-            if (depositSlide.getCurrentPosition() <= 800) {
-                move(800);
-                while (!(depositSlide.getCurrentPosition() > (800 - DepositSlidePosition.stepRange))) {
+            if (depositSlide.getCurrentPosition() <= 1200) {
+                move(1200);
+                while (!(depositSlide.getCurrentPosition() > (1200 - DepositSlidePosition.stepRange))) {
                     Thread.sleep(10);
                 }
             }
