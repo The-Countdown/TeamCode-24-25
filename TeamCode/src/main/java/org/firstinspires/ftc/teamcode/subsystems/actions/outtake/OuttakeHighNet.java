@@ -14,10 +14,9 @@ public class OuttakeHighNet implements Action {
         Robot.rb.outtake.hand.close();
         Robot.rb.depositSlide.highBasket();
         while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > (DepositSlide.DepositSlidePosition.highBasket - 1500))) {
-            if (!Robot.rb.safeSleep(10)) {
-                return true;
-            }
+            telemetryPacket.addLine("Waiting...");
         }
+        telemetryPacket.clearLines();
         Robot.rb.outtake.arm.back();
         Robot.rb.outtake.wrist.horizontal();
         return false;

@@ -118,7 +118,6 @@ public class DepositSlide extends Robot.HardwareDevices {
             robot.outtake.wrist.horizontal();
             Thread.sleep(750);
             retract();
-            depositSlide.setPower(DepositSlidePower.move/2);
             robot.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -184,7 +183,6 @@ public class DepositSlide extends Robot.HardwareDevices {
             if (depositSlide.getCurrentPosition() <= 1200) {
                 move(1200);
                 while (!(depositSlide.getCurrentPosition() > (1200 - DepositSlidePosition.stepRange))) {
-                    Thread.sleep(10);
                 }
             }
             robot.outtake.arm.rest();
@@ -193,7 +191,6 @@ public class DepositSlide extends Robot.HardwareDevices {
             Thread.sleep(1000);
             retract();
             while (!(depositSlide.getCurrentPosition() < 500)) {
-                Thread.sleep(10);
             }
             depositSlide.setPower(DepositSlidePower.move / 4);
         } catch (InterruptedException e) {

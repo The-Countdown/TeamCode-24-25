@@ -40,6 +40,8 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
 
             if (gamepad1.y) {
                 robot.outtake.arm.upClip();
+                robot.outtake.wrist.horizontal();
+                robot.outtake.hand.open();
             }
 
             boolean isRightBumperPressed = gamepad1.right_bumper;

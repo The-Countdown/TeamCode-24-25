@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeClip;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 
-@Autonomous
+@Autonomous(group = "Auto")
 public class AutoTesting extends LinearOpMode {
 
     @Override
@@ -52,7 +52,7 @@ public class AutoTesting extends LinearOpMode {
                 .endTrajectory();
 
         TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(20.1, -44.7, Math.toRadians(240)))
-                .splineToLinearHeading(new Pose2d(19.1, -58.2, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(19.1, -58.1, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -61,7 +61,7 @@ public class AutoTesting extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19, -58.2, Math.toRadians(320)))
+        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19, -58.1, Math.toRadians(320)))
                 .splineToLinearHeading(new Pose2d(19.1, -59, Math.toRadians(240)), Math.toRadians(240))
                 .endTrajectory();
 
@@ -76,7 +76,7 @@ public class AutoTesting extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(17.4, -69.8, Math.toRadians(320)))
+        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(19.1, -58.1, Math.toRadians(320)))
                 .stopAndAdd(new InstantAction(() -> robot.depositSlide.move(400)))
                 .waitSeconds(0.4)
                 .stopAndAdd(new InstantAction(() -> robot.intakeSlide.move(300)))
@@ -108,7 +108,7 @@ public class AutoTesting extends LinearOpMode {
         TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(45, 0, Math.toRadians(180)))
                 .stopAndAdd(new OuttakeSpecimen())
                 .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(4.5, -60), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(4.3, -60), Math.toRadians(180))
                 .endTrajectory();
 
         TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(4.5, -60, Math.toRadians(180)))
@@ -125,7 +125,8 @@ public class AutoTesting extends LinearOpMode {
         TrajectoryActionBuilder after = robot.roadRunner.actionBuilder(new Pose2d(47, 8, Math.toRadians(180)))
                 .strafeToConstantHeading(new Vector2d(35, 8))
                 .waitSeconds(0.15)
-                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.rest()))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.retract()))
                 .endTrajectory();
 
 //        TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(45, 12, Math.toRadians(180)))
