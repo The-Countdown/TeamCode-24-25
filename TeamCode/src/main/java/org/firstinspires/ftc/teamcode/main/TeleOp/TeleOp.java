@@ -41,6 +41,10 @@ public class TeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
+        LimeLightThread limeLightThread = new LimeLightThread(this, robot);
+        Thread limeLight = new Thread(limeLightThread);
+        limeLight.start();
+
         while (opModeIsActive()) {
             if (Robot.HardwareDevices.depositMagnet.isPressed()) {
                 if (!depositMagnetPressed) {

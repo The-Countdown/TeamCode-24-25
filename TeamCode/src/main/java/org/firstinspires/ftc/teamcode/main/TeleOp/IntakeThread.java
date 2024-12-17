@@ -57,11 +57,11 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
             if (isCrossPressed && !wasCrossPressed) {
                 toggleStateCross = !toggleStateCross;
 
-                if (toggleStateCross) {
+/*                if (toggleStateCross) {
                     robot.intake.down();
                 } else {
                     robot.intake.up();
-                }
+                }*/
             }
             wasCrossPressed = isCrossPressed;
 

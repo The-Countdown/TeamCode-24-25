@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Robot {
     public static Robot rb;
+    public static final double servoToDegrees = 241.93548;
     public static boolean hasResetEncoders = false;
     public Pose2d beginPose;
     public MecanumDrive roadRunner;
@@ -144,6 +145,11 @@ public class Robot {
                 )
         );
         HardwareDevices.imu.resetYaw();
+
+        HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        HardwareDevices.limelight.setPollRateHz(100);
+        HardwareDevices.limelight.start();
+        HardwareDevices.limelight.pipelineSwitch(2);
 
         if (beginPose == null) {
             beginPose = new Pose2d(0, 0, Math.toRadians(0));
