@@ -11,7 +11,7 @@ public class OuttakeClip implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         Robot.rb.depositSlide.specimenBarClip();
-        while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > 1140)) {
+        while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > 1150)) {
             telemetryPacket.addLine("Waiting...");
         }
         telemetryPacket.clearLines();

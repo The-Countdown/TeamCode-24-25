@@ -17,7 +17,7 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int lowBasket = 1500;
         public static int specimenWall = 700;
         public static int specimenBar = 780;
-        public static int specimenBarClip = 1150;
+        public static int specimenBarClip = 1160;
         public static int specimenBarAltUp = 1336;
         public static int specimenBarAltDown = 1240;
         public static int transferUp = 1475;
