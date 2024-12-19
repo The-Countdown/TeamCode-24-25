@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Trajectory;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Drive extends Robot.HardwareDevices {
     private Robot robot;
@@ -28,5 +32,22 @@ public class Drive extends Robot.HardwareDevices {
         double headingLimeLight = botPose_mt2.getOrientation().getYaw();
 
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);
+    }
+
+    public void move(double forwardAmount, double strafeAmount) {
+        robot.roadRunner.updatePoseEstimate();
+        Pose2d currentPose = robot.roadRunner.pose;
+        MecanumDrive.PARAMS.timeout = 0;
+
+        Pose2d targetPose = new Pose2d(
+                currentPose.position.x + forwardAmount,
+                currentPose.position.y + strafeAmount,
+                currentPose.heading.real
+        );
+
+        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
+                .strafeTo(new Vector2d(targetPose.position.x, targetPose.position.y));
+
+        trajectory.build();
     }
 }

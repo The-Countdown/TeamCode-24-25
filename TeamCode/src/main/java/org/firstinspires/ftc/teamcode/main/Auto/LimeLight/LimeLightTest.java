@@ -11,10 +11,6 @@ public class LimeLightTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.setPollRateHz(100);
-        limelight.start();
-        limelight.pipelineSwitch(3);
 
         waitForStart();
 
@@ -35,7 +31,6 @@ public class LimeLightTest extends LinearOpMode {
                 telemetry.addData("robotX", robotx);
                 telemetry.addData("robotY", roboty);
                 telemetry.update();
-
             } else {
                 telemetry.addData("Limelight", "No Targets");
                 telemetry.update();

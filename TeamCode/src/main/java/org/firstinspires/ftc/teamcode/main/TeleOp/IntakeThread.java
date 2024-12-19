@@ -28,8 +28,6 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
         boolean wasRightTriggerPressed = false;
         boolean wasLeftTriggerPressed = false;
         boolean toggleStateLT = false;
-        boolean wasCrossPressed = false;
-        boolean toggleStateCross = false;
 
         while (opMode.opModeIsActive()) {
             if (gamepad2.left_bumper) {
@@ -52,18 +50,6 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
-            boolean isCrossPressed = gamepad2.cross;
-            if (isCrossPressed && !wasCrossPressed) {
-                toggleStateCross = !toggleStateCross;
-
-/*                if (toggleStateCross) {
-                    robot.intake.down();
-                } else {
-                    robot.intake.up();
-                }*/
-            }
-            wasCrossPressed = isCrossPressed;
 
             boolean isRightBumperPressed = gamepad2.right_bumper;
 

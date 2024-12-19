@@ -21,30 +21,14 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
     }
     @Override
     public void run() {
+        limelight.pipelineSwitch(3);
+
+        opMode.waitForStart();
+
         while (opMode.opModeIsActive()) {
             if (gamepad2.cross) {
-                lineUp();
+                robot.limeLight.lineUp();
             }
         }
-    }
-
-    private void lineUp() {
-        LLResult result;
-        result = limelight.getLatestResult();
-
-        if (result == null) {
-            opMode.telemetry.addData("Limelight", "No Targets");
-            opMode.telemetry.update();
-            return;
-        }
-
-        double tx = result.getTx();
-
-        opMode.telemetry.addData("tx", tx);
-
-        Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristHorizontal - (tx / Robot.servoToDegrees));
-        opMode.telemetry.addData("angle", Intake.IntakePosition.wristHorizontal - (tx / Robot.servoToDegrees));
-
-        opMode.telemetry.update();
     }
 }

@@ -137,7 +137,7 @@ public class AutoRight extends LinearOpMode {
 
 //        TrajectoryActionBuilder clip4 = robot.roadRunner.actionBuilder(new Pose2d(2.7, -60, Math.toRadians(180)))
 //                .setReversed(true)
-//                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.back()))
+//                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.limeLight.back()))
 //                .strafeToConstantHeading(new Vector2d(35, 2))
 //                .strafeToConstantHeading(new Vector2d(45, 2))
 //                .stopAndAdd(new OuttakePreloadEsc())
@@ -198,7 +198,7 @@ public class AutoRight extends LinearOpMode {
 //                specimen3.build(),
 //                new InstantAction(() -> Robot.rb.outtake.hand.close()),
 //                new SleepAction(0.3),
-//                new InstantAction(() -> Robot.rb.outtake.arm.back()),
+//                new InstantAction(() -> Robot.rb.outtake.limeLight.back()),
 //                new InstantAction(() -> robot.depositSlide.specimenBar()),
 //                new SleepAction(0.15),
 //                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),

@@ -35,7 +35,6 @@ public class Robot {
         public static DcMotorEx intakeSlideL;
         public static DcMotorEx intakeSlideR;
         public static DcMotorEx depositSlide;
-        public static DcMotorEx arm;
 
         public static Servo intakePitchL;
         public static Servo intakePitchR;
@@ -64,6 +63,8 @@ public class Robot {
         HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
 
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        HardwareDevices.limelight.setPollRateHz(100);
+        HardwareDevices.limelight.start();
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -83,7 +84,6 @@ public class Robot {
         HardwareDevices.intakeSlideL = hardwareMap.get(DcMotorEx.class, "intakeSlideL");
         HardwareDevices.intakeSlideR = hardwareMap.get(DcMotorEx.class, "intakeSlideR");
         HardwareDevices.depositSlide = hardwareMap.get(DcMotorEx.class, "depositSlide");
-        HardwareDevices.arm = hardwareMap.get(DcMotorEx.class, "arm");
 
         // Servos
         HardwareDevices.intakeClaw = hardwareMap.get(Servo.class, "intakeClaw");
@@ -102,7 +102,6 @@ public class Robot {
         HardwareDevices.leftBack.setDirection(DcMotorEx.Direction.REVERSE);
         HardwareDevices.intakeSlideL.setDirection(DcMotorEx.Direction.REVERSE);
         HardwareDevices.depositSlide.setDirection(DcMotorEx.Direction.REVERSE);
-        HardwareDevices.arm.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Motor Modes and Settings
         HardwareDevices.leftFront.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -113,7 +112,6 @@ public class Robot {
         HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        HardwareDevices.arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         if (beginPose != null || !hasResetEncoders) {
             HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -125,15 +123,12 @@ public class Robot {
             HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-            HardwareDevices.arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-            HardwareDevices.arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             hasResetEncoders = true;
         }
 
         HardwareDevices.intakeSlideL.setTargetPosition(HardwareDevices.intakeSlideL.getCurrentPosition());
         HardwareDevices.intakeSlideR.setTargetPosition(HardwareDevices.intakeSlideR.getCurrentPosition());
         HardwareDevices.depositSlide.setTargetPosition(HardwareDevices.depositSlide.getCurrentPosition());
-        HardwareDevices.arm.setTargetPosition(HardwareDevices.arm.getCurrentPosition());
 
         HardwareDevices.imu = hardwareMap.get(IMU.class, "imu");
         HardwareDevices.imu.initialize(
@@ -145,11 +140,6 @@ public class Robot {
                 )
         );
         HardwareDevices.imu.resetYaw();
-
-        HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        HardwareDevices.limelight.setPollRateHz(100);
-        HardwareDevices.limelight.start();
-        HardwareDevices.limelight.pipelineSwitch(2);
 
         if (beginPose == null) {
             beginPose = new Pose2d(0, 0, Math.toRadians(0));
@@ -181,7 +171,7 @@ public class Robot {
     public DepositSlide depositSlide = new DepositSlide(this);
     public Intake intake = new Intake(this);
     public Outtake outtake = new Outtake(this);
-    public Arm arm = new Arm(this);
+    public LimeLight limeLight = new LimeLight(this);
 }
 
 
