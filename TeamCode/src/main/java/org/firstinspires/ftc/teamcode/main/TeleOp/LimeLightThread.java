@@ -21,13 +21,13 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
     }
     @Override
     public void run() {
-        limelight.pipelineSwitch(3);
-
-        opMode.waitForStart();
-
         while (opMode.opModeIsActive()) {
             if (gamepad2.cross) {
-                robot.limeLight.lineUp();
+                double orientation = 0;
+                orientation = robot.limeLight.getBlockOrientation();
+
+                opMode.telemetry.addData("Orientation", orientation);
+                opMode.telemetry.update();
             }
         }
     }
