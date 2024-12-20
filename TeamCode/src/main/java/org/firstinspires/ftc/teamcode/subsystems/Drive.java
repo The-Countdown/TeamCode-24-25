@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -17,8 +18,6 @@ public class Drive extends Robot.HardwareDevices {
     }
 
     public Pose2d getLimeLightPos() {
-        Robot.HardwareDevices.limelight.setPollRateHz(100);
-        Robot.HardwareDevices.limelight.start();
         Robot.HardwareDevices.limelight.pipelineSwitch(3);
         LLResult result = Robot.HardwareDevices.limelight.getLatestResult();
 
@@ -34,20 +33,42 @@ public class Drive extends Robot.HardwareDevices {
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);
     }
 
-    public void move(double forwardAmount, double strafeAmount) {
+    public void moveAmount(double x, double y, double angle) {
         robot.roadRunner.updatePoseEstimate();
         Pose2d currentPose = robot.roadRunner.pose;
         MecanumDrive.PARAMS.timeout = 0;
 
+        double outX = currentPose.position.x + x;
+        double outY = currentPose.position.y + y;
+        double outAngle = currentPose.heading.real + angle;
+
         Pose2d targetPose = new Pose2d(
-                currentPose.position.x + forwardAmount,
-                currentPose.position.y + strafeAmount,
-                currentPose.heading.real
-        );
+                currentPose.position.x + x,
+                currentPose.position.y + y,
+                currentPose.heading.real + angle);
 
         TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
-                .strafeTo(new Vector2d(targetPose.position.x, targetPose.position.y));
+                .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
 
         trajectory.build();
+    }
+    public void moveTo(double x, double y, double angle) {
+        robot.roadRunner.updatePoseEstimate();
+        Pose2d currentPose = robot.roadRunner.pose;
+        MecanumDrive.PARAMS.timeout = 0;
+
+        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
+                .splineToLinearHeading(new Pose2d(x, y, angle), angle); //TODO: Change depending on usage
+
+        trajectory.build();
+    }
+    public void movePower(double forward, double strafe, double rotation) {
+        robot.roadRunner.setDrivePowers(new PoseVelocity2d(
+                new Vector2d(
+                        -forward,
+                        -strafe
+                ),
+                -rotation
+        ));
     }
 }

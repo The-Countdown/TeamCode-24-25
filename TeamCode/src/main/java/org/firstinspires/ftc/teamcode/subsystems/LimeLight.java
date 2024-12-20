@@ -48,19 +48,19 @@ public class LimeLight extends Robot.HardwareDevices {
 
         while ((Math.abs(targetTx) - Math.abs(currentTx) > error) && (Math.abs(targetTy) - Math.abs(currentTy) > error)) {
             if (currentTx <= targetTx) {
-                //Strafe right
+                robot.drive.movePower(0,0.5,0);
             }
 
             if (currentTx > targetTx) {
-                //Strafe left
+                robot.drive.movePower(0,-0.5,0);
             }
 
             if (currentTy <= targetTy) {
-                //Strafe forward
+                robot.drive.movePower(0.5,0,0);
             }
 
             if (currentTy > targetTy) {
-                //Strafe backward
+                robot.drive.movePower(-0.5,0,0);
             }
         }
     }
