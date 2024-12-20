@@ -18,9 +18,6 @@ public class LimeLightTest extends LinearOpMode {
     public void runOpMode() {
         Robot robot = new Robot(this);
 
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        TelemetryPacket packet = new TelemetryPacket();
-
         waitForStart();
 
         LimeLightThread limeLightThread = new LimeLightThread(this, robot);

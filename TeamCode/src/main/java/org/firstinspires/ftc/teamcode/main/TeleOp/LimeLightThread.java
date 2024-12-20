@@ -22,12 +22,15 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
     @Override
     public void run() {
         while (opMode.opModeIsActive()) {
-            if (gamepad2.cross) {
-                double orientation = 0;
-                orientation = robot.limeLight.getBlockOrientation();
+            double orientation = 0;
+            orientation = Math.abs(robot.limeLight.getBlockOrientation());
 
-                opMode.telemetry.addData("Orientation", orientation);
+            if (orientation != 0) {
+                opMode.telemetry.addData("orientation prescale", orientation);
+                orientation /= 1800;
+                opMode.telemetry.addData("orientation", orientation);
                 opMode.telemetry.update();
+                Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristHorizontal + orientation);
             }
         }
     }

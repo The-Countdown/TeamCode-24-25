@@ -117,35 +117,61 @@ public class LimeLight extends Robot.HardwareDevices {
             return 0;
         }
 
+        if (results.Retro.length == 0) {
+            return 0;
+        }
 
         if (results.Retro[0].pts.length > 5) {
             return 0;
         }
 
         double[][] pts = results.Retro[0].pts;
-        double maxDistance = 0;
-        double[] point1 = new double[2];
-        double[] point2 = new double[2];
+
+        // find a rectangle of the maximum area
+        double maxArea = 0;
+        int maxIndex = 0;
 
         for (int i = 0; i < pts.length; i++) {
-            for (int j = i + 1; j < pts.length; j++) {
-                double distance = Math.sqrt(Math.pow(pts[j][0] - pts[i][0], 2) + Math.pow(pts[j][1] - pts[i][1], 2));
-                if (distance > maxDistance) {
-                    maxDistance = distance;
-                    point1 = pts[i];
-                    point2 = pts[j];
-                }
+            double[] pt1 = pts[i];
+            double[] pt2 = pts[(i + 1) % pts.length];
+            double[] pt3 = pts[(i + 2) % pts.length];
+
+            double area = Math.abs((pt1[0] * (pt2[1] - pt3[1]) + pt2[0] * (pt3[1] - pt1[1]) + pt3[0] * (pt1[1] - pt2[1])) / 2);
+            if (area > maxArea) {
+                maxArea = area;
+                maxIndex = i;
             }
         }
 
-        double x1 = point1[0];
-        double y1 = point1[1];
-        double x2 = point2[0];
-        double y2 = point2[1];
+        double[] pt1 = pts[maxIndex];
+        double[] pt2 = pts[(maxIndex + 1) % pts.length];
+        double[] pt3 = pts[(maxIndex + 2) % pts.length];
 
-        // Calculate angle
-        double angle = Math.atan2(y2 - y1, x2 - x1);
-        return Math.toDegrees(angle);
+        double[] side1 = {pt2[0] - pt1[0], pt2[1] - pt1[1]};
+        double[] side2 = {pt3[0] - pt2[0], pt3[1] - pt2[1]};
+
+        // Ensure side1 is the longer side
+        if (Math.sqrt(side1[0] * side1[0] + side1[1] * side1[1]) < Math.sqrt(side2[0] * side2[0] + side2[1] * side2[1])) {
+            double[] temp = side1;
+            side1 = side2;
+            side2 = temp;
+        }
+
+        // Calculate the angle of the longer side relative to the x-axis (camera)
+        double angle = Math.atan2(side1[1], side1[0]);
+
+        robot.opMode.telemetry.addData("Angle", Math.toDegrees(angle));
+        robot.opMode.telemetry.addData("Area", maxArea);
+        robot.opMode.telemetry.addData("Side 1 Length", Math.sqrt(side1[0] * side1[0] + side1[1] * side1[1]));
+        robot.opMode.telemetry.addData("Side 2 Length", Math.sqrt(side2[0] * side2[0] + side2[1] * side2[1]));
+        robot.opMode.telemetry.addData("Servo", Robot.HardwareDevices.intakeClawAngle.getPosition());
+
+        double degrees = Math.toDegrees(angle);
+
+        if (degrees < 90 && degrees > -90) {
+            return 180 - Math.abs(degrees);
+        }
+        return degrees;
     }
 
     private class LimeLightResults {

@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Robot {
     public static Robot rb;
-    public static final double servoToDegrees = 241.93548;
+    public static final double servoToDegrees = 24.193548;
     public static boolean hasResetEncoders = false;
     public Pose2d beginPose;
     public MecanumDrive roadRunner;
