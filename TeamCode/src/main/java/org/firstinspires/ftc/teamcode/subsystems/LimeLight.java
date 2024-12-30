@@ -44,7 +44,7 @@ public class LimeLight extends Robot.HardwareDevices {
         return limelight.getLatestResult();
     }
 
-    public void goToLimelightPos(double targetTx, double targetTy, double error) {
+    public boolean goToLimelightPos(double targetTx, double targetTy, double error) {
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
@@ -85,11 +85,18 @@ public class LimeLight extends Robot.HardwareDevices {
                 }
             } else {
                 robot.drive.movePower(0, 0, 0);
+                return true;
             }
         } else {
             robot.drive.movePower(0, 0, 0);
+            return false;
         }
         robot.telemetry.update();
+        return false;
+    }
+
+    public void goToLimeLightPosLoop (double targetTx, double targetTy, double error) {
+        while(!goToLimelightPos(targetTx, targetTy, error));
     }
 
     public String fetchLimelightData() throws Exception {

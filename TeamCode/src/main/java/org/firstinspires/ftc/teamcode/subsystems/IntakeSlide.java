@@ -29,7 +29,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
         intakeSlideR.setPower(IntakeSlidePower.stop);
     }
 
-    public void move(int amount){
+    public void moveTo(int amount){
         if (amount < IntakeSlidePosition.minimum) {
             amount = IntakeSlidePosition.minimum;
         } else if (amount > IntakeSlidePosition.maximum) {
@@ -45,6 +45,11 @@ public class IntakeSlide extends Robot.HardwareDevices {
         intakeSlideL.setPower(IntakeSlidePower.move);
         intakeSlideR.setPower(IntakeSlidePower.move);
     }
+
+    public int avg() {
+        return (intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2;
+    }
+
     public void retract() {
         intakeSlideL.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
         intakeSlideR.setTargetPositionTolerance(IntakeSlidePosition.tolerance);

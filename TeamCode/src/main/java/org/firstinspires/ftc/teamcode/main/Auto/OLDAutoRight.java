@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -70,7 +69,7 @@ public class OLDAutoRight extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                new InstantAction(() -> robot.intakeSlide.move(500)),
+                new InstantAction(() -> robot.intakeSlide.moveTo(500)),
                 new IntakeWait(),
                 new OuttakePreloadEsc(),
                 new InstantAction(() -> robot.intakeSlide.retract()),

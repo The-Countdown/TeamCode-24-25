@@ -36,7 +36,7 @@ public class AutoRight extends LinearOpMode {
                 .endTrajectory();
 
         TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(45, -14, Math.toRadians(180)))
-                .afterTime(0.5, new InstantAction(() -> robot.intakeSlide.move(1400)))
+                .afterTime(0.5, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
                 .afterDisp(15, new OuttakeSpecimen())
                 .splineToLinearHeading(new Pose2d(20.1, -43.75, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
@@ -79,7 +79,7 @@ public class AutoRight extends LinearOpMode {
         TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(19.1, -58.1, Math.toRadians(320)))
                 .stopAndAdd(new InstantAction(() -> robot.depositSlide.move(400)))
                 .waitSeconds(0.4)
-                .stopAndAdd(new InstantAction(() -> robot.intakeSlide.move(300)))
+                .stopAndAdd(new InstantAction(() -> robot.intakeSlide.moveTo(300)))
                 .waitSeconds(0.15)
                 .splineToLinearHeading(new Pose2d(10, -65, Math.toRadians(225)), Math.toRadians(225))
                 .endTrajectory();

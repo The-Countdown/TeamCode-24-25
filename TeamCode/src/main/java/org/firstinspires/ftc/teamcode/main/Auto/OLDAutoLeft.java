@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -81,7 +80,7 @@ public class OLDAutoLeft extends LinearOpMode {
                 new InstantAction(() -> robot.intake.arm.up()),
                 new Wait(100),
                 new InstantAction(() -> robot.intake.elbow.down()),
-                new InstantAction(() -> robot.intakeSlide.move(550)),
+                new InstantAction(() -> robot.intakeSlide.moveTo(550)),
                 new IntakeWait(),
                 toSecondSample.build(),
                 new IntakePickUp(),
@@ -100,7 +99,7 @@ public class OLDAutoLeft extends LinearOpMode {
                 new InstantAction(() -> robot.intake.arm.up()),
                 new Wait(100),
                 new InstantAction(() -> robot.intake.elbow.down()),
-                new InstantAction(() -> robot.intakeSlide.move(550)),
+                new InstantAction(() -> robot.intakeSlide.moveTo(550)),
                 new IntakeWait(),
                 toThirdSample.build(),
                 new IntakePickUp(),
