@@ -24,6 +24,7 @@ public class AutoActionTest extends LinearOpMode {
     public void runOpMode() {
         Robot robot = new Robot(this, new Pose2d(0, 57.11, Math.toRadians(0)));
         robot.limeLight.limeLightInit(0, 100);
+        Robot.HardwareDevices.flashLight.enableLed(false);
 
         robot.intake.rest();
         robot.outtake.rest();

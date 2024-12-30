@@ -70,6 +70,7 @@ public class LimeLight extends Robot.HardwareDevices {
             return true;
         }
         robot.telemetry.update();
+        robot.drive.movePower(0, 0, 0);
         return true;
     }
 

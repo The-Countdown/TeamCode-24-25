@@ -16,6 +16,7 @@ public class LimeLightLineup implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         robot.intake.hand.close();
+        Robot.HardwareDevices.flashLight.enableLed(true);
         while (robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5)) {
         }
         robot.intake.hand.open();

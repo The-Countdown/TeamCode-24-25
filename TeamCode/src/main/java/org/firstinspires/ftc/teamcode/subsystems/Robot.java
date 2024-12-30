@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -51,6 +52,7 @@ public class Robot {
         public static TouchSensor depositMagnet;
         public static Limelight3A limelight;
         public static IMU imu;
+        public static RevColorSensorV3 flashLight;
     }
 
     public Robot(LinearOpMode opMode, Pose2d beginPose) {
@@ -62,7 +64,7 @@ public class Robot {
         this.beginPose = beginPose;
 
         HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
-
+        HardwareDevices.flashLight = hardwareMap.get(RevColorSensorV3.class, "flashLight");
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
