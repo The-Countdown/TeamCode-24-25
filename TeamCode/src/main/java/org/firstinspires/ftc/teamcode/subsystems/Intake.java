@@ -16,16 +16,16 @@ public class Intake extends Robot.HardwareDevices {
         public static double armUpR = 0.3;
         public static double armDownL = 0.685;
         public static double armDownR = 0.315;
-        public static double armRestL = 0.55;
-        public static double armRestR = 0.45;
-        public static double armTransferL = 0.7225;
-        public static double armTransferR = 0.2775;
+        public static double armRestL = 0.58;
+        public static double armRestR = 0.42;
+        public static double armTransferL = 0.7475;
+        public static double armTransferR = 0.2525;
 
         // Elbow positions
         public static double elbowUp = 0.265;
-        public static double elbowRest = 0.3;
-        public static double elbowDown = 0.36;
-        public static double elbowTransfer = 0.1975;
+        public static double elbowRest = 0.29;
+        public static double elbowDown = 0.345;
+        public static double elbowTransfer = 0.21;
 
         // Wrist positions
         public static double wristVertical = 0.07;
@@ -35,7 +35,7 @@ public class Intake extends Robot.HardwareDevices {
 
         // Hand positions
         public static double handOpen = 0.6;
-        public static double handClosed = 0.775;
+        public static double handClosed = 0.79;
         public static double handHalfOpen = 0.74;
     }
 
