@@ -40,29 +40,56 @@ public class LimeLight extends Robot.HardwareDevices {
         robot.opMode.telemetry.update();
     }
 
+    public LLResult getLimeLightResult() {
+        return limelight.getLatestResult();
+    }
+
     public void goToLimelightPos(double targetTx, double targetTy, double error) {
         LLResult result = limelight.getLatestResult();
 
-        double currentTx = result.getTx();
-        double currentTy = result.getTy();
+        if (result != null && result.isValid()) {
+            double currentTx = result.getTx();
+            double currentTy = result.getTy();
+            robot.telemetry.addData("tx: ", currentTx);
+            robot.telemetry.addData("ty: ", currentTx);
 
-        while ((Math.abs(targetTx) - Math.abs(currentTx) > error) && (Math.abs(targetTy) - Math.abs(currentTy) > error)) {
-            if (currentTx <= targetTx) {
-                robot.drive.movePower(0,0.5,0);
-            }
+            double errorx = Math.abs(currentTx) - Math.abs(targetTx);
+            boolean boolx = errorx > error;
+            double errory = Math.abs(currentTy) - Math.abs(targetTy);
+            boolean booly = errory > error;
+            robot.telemetry.addData("errorx: ", errorx);
+            robot.telemetry.addData("boolx: ", boolx);
+            robot.telemetry.addData("errory: ", errory);
+            robot.telemetry.addData("booly: ", booly);
 
-            if (currentTx > targetTx) {
-                robot.drive.movePower(0,-0.5,0);
-            }
+            if (boolx || booly) {
+                robot.telemetry.addData("yes: ", true);
+                if (currentTx >= targetTx) {
+                    robot.drive.movePower(0, 0.6, 0);
+                    robot.telemetry.addData("left: ", true);
+                }
 
-            if (currentTy <= targetTy) {
-                robot.drive.movePower(0.5,0,0);
-            }
+                if (currentTx < targetTx) {
+                    robot.drive.movePower(0, -0.6, 0);
+                    robot.telemetry.addData("right: ", true);
+                }
 
-            if (currentTy > targetTy) {
-                robot.drive.movePower(-0.5,0,0);
+                if (currentTy <= targetTy) {
+                    robot.drive.movePower(0.5, 0, 0);
+                    robot.telemetry.addData("forwards: ", true);
+                }
+
+                if (currentTy > targetTy) {
+                    robot.drive.movePower(-0.5, 0, 0);
+                    robot.telemetry.addData("backwards: ", true);
+                }
+            } else {
+                robot.drive.movePower(0, 0, 0);
             }
+        } else {
+            robot.drive.movePower(0, 0, 0);
         }
+        robot.telemetry.update();
     }
 
     public String fetchLimelightData() throws Exception {
