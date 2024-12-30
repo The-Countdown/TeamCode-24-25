@@ -44,38 +44,16 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                 robot.outtake.hand.open();
             }
 
-            boolean isRightBumperPressed = gamepad1.right_bumper;
-
-            if (isRightBumperPressed && !wasRightBumperPressed) {
-                toggleStateRB = !toggleStateRB;
-
-                if (toggleStateRB) {
-                    robot.outtake.hand.open();
-                } else {
-                    robot.outtake.hand.close();
-                }
+            if (gamepad1.right_bumper) {
+                robot.outtake.hand.close();
             }
-            wasRightBumperPressed = isRightBumperPressed;
+
+            if (gamepad1.left_bumper) {
+                robot.outtake.hand.open();
+            }
 
             if (gamepad2.dpad_down) {
-                try {
-                    robot.outtake.rest();
-                    Thread.sleep(500);
-                    Robot.HardwareDevices.depositSlide.setPower(-0.4);
-                    Robot.HardwareDevices.depositSlide.setTargetPosition(-5000);
-                    double startTime = System.currentTimeMillis();
-                    while (!TeleOp.depositMagnetPressed && ((System.currentTimeMillis() - startTime) < 5000)) {
-                        Thread.sleep(10);
-                    }
-                    robot.depositSlide.stop();
-                    robot.depositSlide.retract();
-                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-                    Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                    TeleOp.depositMagnetPressed = true;
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                robot.depositSlide.magRetract();
             }
 
             int yStickRInt = (int) (gamepad2.right_stick_y * 15);

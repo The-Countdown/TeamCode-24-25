@@ -47,6 +47,7 @@ public class Robot {
         public static Servo depositClawArmBottom;
         public static Servo depositClawAngle;
 
+        public static Servo spmTest;
         public static TouchSensor depositMagnet;
         public static Limelight3A limelight;
         public static IMU imu;
@@ -97,6 +98,8 @@ public class Robot {
         HardwareDevices.depositClawArmBottom = hardwareMap.get(Servo.class, "depositClawArmBottom");
         HardwareDevices.depositClawAngle = hardwareMap.get(Servo.class, "depositClawAngle");
         HardwareDevices.depositClaw = hardwareMap.get(Servo.class, "depositClaw");
+
+        HardwareDevices.spmTest = hardwareMap.get(Servo.class, "spmTest");
 
         // Motor Directions
         HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);

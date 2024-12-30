@@ -51,6 +51,8 @@ public class Drive extends Robot.HardwareDevices {
                 .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
 
         trajectory.build();
+
+        MecanumDrive.PARAMS.timeout = 2;
     }
     public void moveTo(double x, double y, double angle) {
         robot.roadRunner.updatePoseEstimate();
@@ -61,6 +63,8 @@ public class Drive extends Robot.HardwareDevices {
                 .splineToLinearHeading(new Pose2d(x, y, angle), angle); //TODO: Change depending on usage
 
         trajectory.build();
+
+        MecanumDrive.PARAMS.timeout = 2;
     }
     public void movePower(double forward, double strafe, double rotation) {
         robot.roadRunner.setDrivePowers(new PoseVelocity2d(

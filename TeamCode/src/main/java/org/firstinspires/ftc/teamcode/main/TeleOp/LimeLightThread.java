@@ -30,7 +30,7 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
                 orientation /= 1800;
                 opMode.telemetry.addData("orientation", orientation);
                 opMode.telemetry.update();
-                Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristHorizontal + orientation);
+                Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristVertical + orientation);
             }
         }
     }

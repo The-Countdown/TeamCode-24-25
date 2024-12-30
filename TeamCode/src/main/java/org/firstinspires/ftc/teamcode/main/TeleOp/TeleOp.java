@@ -27,7 +27,7 @@ public class TeleOp extends LinearOpMode {
 
         waitForStart();
 
-        robot.intake.rest();
+//        robot.intake.rest();
 
         DriveThread driveRunnable = new DriveThread(this, robot);
         Thread driveThread = new Thread(driveRunnable);

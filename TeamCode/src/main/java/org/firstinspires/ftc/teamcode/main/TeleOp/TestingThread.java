@@ -13,6 +13,7 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
     private final LinearOpMode opMode;
     private final Gamepad gamepad2;
     private final Robot robot;
+    public boolean isCurrent;
 
     public TestingThread(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
@@ -104,6 +105,14 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                 }
             }
 
+            if (gamepad2.left_trigger != 0) {
+
+            }
+
+            if (gamepad2.right_trigger != 0) {
+                robot.depositSlide.magRetract();
+            }
+
             int yStickRInt = (int) (gamepad2.right_stick_y * 15);
             if (gamepad2.right_stick_y != 0) {
                 int currentPosition = depositSlide.getTargetPosition();
@@ -120,6 +129,34 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
             } else {
                 depositSlide.setTargetPosition(depositSlide.getTargetPosition());
             }
+
+//            int maxPosition = 2550;
+//            int minPosition = 0;
+//            if (gamepad2.right_stick_y != 0) {
+//                double joystickInput = -gamepad2.right_stick_y;
+//
+//                int targetPosition;
+//                if (joystickInput > 0) {
+//                    targetPosition = maxPosition;
+//                } else {
+//                    targetPosition = minPosition;
+//                }
+//
+//                depositSlide.setTargetPosition(targetPosition);
+//                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//                depositSlide.setPower(Math.abs(joystickInput));
+//                isCurrent = false;
+//            } else if (gamepad2.right_stick_y == 0) {
+//                if (!isCurrent) {
+//                    isCurrent = true;
+//                    depositSlide.setTargetPosition(depositSlide.getCurrentPosition());
+//                    depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//                    depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+//                }
+//                depositSlide.setTargetPosition(depositSlide.getTargetPosition());
+//                depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//                depositSlide.setPower(DepositSlide.DepositSlidePower.move);
+//            }
 
             int yStickLInt  = (int) (gamepad2.left_stick_y * 30);
             if (gamepad2.left_stick_y != 0) {

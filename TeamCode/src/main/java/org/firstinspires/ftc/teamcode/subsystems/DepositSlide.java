@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class DepositSlide extends Robot.HardwareDevices {
@@ -101,6 +102,16 @@ public class DepositSlide extends Robot.HardwareDevices {
         depositSlide.setPower(DepositSlidePower.move);
     }
 
+    public void magRetract() {
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        depositSlide.setPower(-DepositSlidePower.move);
+        while (!Robot.HardwareDevices.depositMagnet.isPressed()) {}
+        depositSlide.setPower(DepositSlidePower.stop);
+        depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    }
+
     public void specimenGrab() {
         try {
             robot.intake.wrist.horizontal();
@@ -111,13 +122,11 @@ public class DepositSlide extends Robot.HardwareDevices {
             Thread.sleep(600);
             robot.intake.arm.rest();
             robot.intake.elbow.rest();
-            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {
-                Thread.sleep(10);
-            }
+            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {}
             robot.outtake.arm.upClip();
             robot.outtake.wrist.horizontal();
             Thread.sleep(750);
-            retract();
+            magRetract();
             robot.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
