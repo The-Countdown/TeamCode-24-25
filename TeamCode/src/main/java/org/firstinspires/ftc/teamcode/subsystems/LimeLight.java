@@ -18,28 +18,6 @@ public class LimeLight extends Robot.HardwareDevices {
         this.robot = robot;
     }
 
-    public void lineUp() {
-        LLResult result;
-        result = limelight.getLatestResult();
-
-        if (result == null) {
-            robot.opMode.telemetry.addData("Limelight", "No Targets");
-            robot.opMode.telemetry.update();
-            return;
-        }
-
-        double tx = result.getTx();
-        double ty = result.getTy();
-
-        robot.opMode.telemetry.addData("tx", tx);
-        robot.opMode.telemetry.addData("ty", ty);
-
-        Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristHorizontal - (tx / Robot.servoToDegrees));
-        robot.opMode.telemetry.addData("angle", Intake.IntakePosition.wristHorizontal - (tx / Robot.servoToDegrees));
-
-        robot.opMode.telemetry.update();
-    }
-
     public LLResult getLimeLightResult() {
         return limelight.getLatestResult();
     }
@@ -200,17 +178,41 @@ public class LimeLight extends Robot.HardwareDevices {
         // Calculate the angle of the longer side relative to the x-axis (camera)
         double angle = Math.atan2(side1[1], side1[0]);
 
+        // Determine if the sides are more vertical or more horizontal
+        boolean isSide1MoreVertical = Math.abs(side1[1]) > Math.abs(side1[0]);
+        boolean isSide1MoreHorizontal = Math.abs(side1[0]) > Math.abs(side1[1]);
+
+        boolean isSide2MoreVertical = Math.abs(side2[1]) > Math.abs(side2[0]);
+        boolean isSide2MoreHorizontal = Math.abs(side2[0]) > Math.abs(side2[1]);
+
+        // Print or return the results based on the analysis
+        String side1Orientation = isSide1MoreVertical ? "More Vertical" : isSide1MoreHorizontal ? "More Horizontal" : "Neither";
+        String side2Orientation = isSide2MoreVertical ? "More Vertical" : isSide2MoreHorizontal ? "More Horizontal" : "Neither";
+
+        // Output the results
+        robot.opMode.telemetry.addData("", side1Orientation);
+        robot.opMode.telemetry.addData("", side2Orientation);
+
         robot.opMode.telemetry.addData("Angle", Math.toDegrees(angle));
         robot.opMode.telemetry.addData("Area", maxArea);
         robot.opMode.telemetry.addData("Side 1 Length", Math.sqrt(side1[0] * side1[0] + side1[1] * side1[1]));
         robot.opMode.telemetry.addData("Side 2 Length", Math.sqrt(side2[0] * side2[0] + side2[1] * side2[1]));
         robot.opMode.telemetry.addData("Servo", Robot.HardwareDevices.intakeClawAngle.getPosition());
 
-        double degrees = Math.toDegrees(angle);
+        double degrees;
+
+        degrees = Math.toDegrees(angle);
 
         if (degrees < 90 && degrees > -90) {
             return 180 - Math.abs(degrees);
         }
+
+        if (isSide1MoreHorizontal) {
+            degrees = 0;
+        } else {
+            degrees = 180;
+        }
+
         return degrees;
     }
 
