@@ -119,6 +119,12 @@ public class LimeLight extends Robot.HardwareDevices {
         return content.toString();
     }
 
+    public void limeLightInit(int pipeline, int pollRate) {
+        Robot.HardwareDevices.limelight.setPollRateHz(pollRate);
+        Robot.HardwareDevices.limelight.start();
+        Robot.HardwareDevices.limelight.pipelineSwitch(pipeline);
+    }
+
     public double getBlockOrientation() {
         String limeLightData = "";
         try {

@@ -64,9 +64,6 @@ public class Robot {
         HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
 
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        HardwareDevices.limelight.setPollRateHz(100);
-        HardwareDevices.limelight.start();
-        HardwareDevices.limelight.pipelineSwitch(2);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
