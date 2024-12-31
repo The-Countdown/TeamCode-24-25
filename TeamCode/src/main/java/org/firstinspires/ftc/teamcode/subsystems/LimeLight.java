@@ -53,12 +53,12 @@ public class LimeLight extends Robot.HardwareDevices {
                 }
 
                 if (currentTy <= targetTy) {
-                    robot.drive.movePower(0.5, 0, 0);
+                    robot.drive.movePower(0.3, 0, 0);
 //                    robot.telemetry.addData("forwards: ", true);
                 }
 
                 if (currentTy > targetTy) {
-                    robot.drive.movePower(-0.5, 0, 0);
+                    robot.drive.movePower(-0.3, 0, 0);
 //                    robot.telemetry.addData("backwards: ", true);
                 }
             } else {

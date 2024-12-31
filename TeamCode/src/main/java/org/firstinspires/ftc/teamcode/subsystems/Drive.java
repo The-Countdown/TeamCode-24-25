@@ -42,13 +42,18 @@ public class Drive extends Robot.HardwareDevices {
         double outY = currentPose.position.y + y;
         double outAngle = currentPose.heading.real + angle;
 
-        Pose2d targetPose = new Pose2d(
+//        Pose2d targetPose = new Pose2d(
+//                currentPose.position.x + x,
+//                currentPose.position.y + y,
+//                currentPose.heading.real + angle);
+        Vector2d targetPose = new Vector2d(
                 currentPose.position.x + x,
-                currentPose.position.y + y,
-                currentPose.heading.real + angle);
+                currentPose.position.y + y);
 
+//        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
+//                .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
         TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
-                .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
+                .strafeTo(targetPose); //TODO: Change depending on usage
 
         trajectory.build();
 

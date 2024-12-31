@@ -42,5 +42,6 @@ public class LimeLightTest extends LinearOpMode {
                 telemetry.update();
             }
         }
+        Robot.HardwareDevices.limelight.stop();
     }
 }

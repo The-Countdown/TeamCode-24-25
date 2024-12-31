@@ -30,7 +30,7 @@ public class Intake extends Robot.HardwareDevices {
         // Wrist positions
         public static double wristVertical = 0.07;
         public static double wristHorizontal = 0.01;
-        public static double wristHorizontalFlip = 0.115;
+        public static double wristHorizontalFlip = 0.118;
         public static double wristAutoRight = 0.2;
 
         // Hand positions

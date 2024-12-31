@@ -37,7 +37,15 @@ public class AutoActionTest extends LinearOpMode {
                 new SleepAction(2),
                 new InstantAction(() -> Robot.rb.intake.elbow.down()),
                 new SleepAction(2),
-                new LimeLightLineup(robot)
+                new LimeLightLineup(robot),
+                new SleepAction(0.5),
+                new InstantAction(() -> Robot.rb.intake.arm.down()),
+                new SleepAction(0.5),
+                new InstantAction(() -> Robot.rb.intake.hand.close()),
+                new SleepAction(0.5),
+                new InstantAction(() -> Robot.rb.intake.arm.up()),
+                new SleepAction(0.5),
+                new InstantAction(() -> Robot.HardwareDevices.limelight.stop())
         ));
     }
 }
