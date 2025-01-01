@@ -2,8 +2,15 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import android.util.JsonReader;
 
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.google.gson.Gson;
 import com.qualcomm.hardware.limelightvision.LLResult;
+
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeHighNet;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeTransferPrep;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,7 +29,7 @@ public class LimeLight extends Robot.HardwareDevices {
         return limelight.getLatestResult();
     }
 
-    public boolean goToLimelightPos(double targetTx, double targetTy, double error) {
+    public TrajectoryActionBuilder goToLimelightPos(double targetTx, double targetTy, double error) {
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
@@ -31,43 +38,24 @@ public class LimeLight extends Robot.HardwareDevices {
 //            robot.telemetry.addData("tx: ", currentTx);
 //            robot.telemetry.addData("ty: ", currentTx);
 
-            double errorx = Math.abs(currentTx) - Math.abs(targetTx);
-            boolean boolx = errorx > error;
-            double errory = Math.abs(currentTy) - Math.abs(targetTy);
-            boolean booly = errory > error;
-//            robot.telemetry.addData("errorx: ", errorx);
-//            robot.telemetry.addData("boolx: ", boolx);
-//            robot.telemetry.addData("errory: ", errory);
-//            robot.telemetry.addData("booly: ", booly);
-
-            if (boolx || booly) {
-//                robot.telemetry.addData("yes: ", true);
-                if (currentTx > targetTx + error) {
-                    robot.drive.movePower(0, 0.8, 0);
-                     robot.telemetry.addData("left: ", true);
-                } else if (currentTx < targetTx - error) {
-                    robot.drive.movePower(0, -0.8, 0);
-                     robot.telemetry.addData("right: ", true);
-                }
-
-                if (currentTy < targetTy - error) {
-                    robot.drive.movePower(0.3, 0, 0);
-                     robot.telemetry.addData("forwards: ", true);
-                } else if (currentTy > targetTy + error) {
-                    robot.drive.movePower(-0.3, 0, 0);
-                     robot.telemetry.addData("backwards: ", true);
-                }
-            } else {
-                robot.drive.movePower(0, 0, 0);
-                return false;
-            }
+            double height = 4.5; // height of the camera in inches
+            double errorx = currentTx - targetTx;
+            double moveAmountX = errorx;
+            double errory = currentTy - targetTy;
+            double moveAmountY = errory;
+            double xDistance = height * Math.tan(Math.toRadians(errory));
+            double yDistance = height * Math.tan(Math.toRadians(errorx));
+            robot.telemetry.addData("Moving to x:", moveAmountX);
+            robot.telemetry.addData("Moving to y:", moveAmountY);
+            return robot.drive.moveAmount((xDistance * 4), -(yDistance * 2), 0);
+//            try {
+//                Thread.sleep(10000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
         } else {
-            robot.drive.movePower(0, 0, 0);
-            return true;
+            return null;
         }
-        robot.telemetry.update();
-        robot.drive.movePower(0, 0, 0);
-        return true;
     }
 
 

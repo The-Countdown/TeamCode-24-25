@@ -1,15 +1,16 @@
 package org.firstinspires.ftc.teamcode.main.Auto.LimeLight;
 
+import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @Autonomous(name = "LimeLightLineup")
-public class LimeLightLineup extends LinearOpMode {
+public class LimeLightLineupAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -19,10 +20,10 @@ public class LimeLightLineup extends LinearOpMode {
 
         waitForStart();
 
-        while (robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5)) {
-            robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5);
-        }
-        robot.drive.movePower(0, 0, 0);
+        Actions.runBlocking(new SequentialAction(
+                robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5).build(),
+                new InstantAction(() -> robot.intakeSlide.moveTo(Robot.rb.intakeSlide.avg() + 100))
+        ));
         Robot.HardwareDevices.limelight.stop();
     }
 }

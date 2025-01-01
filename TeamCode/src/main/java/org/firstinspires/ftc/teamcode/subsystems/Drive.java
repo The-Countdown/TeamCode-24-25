@@ -50,7 +50,7 @@ public class Drive extends Robot.HardwareDevices {
 //        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
 //                .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
         TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
-                .strafeToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
+                .strafeTo(targetPose); //TODO: Change depending on usage
 
         return trajectory;
     }
