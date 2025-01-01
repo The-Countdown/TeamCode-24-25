@@ -35,7 +35,7 @@ public class Intake extends Robot.HardwareDevices {
 
         // Hand positions
         public static double handOpen = 0.6;
-        public static double handClosed = 0.79;
+        public static double handClosed = 0.83;
         public static double handHalfOpen = 0.74;
     }
 

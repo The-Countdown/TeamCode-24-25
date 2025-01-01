@@ -191,9 +191,9 @@ public class LimeLight extends Robot.HardwareDevices {
         }
 
         if (isSide1MoreHorizontal) {
-            degrees = 0;
-        } else {
             degrees = 180;
+        } else {
+            degrees = 0;
         }
 
         return degrees;
