@@ -42,24 +42,20 @@ public class LimeLight extends Robot.HardwareDevices {
 
             if (boolx || booly) {
 //                robot.telemetry.addData("yes: ", true);
-                if (currentTx >= targetTx) {
-                    robot.drive.movePower(0, 0.6, 0);
-//                    robot.telemetry.addData("left: ", true);
+                if (currentTx > targetTx + error) {
+                    robot.drive.movePower(0, 0.8, 0);
+                     robot.telemetry.addData("left: ", true);
+                } else if (currentTx < targetTx - error) {
+                    robot.drive.movePower(0, -0.8, 0);
+                     robot.telemetry.addData("right: ", true);
                 }
 
-                if (currentTx < targetTx) {
-                    robot.drive.movePower(0, -0.6, 0);
-//                    robot.telemetry.addData("right: ", true);
-                }
-
-                if (currentTy <= targetTy) {
+                if (currentTy < targetTy - error) {
                     robot.drive.movePower(0.3, 0, 0);
-//                    robot.telemetry.addData("forwards: ", true);
-                }
-
-                if (currentTy > targetTy) {
+                     robot.telemetry.addData("forwards: ", true);
+                } else if (currentTy > targetTy + error) {
                     robot.drive.movePower(-0.3, 0, 0);
-//                    robot.telemetry.addData("backwards: ", true);
+                     robot.telemetry.addData("backwards: ", true);
                 }
             } else {
                 robot.drive.movePower(0, 0, 0);

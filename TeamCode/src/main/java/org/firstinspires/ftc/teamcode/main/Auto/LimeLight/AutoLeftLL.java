@@ -22,6 +22,7 @@ public class AutoLeftLL extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this, new Pose2d(0, 57.11, Math.toRadians(0)));
+        robot.limeLight.limeLightInit(0,100);
 
         TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(robot.beginPose)
                 .stopAndAdd(new InstantAction(() -> robot.intake.restEsc()))
@@ -35,7 +36,7 @@ public class AutoLeftLL extends LinearOpMode {
                 .endTrajectory();
 
         TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(5.1,88.6, Math.toRadians(-45)))
-                .strafeToLinearHeading(new Vector2d(10.7, 72.5),0)
+                .strafeToLinearHeading(new Vector2d(7.7, 72.5),0)
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -45,7 +46,7 @@ public class AutoLeftLL extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(10.7,72.5,0))
+        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(7.7,72.5,0))
                 .stopAndAdd(new InstantAction(() -> robot.intake.actOne()))
                 .stopAndAdd(new InstantAction(() -> robot.outtake.arm.transfer()))
                 .strafeToLinearHeading(new Vector2d(6.1, 87.6), Math.toRadians(-45))
@@ -56,7 +57,7 @@ public class AutoLeftLL extends LinearOpMode {
                 .endTrajectory();
 
         TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(6.1,87.6,Math.toRadians(-45)))
-                .strafeToLinearHeading(new Vector2d(10.4, 86.4),0)
+                .strafeToLinearHeading(new Vector2d(7.4, 86.4),0)
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -66,7 +67,7 @@ public class AutoLeftLL extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(10.4,86.4,0))
+        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(7.4,86.4,0))
                 .stopAndAdd(new InstantAction(() -> robot.intake.actOne()))
                 .stopAndAdd(new InstantAction(() -> robot.outtake.arm.transfer()))
                 .strafeToLinearHeading(new Vector2d(6.1, 87.6), Math.toRadians(-45))

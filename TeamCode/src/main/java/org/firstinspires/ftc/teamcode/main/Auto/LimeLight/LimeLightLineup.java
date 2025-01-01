@@ -19,9 +19,10 @@ public class LimeLightLineup extends LinearOpMode {
 
         waitForStart();
 
-        while (opModeIsActive()) {
+        while (robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5)) {
             robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5);
         }
+        robot.drive.movePower(0, 0, 0);
         Robot.HardwareDevices.limelight.stop();
     }
 }

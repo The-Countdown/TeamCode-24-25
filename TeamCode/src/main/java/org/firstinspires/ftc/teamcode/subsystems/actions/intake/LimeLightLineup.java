@@ -15,13 +15,11 @@ public class LimeLightLineup implements Action {
     }
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        Robot.HardwareDevices.flashLight.enableLed(true);
         while (robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5)) {
             robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5);
         }
         robot.drive.movePower(0, 0, 0);
         robot.intakeSlide.moveTo(Robot.rb.intakeSlide.avg() + 100);
-        Robot.HardwareDevices.flashLight.enableLed(false);
         return false;
     }
 }
