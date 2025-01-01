@@ -45,6 +45,8 @@ public class AutoActionTest extends LinearOpMode {
                 new SleepAction(0.5),
                 new InstantAction(() -> Robot.rb.intake.arm.up()),
                 new SleepAction(0.5),
+                Robot.rb.drive.moveAmount(-1,0,90).build(),
+                new SleepAction(3),
                 new InstantAction(() -> Robot.HardwareDevices.limelight.stop())
         ));
     }

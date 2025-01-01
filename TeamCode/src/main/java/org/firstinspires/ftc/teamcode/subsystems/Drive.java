@@ -33,31 +33,26 @@ public class Drive extends Robot.HardwareDevices {
         return new Pose2d(xLimeLight, yLimeLight, headingLimeLight);
     }
 
-    public void moveAmount(double x, double y, double angle) {
+    public TrajectoryActionBuilder moveAmount(double x, double y, double angle) {
         robot.roadRunner.updatePoseEstimate();
         Pose2d currentPose = robot.roadRunner.pose;
-        MecanumDrive.PARAMS.timeout = 0;
 
         double outX = currentPose.position.x + x;
         double outY = currentPose.position.y + y;
-        double outAngle = currentPose.heading.real + angle;
+        double outAngle = currentPose.heading.real + Math.toRadians(angle);
 
 //        Pose2d targetPose = new Pose2d(
 //                currentPose.position.x + x,
 //                currentPose.position.y + y,
 //                currentPose.heading.real + angle);
-        Vector2d targetPose = new Vector2d(
-                currentPose.position.x + x,
-                currentPose.position.y + y);
+        Vector2d targetPose = new Vector2d(outX, outY);
 
 //        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
 //                .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
         TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
-                .strafeTo(targetPose); //TODO: Change depending on usage
+                .strafeToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
 
-        trajectory.build();
-
-        MecanumDrive.PARAMS.timeout = 2;
+        return trajectory;
     }
     public void moveTo(double x, double y, double angle) {
         robot.roadRunner.updatePoseEstimate();

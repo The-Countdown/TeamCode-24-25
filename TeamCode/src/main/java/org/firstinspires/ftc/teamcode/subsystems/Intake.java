@@ -25,7 +25,7 @@ public class Intake extends Robot.HardwareDevices {
         public static double elbowUp = 0.265;
         public static double elbowRest = 0.29;
         public static double elbowDown = 0.345;
-        public static double elbowTransfer = 0.21;
+        public static double elbowTransfer = 0.2;
 
         // Wrist positions
         public static double wristVertical = 0.07;

@@ -69,7 +69,7 @@ public final class MecanumDrive {
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
-        public double timeout = 2;
+        public double timeout = 0;
         public double timeoutDistance = 0.1;
 
         // drive model parameters
