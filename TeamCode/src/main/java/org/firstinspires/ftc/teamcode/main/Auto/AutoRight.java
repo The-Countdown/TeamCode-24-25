@@ -38,7 +38,7 @@ public class AutoRight extends LinearOpMode {
         TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(45, -14, Math.toRadians(180)))
                 .afterTime(0.5, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
                 .afterDisp(15, new OuttakeSpecimen())
-                .splineToLinearHeading(new Pose2d(20.1, -43.75, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(18.1, -43.75, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -47,12 +47,12 @@ public class AutoRight extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(20.1, -43.75, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(20.1, -44.7, Math.toRadians(240)), Math.toRadians(240))
+        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(18.1, -43.75, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(18.1, -44.7, Math.toRadians(240)), Math.toRadians(240))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(20.1, -44.7, Math.toRadians(240)))
-                .splineToLinearHeading(new Pose2d(18.5, -58, Math.toRadians(320)), Math.toRadians(320))
+        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(18.1, -44.7, Math.toRadians(240)))
+                .splineToLinearHeading(new Pose2d(16.5, -58, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -61,13 +61,13 @@ public class AutoRight extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(18.5, -58, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(19.1, -59, Math.toRadians(240)), Math.toRadians(240))
+        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(16.5, -58, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(16.6, -58, Math.toRadians(240)), Math.toRadians(240))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab3 = robot.roadRunner.actionBuilder(new Pose2d(19, -59, Math.toRadians(240)))
-                .splineToLinearHeading(new Pose2d(18, -59, Math.toRadians(320)), Math.toRadians(320))
-                .splineToLinearHeading(new Pose2d(17.4, -69.8, Math.toRadians(320)), Math.toRadians(320))
+        TrajectoryActionBuilder grab3 = robot.roadRunner.actionBuilder(new Pose2d(16.6, -58, Math.toRadians(240)))
+                .splineToLinearHeading(new Pose2d(16.5, -58, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(15.4, -69.8, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -76,7 +76,7 @@ public class AutoRight extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(19.1, -58.1, Math.toRadians(320)))
+        TrajectoryActionBuilder drop3 = robot.roadRunner.actionBuilder(new Pose2d(15.4, -69.8, Math.toRadians(320)))
                 .stopAndAdd(new InstantAction(() -> robot.depositSlide.move(400)))
                 .waitSeconds(0.4)
                 .stopAndAdd(new InstantAction(() -> robot.intakeSlide.moveTo(300)))
@@ -91,10 +91,10 @@ public class AutoRight extends LinearOpMode {
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.rest()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
                 .waitSeconds(1)
-                .splineToConstantHeading(new Vector2d(4.5, -60), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(4, -60), Math.toRadians(180))
                 .endTrajectory();
 
-        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(4.5, -60, Math.toRadians(180)))
+        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(4, -60, Math.toRadians(180)))
                 .setReversed(true)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.back()))
                 .strafeToConstantHeading(new Vector2d(35, 0))
@@ -108,10 +108,10 @@ public class AutoRight extends LinearOpMode {
         TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(45, 0, Math.toRadians(180)))
                 .stopAndAdd(new OuttakeSpecimen())
                 .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(4.3, -60), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(4, -60), Math.toRadians(180))
                 .endTrajectory();
 
-        TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(4.3, -60, Math.toRadians(180)))
+        TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(4, -60, Math.toRadians(180)))
                 .setReversed(true)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.back()))
                 .strafeToConstantHeading(new Vector2d(35, 8))
@@ -164,11 +164,11 @@ public class AutoRight extends LinearOpMode {
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.35),
                 grab2.build(),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
-//                drop2.build(),
-//                new InstantAction(() -> Robot.rb.intake.hand.open()),
-//                new SleepAction(0.15),
-//                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.35),
-//                grab3.build(),
+                drop2.build(),
+                new InstantAction(() -> Robot.rb.intake.hand.open()),
+                new SleepAction(0.15),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.35),
+                grab3.build(),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 drop3.build(),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),

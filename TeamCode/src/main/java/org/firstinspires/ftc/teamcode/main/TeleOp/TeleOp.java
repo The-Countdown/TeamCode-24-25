@@ -11,6 +11,10 @@ import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
 @Config
 public class TeleOp extends LinearOpMode {
@@ -22,6 +26,10 @@ public class TeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this);
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String currentDateTime = sdf.format(calendar.getTime());
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -94,6 +102,7 @@ public class TeleOp extends LinearOpMode {
             packet.put("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
             dashboard.sendTelemetryPacket(packet);
 
+            telemetry.addData("Date and Time", currentDateTime);
             telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real) - 57.2958);
             telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
             telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));

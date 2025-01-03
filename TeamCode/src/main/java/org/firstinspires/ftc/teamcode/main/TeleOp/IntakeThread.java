@@ -7,12 +7,18 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Locale;
+
 
 public class IntakeThread extends Robot.HardwareDevices implements Runnable {
     private final LinearOpMode opMode;
     private final Gamepad gamepad1;
     private final Gamepad gamepad2;
     private final Robot robot;
+    public static boolean snapshot = true;
 
     public IntakeThread(LinearOpMode opMode, Robot robot) {
         this.opMode = opMode;
@@ -44,6 +50,12 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                             break;
                         }
                         Thread.sleep(10);
+                    }
+                    if (snapshot) {
+                        Calendar calendar = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        String currentDateTime = sdf.format(calendar.getTime());
+                        Robot.HardwareDevices.limelight.captureSnapshot(currentDateTime);
                     }
                     robot.depositSlide.actTwo();
                 }
