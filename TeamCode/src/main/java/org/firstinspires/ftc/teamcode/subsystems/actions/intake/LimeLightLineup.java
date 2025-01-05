@@ -26,7 +26,6 @@ public class LimeLightLineup implements Action {
         Actions.runBlocking(new SequentialAction(
                 trag.build()
         ));
-        robot.intakeSlide.moveTo(Robot.rb.intakeSlide.avg() + 100);
         return false;
     }
 }

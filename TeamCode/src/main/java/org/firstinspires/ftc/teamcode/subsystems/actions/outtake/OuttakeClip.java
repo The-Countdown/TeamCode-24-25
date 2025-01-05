@@ -10,12 +10,13 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 public class OuttakeClip implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        Robot.rb.depositSlide.specimenBarClip();
-        while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > 1150)) {
-            telemetryPacket.addLine("Waiting...");
+        try {
+            Robot.rb.outtake.arm.back();
+            Thread.sleep(500);
+            Robot.rb.outtake.hand.open();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        telemetryPacket.clearLines();
-        Robot.rb.outtake.hand.open();
         return false;
     }
 }

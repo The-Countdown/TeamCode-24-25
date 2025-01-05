@@ -52,10 +52,7 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                         Thread.sleep(10);
                     }
                     if (snapshot) {
-                        Calendar calendar = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                        String currentDateTime = sdf.format(calendar.getTime());
-                        Robot.HardwareDevices.limelight.captureSnapshot(currentDateTime);
+                        Robot.HardwareDevices.limelight.captureSnapshot(TeleOp.currentDateTime);
                     }
                     robot.depositSlide.actTwo();
                 }

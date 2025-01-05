@@ -22,20 +22,19 @@ public class TeleOp extends LinearOpMode {
     public static double xStickLMulti = 0.6;
     public static double xStickRMulti = 0.3;
     public static boolean depositMagnetPressed = false;
+    public static String currentDateTime;
 
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this);
 
-        Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String currentDateTime = sdf.format(calendar.getTime());
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
         waitForStart();
 
-//        robot.intake.rest();
+        robot.intake.rest();
 
         DriveThread driveRunnable = new DriveThread(this, robot);
         Thread driveThread = new Thread(driveRunnable);
@@ -54,6 +53,11 @@ public class TeleOp extends LinearOpMode {
 //        limeLight.start();
 
         while (opModeIsActive()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MINUTE, -2);
+            calendar.add(Calendar.SECOND, -15);
+            currentDateTime = sdf.format(calendar.getTime());
+
             if (Robot.HardwareDevices.depositMagnet.isPressed()) {
                 if (!depositMagnetPressed) {
                     Robot.HardwareDevices.depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);

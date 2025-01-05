@@ -110,6 +110,7 @@ public class DepositSlide extends Robot.HardwareDevices {
         depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        depositSlide.setTargetPosition(Robot.HardwareDevices.depositSlide.getCurrentPosition());
     }
 
     public void specimenGrab() {
@@ -146,20 +147,20 @@ public class DepositSlide extends Robot.HardwareDevices {
     public void actTwo() {
         try {
             robot.intake.elbow.transfer();
-            Thread.sleep(1000);
+            Thread.sleep(500);
             transferDown();
-            Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/3);
+            Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/2.5);
             while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.transferDown + 15))) {
                 Thread.sleep(10);
             }
             robot.outtake.hand.close();
-            Thread.sleep(250);
+            Thread.sleep(200);
             robot.intake.hand.open();
-            Thread.sleep(250);
+            Thread.sleep(200);
             highBasket();
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/2);
             robot.outtake.arm.upClip();
-            Thread.sleep(400);
+            Thread.sleep(250);
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move);
             while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300))) {
                 Thread.sleep(10);
@@ -197,11 +198,11 @@ public class DepositSlide extends Robot.HardwareDevices {
             robot.outtake.arm.rest();
             robot.outtake.wrist.vertical();
             robot.outtake.hand.close();
-            Thread.sleep(1000);
+            Thread.sleep(500);
             retract();
             while (!(depositSlide.getCurrentPosition() < 500)) {
             }
-            depositSlide.setPower(DepositSlidePower.move / 4);
+            depositSlide.setPower(DepositSlidePower.move / 3);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

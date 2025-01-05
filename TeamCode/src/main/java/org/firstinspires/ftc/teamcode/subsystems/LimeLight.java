@@ -47,7 +47,7 @@ public class LimeLight extends Robot.HardwareDevices {
             double yDistance = height * Math.tan(Math.toRadians(errorx));
             robot.telemetry.addData("Moving to x:", moveAmountX);
             robot.telemetry.addData("Moving to y:", moveAmountY);
-            return robot.drive.moveAmount((xDistance * 4), -(yDistance * 2), 0);
+            return robot.drive.moveAmount((xDistance * 4) + 3, -(yDistance * 3), 0);
 //            try {
 //                Thread.sleep(10000);
 //            } catch (InterruptedException e) {
@@ -90,7 +90,7 @@ public class LimeLight extends Robot.HardwareDevices {
     public void limeLightInit(int pipeline, int pollRate) {
         Robot.HardwareDevices.limelight.setPollRateHz(pollRate);
         Robot.HardwareDevices.limelight.start();
-        Robot.HardwareDevices.limelight.pipelineSwitch(pipeline);
+        Robot.HardwareDevices.limelight.pipelineSwitch(pipeline);  // Yellow = 0, Blue = 1, Red = 2, April = 3
     }
 
     public double getBlockOrientation() {

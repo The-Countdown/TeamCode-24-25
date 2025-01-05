@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeActTwo;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeHighNet;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeTransferPrep;
 
-public class OLDAutoLeft extends LinearOpMode {
+public class TESTAutoLeft extends LinearOpMode {
 
     @Override
     public void runOpMode() {

@@ -105,14 +105,6 @@ public class TestingThread extends Robot.HardwareDevices implements Runnable {
                 }
             }
 
-            if (gamepad2.left_trigger != 0) {
-
-            }
-
-            if (gamepad2.right_trigger != 0) {
-                robot.depositSlide.magRetract();
-            }
-
             int yStickRInt = (int) (gamepad2.right_stick_y * 15);
             if (gamepad2.right_stick_y != 0) {
                 int currentPosition = depositSlide.getTargetPosition();

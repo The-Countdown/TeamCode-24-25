@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
 public class Drive extends Robot.HardwareDevices {
     private Robot robot;
+    public static Pose2d newPose;
 
     public Drive(Robot robot) {
         this.robot = robot;
@@ -45,12 +46,15 @@ public class Drive extends Robot.HardwareDevices {
 //                currentPose.position.x + x,
 //                currentPose.position.y + y,
 //                currentPose.heading.real + angle);
-        Vector2d targetPose = new Vector2d(outX, outY);
+        Vector2d targetVector = new Vector2d(outX, outY);
 
 //        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
 //                .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
         TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
-                .strafeTo(targetPose); //TODO: Change depending on usage
+                .strafeTo(targetVector); //TODO: Change depending on usage
+
+        newPose = new Pose2d(targetVector, outAngle);
+        robot.roadRunner.updatePoseEstimate();
 
         return trajectory;
     }

@@ -17,9 +17,10 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.intake.LimeLightLineup;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeClip;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
+import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimenAlt;
 
 @Autonomous(group = "Auto")
-public class AutoRight extends LinearOpMode {
+public class TESTAutoRight extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -29,16 +30,16 @@ public class AutoRight extends LinearOpMode {
                 .afterTime(0, new OuttakePreloadEsc())
                 .afterTime(0.75, new InstantAction(() -> Robot.rb.depositSlide.move(190)))
                 .afterDisp(40, new IntakeEsc())
-                .strafeTo(new Vector2d(49, -14))
+                .strafeTo(new Vector2d(56, -2))
                 .stopAndAdd(new OuttakeClip())
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.elbow.down()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.wrist.autoRight()))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(49, -14, Math.toRadians(180)))
-                .afterTime(0.5, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
-                .afterDisp(15, new OuttakeSpecimen())
-                .splineToLinearHeading(new Pose2d(18.1, -43.75, Math.toRadians(320)), Math.toRadians(320))
+        TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(49, -2, Math.toRadians(180)))
+                .afterTime(0.75, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
+                .afterDisp(15, new OuttakeSpecimenAlt())
+                .splineToLinearHeading(new Pose2d(16.1, -47, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -48,12 +49,12 @@ public class AutoRight extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(18.1, -43.75, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(18.1, -44.7, Math.toRadians(240)), Math.toRadians(240))
+        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(16.1, -47, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(11, -47, Math.toRadians(240)), Math.toRadians(240))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(18.1, -44.7, Math.toRadians(240)))
-                .splineToLinearHeading(new Pose2d(16.5, -58, Math.toRadians(320)), Math.toRadians(320))
+        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(16, -47, Math.toRadians(240)))
+                .splineToLinearHeading(new Pose2d(16, -63, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -64,8 +65,8 @@ public class AutoRight extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(16.5, -58, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(11, -62, Math.toRadians(240)), Math.toRadians(240))
+        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(16, -63, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(11, -63, Math.toRadians(240)), Math.toRadians(240))
                 .endTrajectory();
 
 //        TrajectoryActionBuilder grab3 = robot.roadRunner.actionBuilder(new Pose2d(16.6, -58, Math.toRadians(240)))
@@ -88,10 +89,10 @@ public class AutoRight extends LinearOpMode {
 //                .splineToLinearHeading(new Pose2d(10, -65, Math.toRadians(225)), Math.toRadians(225))
 //                .endTrajectory();
 
-        TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(16.6, -58, Math.toRadians(240)))
+        TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(11, -63, Math.toRadians(240)))
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(16.6, -60, Math.toRadians(180)), Math.toRadians(180))
-                .stopAndAdd(new InstantAction(() -> robot.depositSlide.retract()))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.rest()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
                 .waitSeconds(1)
@@ -126,7 +127,7 @@ public class AutoRight extends LinearOpMode {
                 .strafeToConstantHeading(new Vector2d(35, 8))
                 .waitSeconds(0.15)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
-                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.retract()))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
                 .endTrajectory();
 
 //        TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(45, 12, Math.toRadians(180)))
@@ -153,39 +154,46 @@ public class AutoRight extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.1),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 clip1.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new SleepAction(0.15),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.35),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = -0.2),
                 grab1.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 drop1.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
                 new SleepAction(0.15),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.35),
                 grab2.build(),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 drop2.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
                 new SleepAction(0.15),
-//                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.35),
 //                grab3.build(),
-//                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
-//                drop3.build(),
+//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
+////                drop3.build(),
+//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
 //                new InstantAction(() -> Robot.rb.intake.hand.open()),
 //                new SleepAction(0.15),
                 new InstantAction(() -> Robot.rb.intake.elbow.up()),
                 new InstantAction(() -> Robot.rb.intakeSlide.retract()),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
                 specimen1.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> Robot.rb.outtake.hand.close()),
                 new SleepAction(0.3),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 new InstantAction(() -> Robot.rb.depositSlide.move(190)),
                 new SleepAction(0.15),
                 clip2.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
                 specimen2.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> Robot.rb.outtake.hand.close()),
                 new SleepAction(0.3),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
@@ -193,16 +201,20 @@ public class AutoRight extends LinearOpMode {
                 new SleepAction(0.15),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 clip3.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 after.build(),
+                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
 //                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
 //                specimen3.build(),
-//                new InstantAction(() -> Robot.rb.outtake.hand.close()),
-//                new SleepAction(0.3),
-//                new InstantAction(() -> Robot.rb.outtake.limeLight.back()),
-//                new InstantAction(() -> robot.depositSlide.specimenBar()),
-//                new SleepAction(0.15),
-//                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
-//                clip4.build(),
+//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
+////                new InstantAction(() -> Robot.rb.outtake.hand.close()),
+////                new SleepAction(0.3),
+////                new InstantAction(() -> Robot.rb.outtake.limeLight.back()),
+////                new InstantAction(() -> robot.depositSlide.specimenBar()),
+////                new SleepAction(0.15),
+////                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
+////                clip4.build(),
+//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new SleepAction(999999999)
         ));
     }

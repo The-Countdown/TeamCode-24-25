@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 public class OuttakeSpecimen implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        Robot.rb.depositSlide.retract();
+        Robot.rb.depositSlide.magRetract();
         Robot.rb.outtake.arm.upClip();
         Robot.rb.outtake.wrist.horizontal();
         Robot.rb.outtake.hand.open();
