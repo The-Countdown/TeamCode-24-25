@@ -34,14 +34,19 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
 
             if (gamepad2.square) {
                 robot.depositSlide.specimenGrab();
-            } else if (gamepad2.triangle) {
-                robot.depositSlide.specimenHang();
+            } else if (gamepad2.triangle){
+                while (gamepad2.triangle) {
+                    robot.depositSlide.specimenHang();
+                    robot.outtake.wrist.horizontalFlip();
+                }
+                robot.outtake.arm.back();
             }
 
             if (gamepad1.y) {
                 robot.outtake.arm.upClip();
                 robot.outtake.wrist.horizontal();
                 robot.outtake.hand.open();
+                robot.depositSlide.retract();
             }
 
             if (gamepad1.right_bumper) {

@@ -12,7 +12,7 @@ public class OuttakePreloadEsc implements Action {
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         Robot.rb.depositSlide.specimenBar();
         while (!(Robot.HardwareDevices.depositSlide.getCurrentPosition() > 750));
-        Robot.rb.outtake.arm.upClip();
+        Robot.rb.outtake.arm.upLift();
         Robot.rb.outtake.wrist.horizontalFlip();
         return false;
     }

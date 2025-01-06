@@ -11,7 +11,7 @@ public class OuttakeSpecimenAlt implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         Robot.rb.depositSlide.move(300);
-        Robot.rb.outtake.arm.upClip();
+        Robot.rb.outtake.arm.upLift();
         Robot.rb.outtake.wrist.horizontal();
         Robot.rb.outtake.hand.open();
         return false;

@@ -14,7 +14,7 @@ public class Intake extends Robot.HardwareDevices {
         // Arm positions
         public static double armUp = 0.66;
         public static double armDown = 0.59;
-        public static double armRest = 0.09;
+        public static double armRest = 0.1;
         public static double armTransfer = 0.91;
 
         // Elbow positions
@@ -121,6 +121,7 @@ public class Intake extends Robot.HardwareDevices {
 
     public void actOne() {
         try {
+            robot.intakeSlide.retract();
             robot.depositSlide.transferUp();
             Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move/2);
             robot.intake.elbow.up();
@@ -130,14 +131,11 @@ public class Intake extends Robot.HardwareDevices {
             Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             robot.intake.hand.halfOpen();
             robot.outtake.wrist.horizontal();
-            Thread.sleep(400);
+            Thread.sleep(150);
             robot.intake.hand.close();
             robot.intake.wrist.horizontalFlip();
             robot.outtake.hand.open();
             robot.outtake.arm.transfer();
-            robot.intakeSlide.retract();
-            intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.move/1.5);
-            intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.move/1.5);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

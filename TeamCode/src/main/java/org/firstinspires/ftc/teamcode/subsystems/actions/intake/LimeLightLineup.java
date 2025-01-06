@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class LimeLightLineup implements Action {
@@ -19,13 +20,20 @@ public class LimeLightLineup implements Action {
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         TrajectoryActionBuilder trag;
+        int cycles = 0;
         trag = robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5);
         while (trag == null) {
             trag = robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5);
+            cycles += 1;
+            if (cycles >= 100000000) {
+                return false;
+            }
         }
+        MecanumDrive.PARAMS.timeout = 0.2;
         Actions.runBlocking(new SequentialAction(
                 trag.build()
         ));
+        MecanumDrive.PARAMS.timeout = 0.1;
         return false;
     }
 }

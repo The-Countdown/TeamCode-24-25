@@ -13,6 +13,7 @@ public class Outtake extends Robot.HardwareDevices {
     public static class OuttakePositions {
         // Arm positions
         public static double armUpClip = 0.31;
+        public static double armUpLift = 0.5;
         public static double armTransfer = 0.03;
         public static double armBack = 0.97;
         public static double armRest = 0;
@@ -24,7 +25,7 @@ public class Outtake extends Robot.HardwareDevices {
 
         // Hand positions
         public static double handOpen = 0.35;
-        public static double handClosed = 0.675;
+        public static double handClosed = 0.7;
         public static double handHalfOpen = 0.53;
     }
 
@@ -32,6 +33,10 @@ public class Outtake extends Robot.HardwareDevices {
         public void upClip() {
             depositClawArmBottom.setPosition(OuttakePositions.armUpClip);
             depositClawArmTop.setPosition(OuttakePositions.armUpClip);
+        }
+        public void upLift() {
+            depositClawArmBottom.setPosition(OuttakePositions.armUpLift);
+            depositClawArmTop.setPosition(OuttakePositions.armUpLift);
         }
         public void transfer() {
             depositClawArmBottom.setPosition(OuttakePositions.armTransfer);

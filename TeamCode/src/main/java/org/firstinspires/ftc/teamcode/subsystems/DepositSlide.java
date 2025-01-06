@@ -17,8 +17,8 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int highBasket = 2550;
         public static int lowBasket = 1500;
         public static int specimenWall = 700;
-        public static int specimenBar = 780;
-        public static int specimenBarClip = 1160;
+        public static int specimenBar = 820;
+        public static int specimenBarClip = 190;
         public static int specimenBarAltUp = 1336;
         public static int specimenBarAltDown = 1240;
         public static int transferUp = 1475;
@@ -134,15 +134,8 @@ public class DepositSlide extends Robot.HardwareDevices {
         }
     }
     public void specimenHang() {
-        try {
-            specimenBar();
-            robot.outtake.arm.back();
-            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenBar - DepositSlidePosition.stepRange))) {
-                Thread.sleep(10);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        specimenBarClip();
+        robot.outtake.arm.upLift();
     }
     public void actTwo() {
         try {

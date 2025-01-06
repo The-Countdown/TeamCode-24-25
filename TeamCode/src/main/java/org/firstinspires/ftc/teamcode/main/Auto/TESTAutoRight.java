@@ -27,7 +27,7 @@ public class TESTAutoRight extends LinearOpMode {
         Robot robot = new Robot(this, new Pose2d(0, -14, Math.toRadians(180)));
 
         TrajectoryActionBuilder clip1 = robot.roadRunner.actionBuilder(robot.beginPose)
-                .afterTime(0, new OuttakePreloadEsc())
+                .afterTime(0.01, new OuttakePreloadEsc())
                 .afterTime(0.75, new InstantAction(() -> Robot.rb.depositSlide.move(190)))
                 .afterDisp(40, new IntakeEsc())
                 .strafeTo(new Vector2d(56, -2))
@@ -39,7 +39,7 @@ public class TESTAutoRight extends LinearOpMode {
         TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(49, -2, Math.toRadians(180)))
                 .afterTime(0.75, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
                 .afterDisp(15, new OuttakeSpecimenAlt())
-                .splineToLinearHeading(new Pose2d(16.1, -47, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(15.1, -47, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -49,11 +49,11 @@ public class TESTAutoRight extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(16.1, -47, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(11, -47, Math.toRadians(240)), Math.toRadians(240))
+        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(19.6, -47, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(19.5, -47, Math.toRadians(225)), Math.toRadians(225))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(16, -47, Math.toRadians(240)))
+        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(19.5, -47, Math.toRadians(225)))
                 .splineToLinearHeading(new Pose2d(16, -63, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
@@ -61,12 +61,12 @@ public class TESTAutoRight extends LinearOpMode {
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
                 .waitSeconds(0.15)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.up()))
-                .stopAndAdd(new InstantAction(() -> Robot.rb.intakeSlide.retract()))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.intakeSlide.moveTo(300)))
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(16, -63, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(11, -63, Math.toRadians(240)), Math.toRadians(240))
+        TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19.6, -63, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(19.5, -63, Math.toRadians(215)), Math.toRadians(215))
                 .endTrajectory();
 
 //        TrajectoryActionBuilder grab3 = robot.roadRunner.actionBuilder(new Pose2d(16.6, -58, Math.toRadians(240)))
@@ -89,63 +89,59 @@ public class TESTAutoRight extends LinearOpMode {
 //                .splineToLinearHeading(new Pose2d(10, -65, Math.toRadians(225)), Math.toRadians(225))
 //                .endTrajectory();
 
-        TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(11, -63, Math.toRadians(240)))
+        TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(19.5, -63, Math.toRadians(215)))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(16.6, -60, Math.toRadians(180)), Math.toRadians(180))
-                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
+                .strafeToLinearHeading(new Vector2d(19.6, -63), Math.toRadians(175))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.rest()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
-                .waitSeconds(1)
-                .splineToConstantHeading(new Vector2d(4, -60), Math.toRadians(180))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
+                .waitSeconds(0.25)
+                .strafeToConstantHeading(new Vector2d(2.5, -63))
                 .endTrajectory();
 
-        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(4, -60, Math.toRadians(180)))
+        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -63, Math.toRadians(175)))
                 .setReversed(true)
-                .strafeToConstantHeading(new Vector2d(35, 0))
+                .strafeToConstantHeading(new Vector2d(35, -14))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
-                .strafeToConstantHeading(new Vector2d(49, 0))
+                .strafeToConstantHeading(new Vector2d(49, -14))
                 .stopAndAdd(new OuttakeClip())
                 .waitSeconds(0.15)
                 .endTrajectory();
 
-        TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(45, 0, Math.toRadians(180)))
+        TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(49, -14, Math.toRadians(175)))
                 .stopAndAdd(new OuttakeSpecimen())
-                .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(4, -60), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(175))
+                .splineToConstantHeading(new Vector2d(2.5, -60), Math.toRadians(175))
                 .endTrajectory();
 
-        TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(4, -60, Math.toRadians(180)))
+        TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -60, Math.toRadians(175)))
                 .setReversed(true)
                 .strafeToConstantHeading(new Vector2d(35, 8))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
                 .strafeToConstantHeading(new Vector2d(49, 8))
                 .stopAndAdd(new OuttakeClip())
-                .waitSeconds(0.15)
                 .endTrajectory();
 
-        TrajectoryActionBuilder after = robot.roadRunner.actionBuilder(new Pose2d(47, 8, Math.toRadians(180)))
-                .strafeToConstantHeading(new Vector2d(35, 8))
-                .waitSeconds(0.15)
-                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
-                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
-                .endTrajectory();
-
-//        TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(45, 12, Math.toRadians(180)))
-//                .stopAndAdd(new OuttakeSpecimen())
-//                .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(180))
-//                .splineToConstantHeading(new Vector2d(2.7, -60), Math.toRadians(180))
-//                .endTrajectory();
-
-//        TrajectoryActionBuilder clip4 = robot.roadRunner.actionBuilder(new Pose2d(2.7, -60, Math.toRadians(180)))
-//                .setReversed(true)
-//                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.limeLight.back()))
-//                .strafeToConstantHeading(new Vector2d(35, 2))
-//                .strafeToConstantHeading(new Vector2d(45, 2))
-//                .stopAndAdd(new OuttakePreloadEsc())
-////                .waitSeconds(0.5)
-//                .stopAndAdd(new OuttakeClip())
+//        TrajectoryActionBuilder after = robot.roadRunner.actionBuilder(new Pose2d(47, 8, Math.toRadians(180)))
+//                .strafeToConstantHeading(new Vector2d(35, 8))
 //                .waitSeconds(0.15)
+//                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
+//                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
 //                .endTrajectory();
+
+        TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(49, 8, Math.toRadians(175)))
+                .stopAndAdd(new OuttakeSpecimen())
+                .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(175))
+                .splineToConstantHeading(new Vector2d(2.5, -60), Math.toRadians(175))
+                .endTrajectory();
+
+        TrajectoryActionBuilder clip4 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -60, Math.toRadians(175)))
+                .setReversed(true)
+                .strafeToConstantHeading(new Vector2d(35, -7))
+                .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
+                .strafeToConstantHeading(new Vector2d(49, -7))
+                .stopAndAdd(new OuttakeClip())
+                .endTrajectory();
 
         robot.intake.rest();
         robot.outtake.rest();
@@ -154,67 +150,49 @@ public class TESTAutoRight extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.3),
                 clip1.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new SleepAction(0.15),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = -0.2),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.1),
                 grab1.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 drop1.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
                 new SleepAction(0.15),
                 grab2.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 drop2.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
-                new SleepAction(0.15),
+                new SleepAction(0.3),
 //                grab3.build(),
-//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
 ////                drop3.build(),
-//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
 //                new InstantAction(() -> Robot.rb.intake.hand.open()),
 //                new SleepAction(0.15),
                 new InstantAction(() -> Robot.rb.intake.elbow.up()),
                 new InstantAction(() -> Robot.rb.intakeSlide.retract()),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.3),
                 specimen1.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.1),
                 new InstantAction(() -> Robot.rb.outtake.hand.close()),
-                new SleepAction(0.3),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
-                new InstantAction(() -> Robot.rb.depositSlide.move(190)),
                 new SleepAction(0.15),
+                new InstantAction(() -> Robot.rb.depositSlide.move(190)),
+                new InstantAction(() -> Robot.rb.outtake.arm.upLift()),
+                new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()),
+                new SleepAction(0.1),
                 clip2.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
                 specimen2.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
                 new InstantAction(() -> Robot.rb.outtake.hand.close()),
                 new SleepAction(0.3),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 new InstantAction(() -> Robot.rb.depositSlide.move(190)),
+                new InstantAction(() -> Robot.rb.outtake.arm.upLift()),
                 new SleepAction(0.15),
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
                 clip3.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
-                after.build(),
-                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
-//                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.2),
-//                specimen3.build(),
-//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
-////                new InstantAction(() -> Robot.rb.outtake.hand.close()),
-////                new SleepAction(0.3),
-////                new InstantAction(() -> Robot.rb.outtake.limeLight.back()),
-////                new InstantAction(() -> robot.depositSlide.specimenBar()),
-////                new SleepAction(0.15),
-////                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
-////                clip4.build(),
-//                new InstantAction(() -> robot.roadRunner.updatePoseEstimate()),
+//                after.build(),
+                specimen3.build(),
+                new InstantAction(() -> Robot.rb.outtake.hand.close()),
+                new SleepAction(0.3),
+                new InstantAction(() -> Robot.rb.depositSlide.move(190)),
+                new InstantAction(() -> Robot.rb.outtake.arm.upLift()),
+                new SleepAction(0.15),
+                clip4.build(),
                 new SleepAction(999999999)
         ));
     }

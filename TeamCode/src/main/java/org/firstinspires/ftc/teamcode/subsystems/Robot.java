@@ -12,7 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -39,7 +41,7 @@ public class Robot {
 
         public static Servo intakePitchL;
         public static Servo intakePitchR;
-        public static Servo intakeClawAngle;
+        public static ServoImplEx intakeClawAngle;
         public static Servo intakeCoaxialPitch;
         public static Servo intakeClaw;
 
@@ -90,7 +92,8 @@ public class Robot {
         HardwareDevices.intakeClaw = hardwareMap.get(Servo.class, "intakeClaw");
         HardwareDevices.intakePitchL = hardwareMap.get(Servo.class, "intakePitchL");
         HardwareDevices.intakePitchR = hardwareMap.get(Servo.class, "intakePitchR");
-        HardwareDevices.intakeClawAngle = hardwareMap.get(Servo.class, "intakeClawAngle");
+        HardwareDevices.intakeClawAngle = hardwareMap.get(ServoImplEx.class, "intakeClawAngle");
+//        HardwareDevices.intakeClawAngle.setPwmRange(new PwmControl.PwmRange(500, 2500));
         HardwareDevices.intakeCoaxialPitch = hardwareMap.get(Servo.class, "intakeCoaxialPitch");
 
         HardwareDevices.depositClawArmTop = hardwareMap.get(Servo.class, "depositClawArmTop");
