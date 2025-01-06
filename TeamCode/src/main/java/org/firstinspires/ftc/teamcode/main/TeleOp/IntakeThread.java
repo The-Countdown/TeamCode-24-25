@@ -7,11 +7,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Locale;
-
 
 public class IntakeThread extends Robot.HardwareDevices implements Runnable {
     private final LinearOpMode opMode;
@@ -40,24 +35,22 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                 robot.intake.restEsc();
             }
 
-            try {
-                if (gamepad2.share) {
-                    robot.intake.actOne();
-                    while (!gamepad2.share) {
-                        if (gamepad2.right_bumper) {
-                            robot.intake.hand.open();
-                            Thread.sleep(500);
-                            break;
-                        }
-                        Thread.sleep(10);
+            if (gamepad2.dpad_right) {
+                robot.intakeSlide.magRetract();
+            }
+
+            if (gamepad2.share) {
+                robot.intake.actOne();
+                while (!gamepad2.share) {
+                    if (gamepad2.right_bumper || gamepad2.right_trigger > 0.1) {
+                        robot.intake.hand.open();
+                        robot.intake.down();
+                        robot.depositSlide.condensedMilk();
+                        break;
                     }
-                    if (snapshot) {
-                        Robot.HardwareDevices.limelight.captureSnapshot(TeleOp.currentDateTime);
-                    }
-                    robot.depositSlide.actTwo();
                 }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                if (snapshot) {Robot.HardwareDevices.limelight.captureSnapshot(TeleOp.currentDateTime);}
+                robot.depositSlide.actTwo();
             }
 
             boolean isRightBumperPressed = gamepad2.right_bumper;

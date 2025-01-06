@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.main.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -24,9 +23,6 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
 
     @Override
     public void run() {
-        boolean wasRightBumperPressed = false;
-        boolean toggleStateRB = false;
-
         while (opMode.opModeIsActive()) {
             if (gamepad2.circle) {
                 robot.depositSlide.condensedMilk();

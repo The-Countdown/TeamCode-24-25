@@ -3,32 +3,18 @@ package org.firstinspires.ftc.teamcode.main.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.R;
-import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpTesting")
 @Config
 public class TeleOpTesting extends LinearOpMode {
-    public static double intakeYawThreshold = 0.1;
-    public static double intakeYawMulti = 0.001;
-
-    public static double yStickLMulti = 0.4;
-    public static double xStickLMulti = 0.6;
-    public static double xStickRMulti = 0.4;
-    public boolean driveToggle = false;
     boolean depositMagnetPressed = false;
-    boolean wasRightTriggerPressed = false;
-    boolean wasLeftTriggerPressed = false;
-    boolean toggleState = false;
     YawPitchRollAngles robotOrientation;
 
     @Override

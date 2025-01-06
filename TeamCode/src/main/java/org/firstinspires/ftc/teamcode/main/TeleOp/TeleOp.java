@@ -22,6 +22,8 @@ public class TeleOp extends LinearOpMode {
     public static double xStickLMulti = 0.6;
     public static double xStickRMulti = 0.3;
     public static boolean depositMagnetPressed = false;
+    public static boolean intakeMagnetLPressed = false;
+    public static boolean intakeMagnetRPressed = false;
     public static String currentDateTime;
 
     @Override
@@ -68,6 +70,29 @@ public class TeleOp extends LinearOpMode {
             } else {
                 depositMagnetPressed = false;
             }
+
+            if (Robot.HardwareDevices.intakeMagnetL.isPressed()) {
+                if (!intakeMagnetLPressed) {
+                    Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                    Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                    Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeMagnetLPressed = true;
+                }
+            } else {
+                intakeMagnetLPressed = false;
+            }
+
+            if (Robot.HardwareDevices.intakeMagnetR.isPressed()) {
+                if (!intakeMagnetRPressed) {
+                    Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                    Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                    Robot.HardwareDevices.intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    intakeMagnetRPressed = true;
+                }
+            } else {
+                intakeMagnetRPressed = false;
+            }
+
 
             //region Safety
             if ((!Robot.HardwareDevices.depositSlide.isBusy()) && (Robot.HardwareDevices.depositSlide.getTargetPosition() < DepositSlide.DepositSlidePosition.stopTolerance) &&

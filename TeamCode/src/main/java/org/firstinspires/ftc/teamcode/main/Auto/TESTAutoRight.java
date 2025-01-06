@@ -163,7 +163,7 @@ public class TESTAutoRight extends LinearOpMode {
                 new InstantAction(() -> Robot.rb.intake.hand.open()),
                 new SleepAction(0.3),
 //                grab3.build(),
-////                drop3.build(),
+//                drop3.build(),
 //                new InstantAction(() -> Robot.rb.intake.hand.open()),
 //                new SleepAction(0.15),
                 new InstantAction(() -> Robot.rb.intake.elbow.up()),

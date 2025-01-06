@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class DepositSlide extends Robot.HardwareDevices {
@@ -105,7 +104,7 @@ public class DepositSlide extends Robot.HardwareDevices {
     public void magRetract() {
         depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         depositSlide.setPower(-DepositSlidePower.move);
-        while (!Robot.HardwareDevices.depositMagnet.isPressed()) {}
+        while (!Robot.HardwareDevices.depositMagnet.isPressed());
         depositSlide.setPower(DepositSlidePower.stop);
         depositSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         depositSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -123,7 +122,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             Thread.sleep(600);
             robot.intake.arm.rest();
             robot.intake.elbow.rest();
-            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange))) {}
+            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.specimenWall - DepositSlidePosition.stepRange)));
             robot.outtake.arm.upClip();
             robot.outtake.wrist.horizontal();
             Thread.sleep(750);
@@ -143,9 +142,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             Thread.sleep(500);
             transferDown();
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/2.5);
-            while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.transferDown + 15))) {
-                Thread.sleep(10);
-            }
+            while (!(depositSlide.getCurrentPosition() < (DepositSlidePosition.transferDown + 15)));
             robot.outtake.hand.close();
             Thread.sleep(200);
             robot.intake.hand.open();
@@ -155,9 +152,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             robot.outtake.arm.upClip();
             Thread.sleep(250);
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move);
-            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300))) {
-                Thread.sleep(10);
-            }
+            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.highBasket - 300)));
             robot.intake.arm.up();
             robot.intake.wrist.horizontal();
             robot.intake.elbow.down();
@@ -168,33 +163,25 @@ public class DepositSlide extends Robot.HardwareDevices {
         }
     }
     public void depositLow() {
-        try {
-            robot.outtake.hand.close();
-            lowBasket();
-            robot.intakeSlide.retract();
-            while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.lowBasket - 200))) {
-                Thread.sleep(10);
-            }
-            robot.outtake.arm.back();
-            robot.outtake.wrist.horizontal();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        robot.outtake.hand.close();
+        lowBasket();
+        robot.intakeSlide.retract();
+        while (!(depositSlide.getCurrentPosition() > (DepositSlidePosition.lowBasket - 200)));
+        robot.outtake.arm.back();
+        robot.outtake.wrist.horizontal();
     }
     public void condensedMilk() {
         try {
-            if (depositSlide.getCurrentPosition() <= 1200) {
-                move(1200);
-                while (!(depositSlide.getCurrentPosition() > (1200 - DepositSlidePosition.stepRange))) {
-                }
+            if (depositSlide.getCurrentPosition() <= 1100) {
+                move(1100);
+                while (!(depositSlide.getCurrentPosition() > (1100 - DepositSlidePosition.stepRange)));
             }
             robot.outtake.arm.rest();
             robot.outtake.wrist.vertical();
             robot.outtake.hand.close();
-            Thread.sleep(500);
+            Thread.sleep(400);
             retract();
-            while (!(depositSlide.getCurrentPosition() < 500)) {
-            }
+            while (!(depositSlide.getCurrentPosition() < 300));
             depositSlide.setPower(DepositSlidePower.move / 3);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

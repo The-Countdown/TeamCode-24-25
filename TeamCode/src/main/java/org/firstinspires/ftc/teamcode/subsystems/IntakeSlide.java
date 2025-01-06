@@ -50,6 +50,24 @@ public class IntakeSlide extends Robot.HardwareDevices {
         return (intakeSlideL.getCurrentPosition() + intakeSlideR.getCurrentPosition()) / 2;
     }
 
+    public void magRetract() {
+        intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeSlideL.setPower(-IntakeSlide.IntakeSlidePower.move);
+        intakeSlideR.setPower(-IntakeSlide.IntakeSlidePower.move);
+        while (!Robot.HardwareDevices.intakeMagnetL.isPressed() && !Robot.HardwareDevices.intakeMagnetR.isPressed());
+        intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
+        intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
+        intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeSlideR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeSlideL.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        intakeSlideL.setTargetPosition(avg());
+        intakeSlideR.setTargetPosition(avg());
+    }
+
     public void retract() {
         intakeSlideL.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
         intakeSlideR.setTargetPositionTolerance(IntakeSlidePosition.tolerance);
@@ -72,7 +90,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
 
     public void condensedMilk() {
-        robot.intakeSlide.retract();
         robot.intake.rest();
+        magRetract();
     }
 }

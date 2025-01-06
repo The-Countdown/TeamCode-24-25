@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -39,19 +37,20 @@ public class Robot {
         public static DcMotorEx intakeSlideR;
         public static DcMotorEx depositSlide;
 
-        public static Servo intakePitchL;
-        public static Servo intakePitchR;
+        public static ServoImplEx intakePitchL;
+        public static ServoImplEx intakePitchR;
         public static ServoImplEx intakeClawAngle;
-        public static Servo intakeCoaxialPitch;
-        public static Servo intakeClaw;
+        public static ServoImplEx intakeCoaxialPitch;
+        public static ServoImplEx intakeClaw;
 
-        public static Servo depositClaw;
-        public static Servo depositClawArmTop;
-        public static Servo depositClawArmBottom;
-        public static Servo depositClawAngle;
+        public static ServoImplEx depositClaw;
+        public static ServoImplEx depositClawArmTop;
+        public static ServoImplEx depositClawArmBottom;
+        public static ServoImplEx depositClawAngle;
 
-        public static Servo spmTest;
         public static TouchSensor depositMagnet;
+        public static TouchSensor intakeMagnetL;
+        public static TouchSensor intakeMagnetR;
         public static Limelight3A limelight;
         public static IMU imu;
         public static RevColorSensorV3 flashLight;
@@ -66,6 +65,8 @@ public class Robot {
         this.beginPose = beginPose;
 
         HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
+        HardwareDevices.intakeMagnetL = hardwareMap.get(TouchSensor.class, "intakeLMagnet");
+        HardwareDevices.intakeMagnetR = hardwareMap.get(TouchSensor.class, "intakeRMagnet");
         HardwareDevices.flashLight = hardwareMap.get(RevColorSensorV3.class, "flashLight");
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
@@ -89,19 +90,16 @@ public class Robot {
         HardwareDevices.depositSlide = hardwareMap.get(DcMotorEx.class, "depositSlide");
 
         // Servos
-        HardwareDevices.intakeClaw = hardwareMap.get(Servo.class, "intakeClaw");
-        HardwareDevices.intakePitchL = hardwareMap.get(Servo.class, "intakePitchL");
-        HardwareDevices.intakePitchR = hardwareMap.get(Servo.class, "intakePitchR");
+        HardwareDevices.intakeClaw = hardwareMap.get(ServoImplEx.class, "intakeClaw");
+        HardwareDevices.intakePitchL = hardwareMap.get(ServoImplEx.class, "intakePitchL");
+        HardwareDevices.intakePitchR = hardwareMap.get(ServoImplEx.class, "intakePitchR");
         HardwareDevices.intakeClawAngle = hardwareMap.get(ServoImplEx.class, "intakeClawAngle");
-//        HardwareDevices.intakeClawAngle.setPwmRange(new PwmControl.PwmRange(500, 2500));
-        HardwareDevices.intakeCoaxialPitch = hardwareMap.get(Servo.class, "intakeCoaxialPitch");
+        HardwareDevices.intakeCoaxialPitch = hardwareMap.get(ServoImplEx.class, "intakeCoaxialPitch");
 
-        HardwareDevices.depositClawArmTop = hardwareMap.get(Servo.class, "depositClawArmTop");
-        HardwareDevices.depositClawArmBottom = hardwareMap.get(Servo.class, "depositClawArmBottom");
-        HardwareDevices.depositClawAngle = hardwareMap.get(Servo.class, "depositClawAngle");
-        HardwareDevices.depositClaw = hardwareMap.get(Servo.class, "depositClaw");
-
-        HardwareDevices.spmTest = hardwareMap.get(Servo.class, "spmTest");
+        HardwareDevices.depositClawArmTop = hardwareMap.get(ServoImplEx.class, "depositClawArmTop");
+        HardwareDevices.depositClawArmBottom = hardwareMap.get(ServoImplEx.class, "depositClawArmBottom");
+        HardwareDevices.depositClawAngle = hardwareMap.get(ServoImplEx.class, "depositClawAngle");
+        HardwareDevices.depositClaw = hardwareMap.get(ServoImplEx.class, "depositClaw");
 
         // Motor Directions
         HardwareDevices.leftFront.setDirection(DcMotorEx.Direction.REVERSE);
@@ -168,7 +166,6 @@ public class Robot {
                 return false;
             }
         }
-
         return true;
     }
 
