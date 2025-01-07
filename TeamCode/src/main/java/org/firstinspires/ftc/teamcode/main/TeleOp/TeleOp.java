@@ -71,7 +71,7 @@ public class TeleOp extends LinearOpMode {
                 depositMagnetPressed = false;
             }
 
-            if (Robot.HardwareDevices.intakeMagnetL.isPressed()) {
+/*            if (Robot.HardwareDevices.intakeMagnetL.isPressed()) {
                 if (!intakeMagnetLPressed) {
                     Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                     Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -91,7 +91,7 @@ public class TeleOp extends LinearOpMode {
                 }
             } else {
                 intakeMagnetRPressed = false;
-            }
+            }*/
 
 
             //region Safety

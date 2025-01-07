@@ -55,7 +55,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
         intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         intakeSlideL.setPower(-IntakeSlide.IntakeSlidePower.move);
         intakeSlideR.setPower(-IntakeSlide.IntakeSlidePower.move);
-        while (!Robot.HardwareDevices.intakeMagnetL.isPressed() && !Robot.HardwareDevices.intakeMagnetR.isPressed());
+        //while (!Robot.HardwareDevices.intakeMagnetL.isPressed() && !Robot.HardwareDevices.intakeMagnetR.isPressed());
         intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
         intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
         intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
