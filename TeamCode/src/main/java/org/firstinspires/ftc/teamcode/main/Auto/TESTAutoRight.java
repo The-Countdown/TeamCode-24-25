@@ -30,13 +30,13 @@ public class TESTAutoRight extends LinearOpMode {
                 .afterTime(0.01, new OuttakePreloadEsc())
                 .afterTime(0.75, new InstantAction(() -> Robot.rb.depositSlide.move(190)))
                 .afterDisp(40, new IntakeEsc())
-                .strafeTo(new Vector2d(56, -2))
+                .strafeTo(new Vector2d(56, 2))
                 .stopAndAdd(new OuttakeClip())
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.elbow.down()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.wrist.autoRight()))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(49, -2, Math.toRadians(180)))
+        TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(49, 2, Math.toRadians(180)))
                 .afterTime(0.75, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
                 .afterDisp(15, new OuttakeSpecimenAlt())
                 .splineToLinearHeading(new Pose2d(15.1, -47, Math.toRadians(320)), Math.toRadians(320))
@@ -101,14 +101,14 @@ public class TESTAutoRight extends LinearOpMode {
 
         TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -63, Math.toRadians(175)))
                 .setReversed(true)
-                .strafeToConstantHeading(new Vector2d(35, -14))
+                .strafeToConstantHeading(new Vector2d(35, 0))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
-                .strafeToConstantHeading(new Vector2d(49, -14))
+                .strafeToConstantHeading(new Vector2d(49, 0))
                 .stopAndAdd(new OuttakeClip())
                 .waitSeconds(0.15)
                 .endTrajectory();
 
-        TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(49, -14, Math.toRadians(175)))
+        TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(49, 0, Math.toRadians(175)))
                 .stopAndAdd(new OuttakeSpecimen())
                 .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(175))
                 .splineToConstantHeading(new Vector2d(2.5, -60), Math.toRadians(175))
@@ -116,9 +116,9 @@ public class TESTAutoRight extends LinearOpMode {
 
         TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -60, Math.toRadians(175)))
                 .setReversed(true)
-                .strafeToConstantHeading(new Vector2d(35, 8))
+                .strafeToConstantHeading(new Vector2d(35, -2))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
-                .strafeToConstantHeading(new Vector2d(49, 8))
+                .strafeToConstantHeading(new Vector2d(49, -2))
                 .stopAndAdd(new OuttakeClip())
                 .endTrajectory();
 
@@ -129,7 +129,7 @@ public class TESTAutoRight extends LinearOpMode {
 //                .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
 //                .endTrajectory();
 
-        TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(49, 8, Math.toRadians(175)))
+        TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(49, -2, Math.toRadians(175)))
                 .stopAndAdd(new OuttakeSpecimen())
                 .splineToConstantHeading(new Vector2d(15, -60), Math.toRadians(175))
                 .splineToConstantHeading(new Vector2d(2.5, -60), Math.toRadians(175))
@@ -137,9 +137,9 @@ public class TESTAutoRight extends LinearOpMode {
 
         TrajectoryActionBuilder clip4 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -60, Math.toRadians(175)))
                 .setReversed(true)
-                .strafeToConstantHeading(new Vector2d(35, -7))
+                .strafeToConstantHeading(new Vector2d(35, -4))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
-                .strafeToConstantHeading(new Vector2d(49, -7))
+                .strafeToConstantHeading(new Vector2d(49, -4))
                 .stopAndAdd(new OuttakeClip())
                 .endTrajectory();
 
