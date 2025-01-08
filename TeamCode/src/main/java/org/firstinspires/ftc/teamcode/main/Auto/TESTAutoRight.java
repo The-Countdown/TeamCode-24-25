@@ -30,7 +30,7 @@ public class TESTAutoRight extends LinearOpMode {
                 .afterTime(0.01, new OuttakePreloadEsc())
                 .afterTime(0.75, new InstantAction(() -> Robot.rb.depositSlide.move(190)))
                 .afterDisp(40, new IntakeEsc())
-                .strafeTo(new Vector2d(56, 2))
+                .strafeTo(new Vector2d(50, -2))
                 .stopAndAdd(new OuttakeClip())
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.elbow.down()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.wrist.autoRight()))
@@ -39,7 +39,7 @@ public class TESTAutoRight extends LinearOpMode {
         TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(49, 2, Math.toRadians(180)))
                 .afterTime(0.75, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
                 .afterDisp(15, new OuttakeSpecimenAlt())
-                .splineToLinearHeading(new Pose2d(15.1, -47, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(15, -45, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -62,7 +62,8 @@ public class TESTAutoRight extends LinearOpMode {
                 .waitSeconds(0.15)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.up()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intakeSlide.moveTo(300)))
-                .waitSeconds(0.1)
+//                .waitSeconds(0.1)
+                .waitSeconds(0.6)
                 .endTrajectory();
 
         TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19.6, -63, Math.toRadians(320)))
@@ -192,8 +193,7 @@ public class TESTAutoRight extends LinearOpMode {
                 new InstantAction(() -> Robot.rb.depositSlide.move(190)),
                 new InstantAction(() -> Robot.rb.outtake.arm.upLift()),
                 new SleepAction(0.15),
-                clip4.build(),
-                new SleepAction(999999999)
+                clip4.build()
         ));
     }
 }
