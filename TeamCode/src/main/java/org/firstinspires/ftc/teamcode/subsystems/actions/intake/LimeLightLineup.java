@@ -25,7 +25,7 @@ public class LimeLightLineup implements Action {
         while (trag == null) {
             trag = robot.limeLight.goToLimelightPos(0.1, 0.1, 2.5);
             cycles += 1;
-            if (cycles >= 100000000) {
+            if (cycles >= 50000000) {
                 return false;
             }
         }
