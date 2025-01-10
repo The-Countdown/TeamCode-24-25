@@ -30,16 +30,16 @@ public class TESTAutoRight extends LinearOpMode {
                 .afterTime(0.01, new OuttakePreloadEsc())
                 .afterTime(0.75, new InstantAction(() -> Robot.rb.depositSlide.move(190)))
                 .afterDisp(40, new IntakeEsc())
-                .strafeTo(new Vector2d(51, -2))
+                .strafeTo(new Vector2d(52, -2))
                 .stopAndAdd(new OuttakeClip())
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.elbow.down()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.wrist.autoRight()))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(50, -2, Math.toRadians(180)))
+        TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(52, -2, Math.toRadians(180)))
                 .afterTime(0.75, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
                 .afterDisp(15, new OuttakeSpecimenAlt())
-                .splineToLinearHeading(new Pose2d(16, -49, Math.toRadians(320)), Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(15, -50, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -49,12 +49,12 @@ public class TESTAutoRight extends LinearOpMode {
                 .waitSeconds(0.1)
                 .endTrajectory();
 
-        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(19.6, -49, Math.toRadians(320)))
-                .splineToLinearHeading(new Pose2d(19.5, -49, Math.toRadians(225)), Math.toRadians(225))
+        TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(19.6, -50, Math.toRadians(320)))
+                .splineToLinearHeading(new Pose2d(19.5, -50, Math.toRadians(225)), Math.toRadians(225))
                 .endTrajectory();
 
-        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(19.5, -49, Math.toRadians(225)))
-                .splineToLinearHeading(new Pose2d(16, -63, Math.toRadians(320)), Math.toRadians(320))
+        TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(19.5, -50, Math.toRadians(225)))
+                .splineToLinearHeading(new Pose2d(15, -63, Math.toRadians(320)), Math.toRadians(320))
                 .stopAndAdd(new LimeLightLineup(robot))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
@@ -62,7 +62,7 @@ public class TESTAutoRight extends LinearOpMode {
                 .waitSeconds(0.15)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.up()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intakeSlide.moveTo(300)))
-                .waitSeconds(0.3)
+                .waitSeconds(0.4)
                 .endTrajectory();
 
         TrajectoryActionBuilder drop2 = robot.roadRunner.actionBuilder(new Pose2d(19.6, -63, Math.toRadians(320)))
@@ -96,10 +96,10 @@ public class TESTAutoRight extends LinearOpMode {
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))
                 .waitSeconds(0.15)
-                .strafeToConstantHeading(new Vector2d(2.5, -63))
+                .strafeToConstantHeading(new Vector2d(3.25, -63))
                 .endTrajectory();
 
-        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -63, Math.toRadians(175)))
+        TrajectoryActionBuilder clip2 = robot.roadRunner.actionBuilder(new Pose2d(3.25, -63, Math.toRadians(175)))
                 .setReversed(true)
                 .strafeToConstantHeading(new Vector2d(35, 0))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
@@ -111,14 +111,14 @@ public class TESTAutoRight extends LinearOpMode {
         TrajectoryActionBuilder specimen2 = robot.roadRunner.actionBuilder(new Pose2d(49, 0, Math.toRadians(175)))
                 .stopAndAdd(new OuttakeSpecimen())
                 .splineToConstantHeading(new Vector2d(15, -55), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(2.5, -55), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(3, -55), Math.toRadians(180))
                 .endTrajectory();
 
-        TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -55, Math.toRadians(180)))
+        TrajectoryActionBuilder clip3 = robot.roadRunner.actionBuilder(new Pose2d(3, -55, Math.toRadians(180)))
                 .setReversed(true)
-                .strafeToConstantHeading(new Vector2d(35, 10))
+                .strafeToConstantHeading(new Vector2d(35, 7))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
-                .strafeToConstantHeading(new Vector2d(49, 10))
+                .strafeToConstantHeading(new Vector2d(49, 7))
                 .stopAndAdd(new OuttakeClip())
                 .endTrajectory();
 
@@ -132,14 +132,14 @@ public class TESTAutoRight extends LinearOpMode {
         TrajectoryActionBuilder specimen3 = robot.roadRunner.actionBuilder(new Pose2d(49, 10, Math.toRadians(180)))
                 .stopAndAdd(new OuttakeSpecimen())
                 .splineToConstantHeading(new Vector2d(15, -55), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(2.5, -55), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(3, -55), Math.toRadians(180))
                 .endTrajectory();
 
-        TrajectoryActionBuilder clip4 = robot.roadRunner.actionBuilder(new Pose2d(2.5, -55, Math.toRadians(180)))
+        TrajectoryActionBuilder clip4 = robot.roadRunner.actionBuilder(new Pose2d(3, -55, Math.toRadians(180)))
                 .setReversed(true)
-                .strafeToConstantHeading(new Vector2d(35, 12))
+                .strafeToConstantHeading(new Vector2d(35, 10))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.wrist.horizontalFlip()))
-                .strafeToConstantHeading(new Vector2d(49, 12))
+                .strafeToConstantHeading(new Vector2d(49, 10))
                 .stopAndAdd(new OuttakeClip())
                 .endTrajectory();
 
@@ -150,7 +150,7 @@ public class TESTAutoRight extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
+                new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0.125),
                 clip1.build(),
                 new SleepAction(0.15),
                 new InstantAction(() -> MecanumDrive.PARAMS.timeout = 0),
@@ -180,7 +180,7 @@ public class TESTAutoRight extends LinearOpMode {
                 clip2.build(),
                 specimen2.build(),
                 new InstantAction(() -> Robot.rb.outtake.hand.close()),
-                new SleepAction(0.15),
+                new SleepAction(0.2),
                 new InstantAction(() -> Robot.rb.depositSlide.move(190)),
                 new InstantAction(() -> Robot.rb.outtake.arm.upLift()),
                 new SleepAction(0.15),
