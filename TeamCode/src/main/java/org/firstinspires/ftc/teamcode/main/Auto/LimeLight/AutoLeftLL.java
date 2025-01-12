@@ -22,7 +22,7 @@ public class AutoLeftLL extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this, new Pose2d(0, 57.11, Math.toRadians(0)));
-        robot.limeLight.limeLightInit(0,100);
+        robot.limeLight.limeLightInit(0,30);
 
         TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(robot.beginPose)
                 .stopAndAdd(new InstantAction(() -> robot.intake.restEsc()))

@@ -35,8 +35,12 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                 robot.intake.restEsc();
             }
 
-            if (gamepad2.dpad_right) {
-                robot.intakeSlide.magRetract();
+//            if (gamepad2.dpad_right) {
+//                robot.intakeSlide.magRetract();
+//            }
+
+            if (gamepad2.dpad_up) {
+                robot.intake.elbow.up();
             }
 
             if (gamepad2.share) {

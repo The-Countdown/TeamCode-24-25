@@ -24,7 +24,7 @@ public class LimeLightTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this, new Pose2d(0, 57.11, Math.toRadians(0)));
-        robot.limeLight.limeLightInit(2,100);
+        robot.limeLight.limeLightInit(2,30);
         robot.intake.arm.up();
 
         waitForStart();

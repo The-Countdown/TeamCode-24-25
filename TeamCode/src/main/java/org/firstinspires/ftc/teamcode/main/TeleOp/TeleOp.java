@@ -19,7 +19,7 @@ import java.util.Locale;
 @Config
 public class TeleOp extends LinearOpMode {
     public static double yStickLMulti = 0.4;
-    public static double xStickLMulti = 0.6;
+    public static double xStickLMulti = 0.75;
     public static double xStickRMulti = 0.3;
     public static boolean depositMagnetPressed = false;
     public static boolean intakeMagnetLPressed = false;

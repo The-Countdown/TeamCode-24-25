@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimenAlt;
 
 @Autonomous(group = "Auto")
-public class TESTAutoRight extends LinearOpMode {
+public class RTESTAutoRight extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -145,7 +145,7 @@ public class TESTAutoRight extends LinearOpMode {
 
         robot.intake.rest();
         robot.outtake.rest();
-        robot.limeLight.limeLightInit(2,100);
+        robot.limeLight.limeLightInit(2,30);
 
         waitForStart();
 

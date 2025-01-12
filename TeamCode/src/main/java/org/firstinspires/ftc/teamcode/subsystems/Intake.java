@@ -13,7 +13,7 @@ public class Intake extends Robot.HardwareDevices {
     public static class IntakePosition {
         // Arm positions
         public static double armUp = 0.66;
-        public static double armDown = 0.59;
+        public static double armDown = 0.57;
         public static double armRest = 0.1;
         public static double armTransfer = 0.91;
 
