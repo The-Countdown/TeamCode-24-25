@@ -1,10 +1,18 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.roadrunner.AccelConstraint;
+import com.acmerobotics.roadrunner.Arclength;
+import com.acmerobotics.roadrunner.MinMax;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Pose2dDual;
+import com.acmerobotics.roadrunner.PosePath;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.VelConstraint;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
@@ -51,7 +59,18 @@ public class Drive extends Robot.HardwareDevices {
 //        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
 //                .splineToLinearHeading(targetPose, outAngle); //TODO: Change depending on usage
         TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)
-                .strafeTo(targetVector); //TODO: Change depending on usage
+                .strafeTo(targetVector, new VelConstraint() {
+                    @Override
+                    public double maxRobotVel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                        return 20;
+                    }
+                }, new AccelConstraint() {
+                    @NonNull
+                    @Override
+                    public MinMax minMaxProfileAccel(@NonNull Pose2dDual<Arclength> pose2dDual, @NonNull PosePath posePath, double v) {
+                        return new MinMax(-20, 20);
+                    }
+                }); //TODO: Change depending on usage
 
         newPose = new Pose2d(targetVector, outAngle);
         robot.roadRunner.updatePoseEstimate();

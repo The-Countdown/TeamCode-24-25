@@ -38,7 +38,7 @@ public class LimeLight extends Robot.HardwareDevices {
 //            robot.telemetry.addData("tx: ", currentTx);
 //            robot.telemetry.addData("ty: ", currentTx);
 
-            double height = 5.8; // height of the camera in inches
+            double height = 6.3; // height of the camera in inches
             double errorx = currentTx - targetTx;
             double moveAmountX = errorx;
             double errory = currentTy - targetTy;
@@ -99,11 +99,11 @@ public class LimeLight extends Robot.HardwareDevices {
             limeLightData = fetchLimelightData();
         } catch (Exception e) {
             robot.opMode.telemetry.addData("Error", e.getMessage());
-            robot.opMode.telemetry.update();
             return 0;
         }
 
         if (limeLightData.equals("")) {
+            robot.opMode.telemetry.addData("Error", "No data received from Limelight");
             return 0;
         }
 
@@ -114,23 +114,43 @@ public class LimeLight extends Robot.HardwareDevices {
             results = gson.fromJson(limeLightData, LimeLightResults.class);
         } catch (Exception e) {
             robot.opMode.telemetry.addData("Error", e.getMessage());
-            robot.opMode.telemetry.update();
             return 0;
         }
 
         if (results.Retro.length == 0) {
+            robot.opMode.telemetry.addData("Error", "No Retro data received from Limelight");
             return 0;
         }
 
-        if (results.Retro[0].pts.length > 5) {
-            return 0;
-        }
+//        if (results.Retro[0].pts.length > 5) {
+//            robot.opMode.telemetry.addData("Error", "Too many points received from Limelight");
+//            return 0;
+//        }
+//
+//        double[][] pts = results.Retro[0].pts;
+//
+//        // find a rectangle of the maximum area
+//        double maxArea = 0;
+//        int maxIndex = 0;
+//
+//        for (int i = 0; i < pts.length; i++) {
+//            double[] pt1 = pts[i];
+//            double[] pt2 = pts[(i + 1) % pts.length];
+//            double[] pt3 = pts[(i + 2) % pts.length];
+//
+//            double area = Math.abs((pt1[0] * (pt2[1] - pt3[1]) + pt2[0] * (pt3[1] - pt1[1]) + pt3[0] * (pt1[1] - pt2[1])) / 2);
+//            if (area > maxArea) {
+//                maxArea = area;
+//                maxIndex = i;
+//            }
+//        }
 
         double[][] pts = results.Retro[0].pts;
 
-        // find a rectangle of the maximum area
+// find a rectangle of the maximum area with the long side approximately 2.57 times the short side
         double maxArea = 0;
         int maxIndex = 0;
+        double bestRatioDiff = Double.MAX_VALUE;
 
         for (int i = 0; i < pts.length; i++) {
             double[] pt1 = pts[i];
@@ -138,9 +158,21 @@ public class LimeLight extends Robot.HardwareDevices {
             double[] pt3 = pts[(i + 2) % pts.length];
 
             double area = Math.abs((pt1[0] * (pt2[1] - pt3[1]) + pt2[0] * (pt3[1] - pt1[1]) + pt3[0] * (pt1[1] - pt2[1])) / 2);
-            if (area > maxArea) {
+            double[] side1 = {pt2[0] - pt1[0], pt2[1] - pt1[1]};
+            double[] side2 = {pt3[0] - pt2[0], pt3[1] - pt2[1]};
+
+            double length1 = Math.sqrt(side1[0] * side1[0] + side1[1] * side1[1]);
+            double length2 = Math.sqrt(side2[0] * side2[0] + side2[1] * side2[1]);
+
+            double longSide = Math.max(length1, length2);
+            double shortSide = Math.min(length1, length2);
+            double ratio = longSide / shortSide;
+            double ratioDiff = Math.abs(ratio - 2.57);
+
+            if (area > maxArea && ratioDiff < bestRatioDiff) {
                 maxArea = area;
                 maxIndex = i;
+                bestRatioDiff = ratioDiff;
             }
         }
 
@@ -161,18 +193,26 @@ public class LimeLight extends Robot.HardwareDevices {
         // Calculate the angle of the longer side relative to the x-axis (camera)
         double angle = Math.atan2(side1[1], side1[0]);
 
-        robot.opMode.telemetry.addData("Angle", Math.toDegrees(angle));
-        robot.opMode.telemetry.addData("Area", maxArea);
-        robot.opMode.telemetry.addData("Side 1 Length", Math.sqrt(side1[0] * side1[0] + side1[1] * side1[1]));
-        robot.opMode.telemetry.addData("Side 2 Length", Math.sqrt(side2[0] * side2[0] + side2[1] * side2[1]));
-        robot.opMode.telemetry.addData("Servo", Robot.HardwareDevices.intakeClawAngle.getPosition());
 
-        double degrees = Math.toDegrees(angle);
+        angle = Math.toDegrees(angle);
 
-        if (degrees < 90 && degrees > -90) {
-            return 180 - Math.abs(degrees);
+        if (angle < 0)
+        {
+            angle += 180;
         }
-        return degrees;
+
+        if (angle > 90)
+        {
+            angle = 180 - angle;
+            angle *= -1;
+        }
+
+        angle += 90;
+
+        angle = 180 - angle;
+
+        robot.opMode.telemetry.addData("Raw Angle", angle);
+        return angle;
     }
 
     private class LimeLightResults {
