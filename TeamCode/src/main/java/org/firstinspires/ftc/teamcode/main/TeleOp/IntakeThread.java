@@ -57,18 +57,18 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
                 robot.depositSlide.actTwo();
             }
 
-            boolean isRightBumperPressed = gamepad2.right_bumper;
-
-            if (isRightBumperPressed && !wasRightBumperPressed) {
-                toggleStateRB = !toggleStateRB;
-
-                if (toggleStateRB) {
-                    robot.intake.hand.close();
-                } else {
-                    robot.intake.hand.open();
-                }
-            }
-            wasRightBumperPressed = isRightBumperPressed;
+//            boolean isRightBumperPressed = gamepad2.right_bumper;
+//
+//            if (isRightBumperPressed && !wasRightBumperPressed) {
+//                toggleStateRB = !toggleStateRB;
+//
+//                if (toggleStateRB) {
+//                    robot.intake.hand.close();
+//                } else {
+//                    robot.intake.hand.open();
+//                }
+//            }
+//            wasRightBumperPressed = isRightBumperPressed;
 
             boolean isRightTriggerPressed = gamepad2.right_trigger > 0.1;
 

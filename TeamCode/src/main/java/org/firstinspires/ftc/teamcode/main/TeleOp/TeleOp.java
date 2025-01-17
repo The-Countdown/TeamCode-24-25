@@ -50,9 +50,10 @@ public class TeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-//        LimeLightThread limeLightThread = new LimeLightThread(this, robot);
-//        Thread limeLight = new Thread(limeLightThread);
-//        limeLight.start();
+        robot.limeLight.limeLightInit(0,100);
+        LimeLightThread limeLightThread = new LimeLightThread(this, robot);
+        Thread limeLight = new Thread(limeLightThread);
+        limeLight.start();
 
         while (opModeIsActive()) {
             Calendar calendar = Calendar.getInstance();

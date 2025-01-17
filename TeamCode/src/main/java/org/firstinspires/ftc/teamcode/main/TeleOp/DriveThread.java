@@ -34,6 +34,10 @@ public class DriveThread extends Robot.HardwareDevices implements Runnable {
         YawPitchRollAngles robotOrientation;
 
         while (opMode.opModeIsActive()) {
+            if (gamepad1.options) robot.driveAvailable = true;
+
+            if (!robot.driveAvailable) continue;
+
             robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
             double imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
             if (imuYaw < 0) {

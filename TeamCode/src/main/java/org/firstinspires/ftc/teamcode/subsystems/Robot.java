@@ -22,6 +22,7 @@ public class Robot {
     public static Robot rb;
     public static final double servoToDegrees = 24.193548;
     public static boolean hasResetEncoders = false;
+    public boolean driveAvailable = true;
     public Pose2d beginPose;
     public MecanumDrive roadRunner;
     HardwareMap hardwareMap;
