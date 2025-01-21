@@ -47,7 +47,7 @@ public class LimeLight extends Robot.HardwareDevices {
             double yDistance = height * Math.tan(Math.toRadians(errorx));
             robot.telemetry.addData("Moving to x:", moveAmountX);
             robot.telemetry.addData("Moving to y:", moveAmountY);
-            return robot.drive.moveAmount((xDistance * 1.4) /*+ 3.1*/, -(yDistance * 1.4), 0);
+            return robot.drive.moveAmount(0 /*(xDistance * 1.4)*/ /*+ 3.1*/, -(yDistance * 1.4), 0); // times 0 because I want to remove the forward back movement
 //            try {
 //                Thread.sleep(10000);
 //            } catch (InterruptedException e) {
@@ -122,32 +122,9 @@ public class LimeLight extends Robot.HardwareDevices {
             return 0;
         }
 
-//        if (results.Retro[0].pts.length > 5) {
-//            robot.opMode.telemetry.addData("Error", "Too many points received from Limelight");
-//            return 0;
-//        }
-//
-//        double[][] pts = results.Retro[0].pts;
-//
-//        // find a rectangle of the maximum area
-//        double maxArea = 0;
-//        int maxIndex = 0;
-//
-//        for (int i = 0; i < pts.length; i++) {
-//            double[] pt1 = pts[i];
-//            double[] pt2 = pts[(i + 1) % pts.length];
-//            double[] pt3 = pts[(i + 2) % pts.length];
-//
-//            double area = Math.abs((pt1[0] * (pt2[1] - pt3[1]) + pt2[0] * (pt3[1] - pt1[1]) + pt3[0] * (pt1[1] - pt2[1])) / 2);
-//            if (area > maxArea) {
-//                maxArea = area;
-//                maxIndex = i;
-//            }
-//        }
-
         double[][] pts = results.Retro[0].pts;
 
-// find a rectangle of the maximum area with the long side approximately 2.57 times the short side
+        // find a rectangle of the maximum area with the long side approximately 2.57 times the short side
         double maxArea = 0;
         int maxIndex = 0;
         double bestRatioDiff = Double.MAX_VALUE;

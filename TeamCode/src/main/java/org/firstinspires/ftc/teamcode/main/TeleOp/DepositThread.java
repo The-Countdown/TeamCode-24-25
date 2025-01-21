@@ -24,6 +24,8 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
     @Override
     public void run() {
         while (opMode.opModeIsActive()) {
+            if (!robot.driveAvailable) continue;
+
             if (gamepad2.circle) {
                 robot.depositSlide.condensedMilk();
             }

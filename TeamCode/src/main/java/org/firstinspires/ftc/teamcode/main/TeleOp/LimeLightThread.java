@@ -59,18 +59,38 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
     }
 
     void pickUp() {
-        robot.intake.wrist.horizontal();
 
-        if (!robot.safeSleep(100)) {
-            return;
+        if (Robot.HardwareDevices.intakeClawAngle.getPosition() < 0.85) {
+            robot.intake.wrist.horizontal();
+            if (!robot.safeSleep(300)) {
+                return;
+            }
         }
 
         double orientation = 0;
-        orientation = Math.abs(robot.limeLight.getBlockOrientation());
+        orientation = robot.limeLight.getBlockOrientation();
 
         if (orientation != 0) {
             orientation /= 355;
             opMode.telemetry.addData("target servo position", Intake.IntakePosition.wristHorizontal - orientation);
+
+            double height = 6.3; // height of the camera in inches
+            double moveAmountY = robot.limeLight.getLimeLightResult().getTy();
+            double yDistance = height * Math.tan(Math.toRadians(moveAmountY));
+
+            int target = (int)(Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + 100 + (yDistance*90));
+
+
+            if (target > IntakeSlide.IntakeSlidePosition.maximum) {
+                target = IntakeSlide.IntakeSlidePosition.maximum;
+            }
+
+            if (target < IntakeSlide.IntakeSlidePosition.minimum) {
+                target = IntakeSlide.IntakeSlidePosition.minimum;
+            }
+
+            robot.intakeSlide.moveTo(target);
+
             robot.roadRunner.updatePoseEstimate();
             Actions.runBlocking(new SequentialAction(
                     robot.limeLight.goToLimelightPos(0, -10, 2.5).build()
@@ -80,10 +100,15 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
             if (!robot.safeSleep(300)) {
                 return;
             }
-            robot.intake.arm.down();
-            if (!robot.safeSleep(300)) {
-                return;
+
+            while (Robot.HardwareDevices.intakePitchL.getPosition() > Intake.IntakePosition.armDown) {
+                Robot.HardwareDevices.intakePitchL.setPosition(Robot.HardwareDevices.intakePitchL.getPosition() - 0.01);
+                Robot.HardwareDevices.intakePitchR.setPosition(Robot.HardwareDevices.intakePitchR.getPosition() - 0.01);
+                if (!robot.safeSleep(5)) {
+                    return;
+                }
             }
+
             robot.intake.hand.close();
             if (!robot.safeSleep(300)) {
                 return;

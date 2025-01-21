@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.ftc.Actions;
 
 public class Intake extends Robot.HardwareDevices {
     private Robot robot;
@@ -144,6 +146,22 @@ public class Intake extends Robot.HardwareDevices {
     public void restEsc() {
         robot.intake.arm.up();
         robot.intake.elbow.up();
+    }
+
+    public void lineUp() {
+        robot.intake.wrist.horizontal();
+
+        if (!robot.safeSleep(100)) {
+            return;
+        }
+
+        double orientation = 0;
+        orientation = robot.limeLight.getBlockOrientation();
+
+        if (orientation != 0) {
+            orientation /= 355;
+            Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristHorizontal - orientation);
+        }
     }
 
     public Arm arm = new Arm();

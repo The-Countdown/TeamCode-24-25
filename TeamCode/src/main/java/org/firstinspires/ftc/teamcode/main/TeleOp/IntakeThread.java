@@ -31,6 +31,8 @@ public class IntakeThread extends Robot.HardwareDevices implements Runnable {
         boolean toggleStateLT = false;
 
         while (opMode.opModeIsActive()) {
+            if (!robot.driveAvailable) continue;
+
             if (gamepad2.left_bumper) {
                 robot.intake.restEsc();
             }

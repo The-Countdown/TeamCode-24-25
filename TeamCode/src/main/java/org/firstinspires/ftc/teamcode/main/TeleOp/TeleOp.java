@@ -56,6 +56,8 @@ public class TeleOp extends LinearOpMode {
         limeLight.start();
 
         while (opModeIsActive()) {
+            if (gamepad1.options || gamepad2.options) robot.driveAvailable = true;
+
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MINUTE, -2);
             calendar.add(Calendar.SECOND, -15);
@@ -150,6 +152,13 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
             telemetry.addLine();
             telemetry.addData("Magnitude", DriveThread.magnitudeL);
+
+            double height = 6.3; // height of the camera in inches
+            double moveAmountY = robot.limeLight.getLimeLightResult().getTy();
+            double yDistance = height * Math.tan(Math.toRadians(moveAmountY));
+            telemetry.addData("move amount", (yDistance*90));
+            telemetry.addData("move target", (int)(Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + (yDistance*90)));
+
             telemetry.update();
             //endregion
         }
