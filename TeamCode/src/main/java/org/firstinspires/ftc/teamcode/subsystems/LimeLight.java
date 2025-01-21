@@ -35,8 +35,6 @@ public class LimeLight extends Robot.HardwareDevices {
         if (result != null && result.isValid()) {
             double currentTx = result.getTx();
             double currentTy = result.getTy();
-//            robot.telemetry.addData("tx: ", currentTx);
-//            robot.telemetry.addData("ty: ", currentTx);
 
             double height = 6.3; // height of the camera in inches
             double errorx = currentTx - targetTx;
@@ -47,12 +45,7 @@ public class LimeLight extends Robot.HardwareDevices {
             double yDistance = height * Math.tan(Math.toRadians(errorx));
             robot.telemetry.addData("Moving to x:", moveAmountX);
             robot.telemetry.addData("Moving to y:", moveAmountY);
-            return robot.drive.moveAmount(0 /*(xDistance * 1.4)*/ /*+ 3.1*/, -(yDistance * 1.4), 0); // times 0 because I want to remove the forward back movement
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
+            return robot.drive.moveAmount(0 ,-(yDistance * 1.4), 0);
         } else {
             return null;
         }
@@ -125,7 +118,6 @@ public class LimeLight extends Robot.HardwareDevices {
         double[][] pts = results.Retro[0].pts;
 
         // find a rectangle of the maximum area with the long side approximately 2.57 times the short side
-        double maxArea = 0;
         int maxIndex = 0;
         double bestRatioDiff = Double.MAX_VALUE;
 
@@ -134,7 +126,6 @@ public class LimeLight extends Robot.HardwareDevices {
             double[] pt2 = pts[(i + 1) % pts.length];
             double[] pt3 = pts[(i + 2) % pts.length];
 
-            double area = Math.abs((pt1[0] * (pt2[1] - pt3[1]) + pt2[0] * (pt3[1] - pt1[1]) + pt3[0] * (pt1[1] - pt2[1])) / 2);
             double[] side1 = {pt2[0] - pt1[0], pt2[1] - pt1[1]};
             double[] side2 = {pt3[0] - pt2[0], pt3[1] - pt2[1]};
 
@@ -146,8 +137,7 @@ public class LimeLight extends Robot.HardwareDevices {
             double ratio = longSide / shortSide;
             double ratioDiff = Math.abs(ratio - 2.57);
 
-            if (area > maxArea && ratioDiff < bestRatioDiff) {
-                maxArea = area;
+            if (ratioDiff < bestRatioDiff) {
                 maxIndex = i;
                 bestRatioDiff = ratioDiff;
             }
@@ -160,16 +150,38 @@ public class LimeLight extends Robot.HardwareDevices {
         double[] side1 = {pt2[0] - pt1[0], pt2[1] - pt1[1]};
         double[] side2 = {pt3[0] - pt2[0], pt3[1] - pt2[1]};
 
+        double side1Length = Math.sqrt(side1[0] * side1[0] + side1[1] * side1[1]);
+        double side2Length = Math.sqrt(side2[0] * side2[0] + side2[1] * side2[1]);
+
+        boolean isSide1OutOfFrame = false;
+        boolean isSide2OutOfFrame = false;
+
+//        //if side1[0] or side2[0] is less than 1 or above 638 make it so that the side length is the other side but with the ratio
+//        if (side1[0] < 1 || side1[0] > 638 || side1[1] < 1 || side1[1] > 478) {
+//            isSide1OutOfFrame = true;
+//        }
+//        if (side2[0] < 1 || side2[0] > 638 || side2[1] < 1 || side2[1] > 478) {
+//            isSide2OutOfFrame = true;
+//        }
+//
+//        if (isSide1OutOfFrame && isSide2OutOfFrame) {
+//            robot.opMode.telemetry.addData("Error", "Both sides are out of frame");
+//            return 0;
+//        }
+//
+//        if (isSide1OutOfFrame) {
+//            side1Length = side2Length * 2.57;
+//        } else if (isSide2OutOfFrame) {
+//            side2Length = side1Length * 2.57;
+//        }
+
         // Ensure side1 is the longer side
-        if (Math.sqrt(side1[0] * side1[0] + side1[1] * side1[1]) < Math.sqrt(side2[0] * side2[0] + side2[1] * side2[1])) {
-            double[] temp = side1;
+        if (side1Length < side2Length) {
             side1 = side2;
-            side2 = temp;
         }
 
         // Calculate the angle of the longer side relative to the x-axis (camera)
         double angle = Math.atan2(side1[1], side1[0]);
-
 
         angle = Math.toDegrees(angle);
 

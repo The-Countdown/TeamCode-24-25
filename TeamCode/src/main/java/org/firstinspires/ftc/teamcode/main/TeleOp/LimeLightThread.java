@@ -95,6 +95,12 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
             Actions.runBlocking(new SequentialAction(
                     robot.limeLight.goToLimelightPos(0, -10, 2.5).build()
             ));
+
+            double newOrientation = robot.limeLight.getBlockOrientation();
+            if (newOrientation != 0) {
+                orientation = newOrientation / 355;
+            }
+            
             Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristHorizontal - orientation);
             robot.intake.hand.open();
             if (!robot.safeSleep(300)) {
