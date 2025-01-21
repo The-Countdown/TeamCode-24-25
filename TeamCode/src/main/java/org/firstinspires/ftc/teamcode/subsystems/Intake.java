@@ -131,7 +131,7 @@ public class Intake extends Robot.HardwareDevices {
             Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.move);
             robot.intake.hand.halfOpen();
             robot.outtake.wrist.horizontal();
-            Thread.sleep(150);
+            Thread.sleep(300);
             robot.intake.hand.close();
             robot.intake.wrist.horizontalFlip();
             robot.outtake.hand.open();

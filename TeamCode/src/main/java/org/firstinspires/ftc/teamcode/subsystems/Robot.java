@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
@@ -55,6 +56,7 @@ public class Robot {
         public static Limelight3A limelight;
         public static IMU imu;
         public static RevColorSensorV3 flashLight;
+//        public static VoltageSensor voltageSensor;
     }
 
     public Robot(LinearOpMode opMode, Pose2d beginPose) {
@@ -69,6 +71,7 @@ public class Robot {
         //HardwareDevices.intakeMagnetL = hardwareMap.get(TouchSensor.class, "intakeLMagnet");
         //HardwareDevices.intakeMagnetR = hardwareMap.get(TouchSensor.class, "intakeRMagnet");
         HardwareDevices.flashLight = hardwareMap.get(RevColorSensorV3.class, "flashLight");
+//        HardwareDevices.voltageSensor = hardwareMap.get(VoltageSensor.class, "voltageSensor");
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

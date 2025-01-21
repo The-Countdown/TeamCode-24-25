@@ -123,6 +123,7 @@ public class TeleOp extends LinearOpMode {
             packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real) - 57.2958);
             packet.put("PoseX", robot.roadRunner.pose.position.x);
             packet.put("PoseY", robot.roadRunner.pose.position.y);
+//            packet.put("Voltage", Robot.HardwareDevices.voltageSensor.getVoltage());
             packet.put("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
             packet.put("Deposit Current (mA)", Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS));
             packet.put("IntakeL Height", Robot.HardwareDevices.intakeSlideL.getCurrentPosition());
