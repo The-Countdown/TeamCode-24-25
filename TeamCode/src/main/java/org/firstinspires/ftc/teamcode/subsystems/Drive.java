@@ -50,10 +50,6 @@ public class Drive extends Robot.HardwareDevices {
         double outY = currentPose.position.y + y;
         double outAngle = currentPose.heading.real + Math.toRadians(angle);
 
-//        Pose2d targetPose = new Pose2d(
-//                currentPose.position.x + x,
-//                currentPose.position.y + y,
-//                currentPose.heading.real + angle);
         Vector2d targetVector = new Vector2d(outX, outY);
 
 //        TrajectoryActionBuilder trajectory = robot.roadRunner.actionBuilder(currentPose)

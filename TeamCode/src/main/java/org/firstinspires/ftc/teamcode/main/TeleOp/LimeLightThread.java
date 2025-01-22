@@ -48,7 +48,11 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
 
                 if (toggleStateRB) {
                     robot.driveAvailable = false;
-                    pickUp();
+                    try {
+                        pickUp();
+                    } catch (Exception e) {
+                        opMode.telemetry.addData("Pick Up Error", e.getMessage());
+                    }
                     robot.driveAvailable = true;
                 } else {
                     robot.intake.hand.open();
@@ -74,27 +78,38 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
             orientation /= 355;
             opMode.telemetry.addData("target servo position", Intake.IntakePosition.wristHorizontal - orientation);
 
-            double height = 6.3; // height of the camera in inches
-            double moveAmountY = robot.limeLight.getLimeLightResult().getTy();
-            double yDistance = height * Math.tan(Math.toRadians(moveAmountY));
+            double yDistance;
+            double xDistance;
 
-            int target = (int)(Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + 100 + (yDistance*90));
+            do {
+                double height = 6.3; // height of the camera in inches
+                double moveAmountY = robot.limeLight.getLimeLightResult().getTy();
+                double moveAmountX = robot.limeLight.getLimeLightResult().getTx();
+                yDistance = height * Math.tan(Math.toRadians(moveAmountY));
+                xDistance = height * Math.tan(Math.toRadians(moveAmountX));
 
+                int target = (int) (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + 100 + (yDistance * 90));
 
-            if (target > IntakeSlide.IntakeSlidePosition.maximum) {
-                target = IntakeSlide.IntakeSlidePosition.maximum;
-            }
+                if (target > IntakeSlide.IntakeSlidePosition.maximum) {
+                    target = IntakeSlide.IntakeSlidePosition.maximum;
+                }
 
-            if (target < IntakeSlide.IntakeSlidePosition.minimum) {
-                target = IntakeSlide.IntakeSlidePosition.minimum;
-            }
+                if (target < IntakeSlide.IntakeSlidePosition.minimum) {
+                    target = IntakeSlide.IntakeSlidePosition.minimum;
+                }
 
-            robot.intakeSlide.moveTo(target);
+                robot.intakeSlide.moveTo(target);
 
-            robot.roadRunner.updatePoseEstimate();
-            Actions.runBlocking(new SequentialAction(
-                    robot.limeLight.goToLimelightPos(0, -10, 2.5).build()
-            ));
+                robot.roadRunner.updatePoseEstimate();
+                Actions.runBlocking(new SequentialAction(
+                        robot.limeLight.goToLimelightPos(0, -10, 2.5).build()
+                ));
+
+                opMode.telemetry.addData("y", yDistance * 1.4);
+                opMode.telemetry.addData("x", xDistance * 1.4);
+                opMode.telemetry.update();
+            } while (xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1.3
+                    && robot.limeLight.getLimeLightResult().isValid() && opMode.opModeIsActive() && !gamepad1.options && !gamepad2.options);
 
             double newOrientation = robot.limeLight.getBlockOrientation();
             if (newOrientation != 0) {
@@ -110,7 +125,7 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
             while (Robot.HardwareDevices.intakePitchL.getPosition() > Intake.IntakePosition.armDown) {
                 Robot.HardwareDevices.intakePitchL.setPosition(Robot.HardwareDevices.intakePitchL.getPosition() - 0.01);
                 Robot.HardwareDevices.intakePitchR.setPosition(Robot.HardwareDevices.intakePitchR.getPosition() - 0.01);
-                if (!robot.safeSleep(5)) {
+                if (!robot.safeSleep(10)) {
                     return;
                 }
             }

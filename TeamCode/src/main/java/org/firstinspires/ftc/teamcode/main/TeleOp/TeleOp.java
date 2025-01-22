@@ -122,7 +122,7 @@ public class TeleOp extends LinearOpMode {
             robot.roadRunner.updatePoseEstimate();
 
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.real) - 57.2958);
+            packet.put("Heading (deg)", Math.toDegrees(robot.roadRunner.pose.heading.toDouble()));
             packet.put("PoseX", robot.roadRunner.pose.position.x);
             packet.put("PoseY", robot.roadRunner.pose.position.y);
 //            packet.put("Voltage", Robot.HardwareDevices.voltageSensor.getVoltage());
@@ -136,7 +136,7 @@ public class TeleOp extends LinearOpMode {
             dashboard.sendTelemetryPacket(packet);
 
             telemetry.addData("Date and Time", currentDateTime);
-            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.real) - 57.2958);
+            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.toDouble()));
             telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
             telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
             telemetry.addLine();
@@ -159,7 +159,7 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("move amount", (yDistance*90));
             telemetry.addData("move target", (int)(Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + (yDistance*90)));
 
-            telemetry.update();
+            //telemetry.update();
             //endregion
         }
         Robot.hasResetEncoders = false;
