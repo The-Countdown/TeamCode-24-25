@@ -5,7 +5,9 @@ import android.util.JsonReader;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.google.gson.Gson;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
@@ -27,6 +29,12 @@ public class LimeLight extends Robot.HardwareDevices {
 
     public LLResult getLimeLightResult() {
         return limelight.getLatestResult();
+    }
+
+    public void limeLightInit(int pipeline, int pollRate) {
+        Robot.HardwareDevices.limelight.setPollRateHz(pollRate);
+        Robot.HardwareDevices.limelight.start();
+        Robot.HardwareDevices.limelight.pipelineSwitch(pipeline);  // Yellow = 0, Blue = 1, Red = 2, April = 3
     }
 
     public TrajectoryActionBuilder goToLimelightPos(double targetTx, double targetTy, double error) {
@@ -86,12 +94,6 @@ public class LimeLight extends Robot.HardwareDevices {
         connection.disconnect();
 
         return content.toString();
-    }
-
-    public void limeLightInit(int pipeline, int pollRate) {
-        Robot.HardwareDevices.limelight.setPollRateHz(pollRate);
-        Robot.HardwareDevices.limelight.start();
-        Robot.HardwareDevices.limelight.pipelineSwitch(pipeline);  // Yellow = 0, Blue = 1, Red = 2, April = 3
     }
 
     public double getBlockOrientation() {
@@ -210,6 +212,100 @@ public class LimeLight extends Robot.HardwareDevices {
 
         robot.opMode.telemetry.addData("Raw Angle", angle);
         return angle;
+    }
+
+    public void pickUp() {
+        if (Robot.HardwareDevices.intakeClawAngle.getPosition() < 0.85) {
+            robot.intake.wrist.horizontal();
+            if (!robot.safeSleep(300)) {
+                return;
+            }
+        }
+
+        double orientation = 0;
+        orientation = robot.limeLight.getBlockOrientation();
+
+        if (orientation != 0) {
+            orientation /= 355;
+            robot.opMode.telemetry.addData("target servo position", Intake.IntakePosition.wristHorizontal - orientation);
+
+            double yDistance;
+            double xDistance;
+
+            do {
+                double height = 6.3; // height of the camera in inches
+                double moveAmountY = robot.limeLight.getLimeLightResult().getTy();
+                double moveAmountX = robot.limeLight.getLimeLightResult().getTx();
+                yDistance = height * Math.tan(Math.toRadians(moveAmountY));
+                xDistance = height * Math.tan(Math.toRadians(moveAmountX));
+
+                int target = (int) (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + (yDistance * 90));
+
+                if (target > IntakeSlide.IntakeSlidePosition.maximum) {
+                    target = IntakeSlide.IntakeSlidePosition.maximum;
+                }
+
+                if (target < IntakeSlide.IntakeSlidePosition.minimum) {
+                    target = IntakeSlide.IntakeSlidePosition.minimum;
+                }
+
+                robot.intakeSlide.moveTo(target);
+
+                robot.roadRunner.updatePoseEstimate();
+                Actions.runBlocking(new SequentialAction(
+                        robot.limeLight.goToLimelightPos(0, -10, 2.5).build()
+                ));
+
+                robot.opMode.telemetry.addData("y", yDistance * 1.4);
+                robot.opMode.telemetry.addData("x", xDistance * 1.4);
+                robot.opMode.telemetry.update();
+            } while (xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1.3
+                    && robot.limeLight.getLimeLightResult().isValid() && robot.opMode.opModeIsActive() && !robot.opMode.gamepad1.options && !robot.opMode.gamepad2.options);
+
+            if (robot.opMode.gamepad1.options || robot.opMode.gamepad2.options) {
+                return;
+            }
+
+            int target = (int) (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + 180);
+
+            if (target > IntakeSlide.IntakeSlidePosition.maximum) {
+                target = IntakeSlide.IntakeSlidePosition.maximum;
+            }
+
+            if (target < IntakeSlide.IntakeSlidePosition.minimum) {
+                target = IntakeSlide.IntakeSlidePosition.minimum;
+            }
+
+            robot.intakeSlide.moveTo(target);
+
+            double newOrientation = robot.limeLight.getBlockOrientation();
+            if (newOrientation != 0) {
+                orientation = newOrientation / 355;
+            }
+
+            Robot.HardwareDevices.intakeClawAngle.setPosition(Intake.IntakePosition.wristHorizontal - orientation);
+            robot.intake.hand.open();
+            if (!robot.safeSleep(300)) {
+                return;
+            }
+
+            while (Robot.HardwareDevices.intakePitchL.getPosition() > Intake.IntakePosition.armDown) {
+                Robot.HardwareDevices.intakePitchL.setPosition(Robot.HardwareDevices.intakePitchL.getPosition() - 0.01);
+                Robot.HardwareDevices.intakePitchR.setPosition(Robot.HardwareDevices.intakePitchR.getPosition() - 0.01);
+                if (!robot.safeSleep(10)) {
+                    return;
+                }
+            }
+
+            robot.intake.hand.close();
+            if (!robot.safeSleep(300)) {
+                return;
+            }
+            robot.intake.arm.up();
+            robot.intake.wrist.horizontal();
+            //robot.intakeSlide.retract();
+        }
+        robot.opMode.telemetry.update();
     }
 
     private class LimeLightResults {
