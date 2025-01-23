@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.main.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -11,6 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+@Disabled
+
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpTesting")
 @Config
 public class TeleOpTesting extends LinearOpMode {

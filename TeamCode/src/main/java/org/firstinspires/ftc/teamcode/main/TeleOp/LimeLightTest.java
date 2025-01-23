@@ -4,12 +4,14 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@Disabled
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "LimeLight")
 @Config
 public class LimeLightTest extends LinearOpMode {

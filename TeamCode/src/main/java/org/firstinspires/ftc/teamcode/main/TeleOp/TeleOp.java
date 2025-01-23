@@ -135,7 +135,7 @@ public class TeleOp extends LinearOpMode {
             packet.put("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
             dashboard.sendTelemetryPacket(packet);
 
-            if (robot.driveAvailable && !robot.driveAvailable) {
+            if (robot.driveAvailable) {
                 telemetry.addData("Date and Time", currentDateTime);
                 telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.toDouble()));
                 telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
