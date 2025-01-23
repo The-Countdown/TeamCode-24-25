@@ -39,15 +39,21 @@ public class LimeLight extends Robot.HardwareDevices {
             double height = 6.3; // height of the camera in inches
             double errorx = currentTx - targetTx;
             double errory = currentTy - targetTy;
-            double xDistance = /*height * Math.tan(Math.toRadians(errory))*/ 0;
+            double xDistance = 0;
             double yDistance = height * Math.tan(Math.toRadians(errorx));
 
             double heading = robot.roadRunner.pose.heading.toDouble();
-            double x = xDistance * Math.cos(heading) - yDistance * Math.sin(heading);
-            double y = xDistance * Math.sin(heading) + yDistance * Math.cos(heading);
+            double x = (xDistance * Math.cos(heading)) - (yDistance * Math.sin(heading));
+            double y = (xDistance * Math.sin(heading)) + (yDistance * Math.cos(heading));
 
+            robot.opMode.telemetry.addData("currentTx", currentTx);
+            robot.opMode.telemetry.addData("currentTy", currentTy);
+            robot.opMode.telemetry.addData("yDistance", yDistance);
+            robot.opMode.telemetry.addData("x", x);
+            robot.opMode.telemetry.addData("y", y);
+            robot.opMode.telemetry.addData("heading", heading);
 
-            return robot.drive.moveAmount(x * 1.4 ,-(y * 1.4), 0);
+            return robot.drive.moveAmount(-(x * 1.4),-(y * 1.4), 0);
         } else {
             return null;
         }

@@ -135,31 +135,35 @@ public class TeleOp extends LinearOpMode {
             packet.put("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
             dashboard.sendTelemetryPacket(packet);
 
-            telemetry.addData("Date and Time", currentDateTime);
-            telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.toDouble()));
-            telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
-            telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
-            telemetry.addLine();
-            telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
-            telemetry.addData("Deposit Current (mA)", Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetry.addLine();
-            telemetry.addData("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
-            telemetry.addData("IntakeL Current (mA)", Robot.HardwareDevices.intakeSlideL.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetry.addLine();
-            telemetry.addData("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
-            telemetry.addData("IntakeR Current (mA)", Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS));
-            telemetry.addLine();
-            telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
-            telemetry.addLine();
-            telemetry.addData("Magnitude", DriveThread.magnitudeL);
+            if (robot.driveAvailable && !robot.driveAvailable) {
+                telemetry.addData("Date and Time", currentDateTime);
+                telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.toDouble()));
+                telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
+                telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));
+                telemetry.addLine();
+                telemetry.addData("Deposit Height", Robot.HardwareDevices.depositSlide.getCurrentPosition());
+                telemetry.addData("Deposit Current (mA)", Robot.HardwareDevices.depositSlide.getCurrent(CurrentUnit.MILLIAMPS));
+                telemetry.addLine();
+                telemetry.addData("IntakeL Height", (Robot.HardwareDevices.intakeSlideL.getCurrentPosition()));
+                telemetry.addData("IntakeL Current (mA)", Robot.HardwareDevices.intakeSlideL.getCurrent(CurrentUnit.MILLIAMPS));
+                telemetry.addLine();
+                telemetry.addData("IntakeR Height", (Robot.HardwareDevices.intakeSlideR.getCurrentPosition()));
+                telemetry.addData("IntakeR Current (mA)", Robot.HardwareDevices.intakeSlideR.getCurrent(CurrentUnit.MILLIAMPS));
+                telemetry.addLine();
+                telemetry.addData("Deposit Magnet", Robot.HardwareDevices.depositMagnet.isPressed());
+                telemetry.addLine();
+                telemetry.addData("Magnitude", DriveThread.magnitudeL);
 
-            double height = 6.3; // height of the camera in inches
-            double moveAmountY = robot.limeLight.getLimeLightResult().getTy();
-            double yDistance = height * Math.tan(Math.toRadians(moveAmountY));
-            telemetry.addData("move amount", (yDistance*90));
-            telemetry.addData("move target", (int)(Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + (yDistance*90)));
+                if (robot.limeLight.getLimeLightResult() != null && robot.limeLight.getLimeLightResult().isValid()) {
+                    double height = 6.3; // height of the camera in inches
+                    double moveAmountY = robot.limeLight.getLimeLightResult().getTy();
+                    double yDistance = height * Math.tan(Math.toRadians(moveAmountY));
+                    telemetry.addData("move amount", (yDistance*90));
+                    telemetry.addData("move target", (int)(Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + (yDistance*90)));
+                }
 
-            //telemetry.update();
+                telemetry.update();
+            }
             //endregion
         }
         Robot.hasResetEncoders = false;

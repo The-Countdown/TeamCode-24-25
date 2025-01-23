@@ -88,7 +88,7 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
                 yDistance = height * Math.tan(Math.toRadians(moveAmountY));
                 xDistance = height * Math.tan(Math.toRadians(moveAmountX));
 
-                int target = (int) (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + 100 + (yDistance * 90));
+                int target = (int) (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + (yDistance * 90));
 
                 if (target > IntakeSlide.IntakeSlidePosition.maximum) {
                     target = IntakeSlide.IntakeSlidePosition.maximum;
@@ -110,6 +110,22 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
                 opMode.telemetry.update();
             } while (xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1.3
                     && robot.limeLight.getLimeLightResult().isValid() && opMode.opModeIsActive() && !gamepad1.options && !gamepad2.options);
+
+            if (gamepad1.options || gamepad2.options) {
+                return;
+            }
+
+            int target = (int) (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() + 180);
+
+            if (target > IntakeSlide.IntakeSlidePosition.maximum) {
+                target = IntakeSlide.IntakeSlidePosition.maximum;
+            }
+
+            if (target < IntakeSlide.IntakeSlidePosition.minimum) {
+                target = IntakeSlide.IntakeSlidePosition.minimum;
+            }
+
+            robot.intakeSlide.moveTo(target);
 
             double newOrientation = robot.limeLight.getBlockOrientation();
             if (newOrientation != 0) {
@@ -136,7 +152,7 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
             }
             robot.intake.arm.up();
             robot.intake.wrist.horizontal();
-            robot.intakeSlide.retract();
+            //robot.intakeSlide.retract();
         }
         opMode.telemetry.update();
     }

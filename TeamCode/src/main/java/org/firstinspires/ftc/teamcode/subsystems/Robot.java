@@ -71,7 +71,7 @@ public class Robot {
         //HardwareDevices.intakeMagnetL = hardwareMap.get(TouchSensor.class, "intakeLMagnet");
         //HardwareDevices.intakeMagnetR = hardwareMap.get(TouchSensor.class, "intakeRMagnet");
         HardwareDevices.flashLight = hardwareMap.get(RevColorSensorV3.class, "flashLight");
-//        HardwareDevices.voltageSensor = hardwareMap.get(VoltageSensor.class, "voltageSensor");
+        //HardwareDevices.voltageSensor = hardwareMap.get(VoltageSensor.class, "voltageSensor");
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
