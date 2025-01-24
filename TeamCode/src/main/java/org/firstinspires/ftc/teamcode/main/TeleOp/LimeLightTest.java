@@ -7,6 +7,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +20,7 @@ public class LimeLightTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this);
-        robot.limeLight.limeLightInit(0,100);
+        robot.limeLight.limeLightInit(LimeLight.Pipelines.Yellow,100);
 
         waitForStart();
 

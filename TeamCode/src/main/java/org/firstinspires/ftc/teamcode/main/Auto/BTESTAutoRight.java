@@ -8,9 +8,11 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeEsc;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.LimeLightLineup;
@@ -19,6 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadE
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimenAlt;
 
+@Disabled
 @Autonomous(group = "Auto")
 public class BTESTAutoRight extends LinearOpMode {
 
@@ -145,7 +148,7 @@ public class BTESTAutoRight extends LinearOpMode {
 
         robot.intake.rest();
         robot.outtake.rest();
-        robot.limeLight.limeLightInit(1,30);
+        robot.limeLight.limeLightInit(LimeLight.Pipelines.Blue,30);
 
         waitForStart();
 

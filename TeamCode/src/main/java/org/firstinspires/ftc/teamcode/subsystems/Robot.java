@@ -19,10 +19,14 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 
+import java.util.Date;
+
 public class Robot {
     public static Robot rb;
-    public static final double servoToDegrees = 24.193548;
     public static boolean hasResetEncoders = false;
+    public static Pose2d teleOpStart = new Pose2d(0,0,0);
+    public static Date teleOpStartDate = new Date(new Date().getTime() - 31556952000L);
+    public static LimeLight.Pipelines color = LimeLight.Pipelines.Red;
     public boolean driveAvailable = true;
     public Pose2d beginPose;
     public MecanumDrive roadRunner;
@@ -147,7 +151,12 @@ public class Robot {
                         )
                 )
         );
-        HardwareDevices.imu.resetYaw();
+
+        if (beginPose == null && (new Date().getTime() - teleOpStartDate.getTime()) < 30000) {
+            beginPose = teleOpStart;
+        } else {
+            HardwareDevices.imu.resetYaw();
+        }
 
         if (beginPose == null) {
             beginPose = new Pose2d(0, 0, Math.toRadians(0));

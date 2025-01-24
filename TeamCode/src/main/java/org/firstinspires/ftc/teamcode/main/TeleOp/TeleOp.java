@@ -3,16 +3,20 @@ package org.firstinspires.ftc.teamcode.main.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
@@ -34,6 +38,16 @@ public class TeleOp extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
+        boolean willRetainPosition = (new Date().getTime() - Robot.teleOpStartDate.getTime()) < 30000;
+
+        telemetry.addData("Color", Robot.color);
+        if (willRetainPosition) {
+            telemetry.addData("Retained position", (int)Robot.teleOpStart.position.x + ", " + (int)Robot.teleOpStart.position.y + ", " + (int)Math.toDegrees(Robot.teleOpStart.heading.toDouble()));
+        } else {
+            telemetry.addLine("Will not retain position");
+        }
+        telemetry.update();
+
         waitForStart();
 
         robot.intake.rest();
@@ -50,7 +64,7 @@ public class TeleOp extends LinearOpMode {
         Thread intakeThread = new Thread(intakeRunnable);
         intakeThread.start();
 
-        robot.limeLight.limeLightInit(0,100);
+        robot.limeLight.limeLightInit(LimeLight.Pipelines.Yellow, 100);
         LimeLightThread limeLightThread = new LimeLightThread(this, robot);
         Thread limeLight = new Thread(limeLightThread);
         limeLight.start();
@@ -137,6 +151,7 @@ public class TeleOp extends LinearOpMode {
 
             if (robot.driveAvailable) {
                 telemetry.addData("Date and Time", currentDateTime);
+                telemetry.addData("IMU Yaw", Robot.HardwareDevices.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
                 telemetry.addData("Heading", Math.toDegrees(robot.roadRunner.pose.heading.toDouble()));
                 telemetry.addData("PoseX", (robot.roadRunner.pose.position.x));
                 telemetry.addData("PoseY", (robot.roadRunner.pose.position.y));

@@ -22,6 +22,7 @@ import java.net.URL;
 public class LimeLight extends Robot.HardwareDevices {
     private Robot robot;
     private final String urlString = "http://172.29.0.1:5807/results";
+    private final boolean logging = false;
 
     public LimeLight(Robot robot) {
         this.robot = robot;
@@ -31,10 +32,10 @@ public class LimeLight extends Robot.HardwareDevices {
         return limelight.getLatestResult();
     }
 
-    public void limeLightInit(int pipeline, int pollRate) {
+    public void limeLightInit(Pipelines pipeline, int pollRate) {
         Robot.HardwareDevices.limelight.setPollRateHz(pollRate);
         Robot.HardwareDevices.limelight.start();
-        Robot.HardwareDevices.limelight.pipelineSwitch(pipeline);  // Yellow = 0, Blue = 1, Red = 2, April = 3
+        Robot.HardwareDevices.limelight.pipelineSwitch(pipeline.value);  // Yellow = 0, Blue = 1, Red = 2, April = 3
     }
 
     public TrajectoryActionBuilder goToLimelightPos(double targetTx, double targetTy, double error) {
@@ -54,12 +55,14 @@ public class LimeLight extends Robot.HardwareDevices {
             double x = (xDistance * Math.cos(heading)) - (yDistance * Math.sin(heading));
             double y = (xDistance * Math.sin(heading)) + (yDistance * Math.cos(heading));
 
-            robot.opMode.telemetry.addData("currentTx", currentTx);
-            robot.opMode.telemetry.addData("currentTy", currentTy);
-            robot.opMode.telemetry.addData("yDistance", yDistance);
-            robot.opMode.telemetry.addData("x", x);
-            robot.opMode.telemetry.addData("y", y);
-            robot.opMode.telemetry.addData("heading", heading);
+            if (logging) {
+                robot.opMode.telemetry.addData("currentTx", currentTx);
+                robot.opMode.telemetry.addData("currentTy", currentTy);
+                robot.opMode.telemetry.addData("yDistance", yDistance);
+                robot.opMode.telemetry.addData("x", x);
+                robot.opMode.telemetry.addData("y", y);
+                robot.opMode.telemetry.addData("heading", heading);
+            }
 
             return robot.drive.moveAmount(-(x * 1.4),-(y * 1.4), 0);
         } else {
@@ -101,12 +104,12 @@ public class LimeLight extends Robot.HardwareDevices {
         try {
             limeLightData = fetchLimelightData();
         } catch (Exception e) {
-            robot.opMode.telemetry.addData("Error", e.getMessage());
+            if (logging) robot.opMode.telemetry.addData("Error", e.getMessage());
             return 0;
         }
 
         if (limeLightData.equals("")) {
-            robot.opMode.telemetry.addData("Error", "No data received from Limelight");
+            if (logging) robot.opMode.telemetry.addData("Error", "No data received from Limelight");
             return 0;
         }
 
@@ -116,12 +119,12 @@ public class LimeLight extends Robot.HardwareDevices {
             Gson gson = new Gson();
             results = gson.fromJson(limeLightData, LimeLightResults.class);
         } catch (Exception e) {
-            robot.opMode.telemetry.addData("Error", e.getMessage());
+            if (logging) robot.opMode.telemetry.addData("Error", e.getMessage());
             return 0;
         }
 
         if (results.Retro.length == 0) {
-            robot.opMode.telemetry.addData("Error", "No Retro data received from Limelight");
+            if (logging) robot.opMode.telemetry.addData("Error", "No Retro data received from Limelight");
             return 0;
         }
 
@@ -210,7 +213,7 @@ public class LimeLight extends Robot.HardwareDevices {
 
         angle = 180 - angle;
 
-        robot.opMode.telemetry.addData("Raw Angle", angle);
+        if (logging) robot.opMode.telemetry.addData("Raw Angle", angle);
         return angle;
     }
 
@@ -227,7 +230,7 @@ public class LimeLight extends Robot.HardwareDevices {
 
         if (orientation != 0) {
             orientation /= 355;
-            robot.opMode.telemetry.addData("target servo position", Intake.IntakePosition.wristHorizontal - orientation);
+            if (logging) robot.opMode.telemetry.addData("target servo position", Intake.IntakePosition.wristHorizontal - orientation);
 
             double yDistance;
             double xDistance;
@@ -255,12 +258,9 @@ public class LimeLight extends Robot.HardwareDevices {
                 Actions.runBlocking(new SequentialAction(
                         robot.limeLight.goToLimelightPos(0, -10, 2.5).build()
                 ));
-
-                robot.opMode.telemetry.addData("y", yDistance * 1.4);
-                robot.opMode.telemetry.addData("x", xDistance * 1.4);
-                robot.opMode.telemetry.update();
-            } while (xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1
-                    && robot.limeLight.getLimeLightResult().isValid() && robot.opMode.opModeIsActive() && !robot.opMode.gamepad1.options && !robot.opMode.gamepad2.options);
+            } while ((xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1)
+                    && robot.limeLight.getLimeLightResult().isValid() && robot.opMode.opModeIsActive() &&
+                    !robot.opMode.gamepad1.options && !robot.opMode.gamepad2.options && robot.opMode.gamepad2.right_trigger < 0.5);
 
             if (robot.opMode.gamepad1.options || robot.opMode.gamepad2.options) {
                 return;
@@ -305,13 +305,25 @@ public class LimeLight extends Robot.HardwareDevices {
             robot.intake.wrist.horizontal();
             //robot.intakeSlide.retract();
         }
-        robot.opMode.telemetry.update();
     }
 
     private class LimeLightResults {
         public PtsRoot[] Retro;
         public class PtsRoot {
             public double[][] pts;
+        }
+    }
+
+    public enum Pipelines {
+        Yellow(0),
+        Blue(1),
+        Red(2),
+        April(3);
+
+        public final int value;
+
+        Pipelines(int value) {
+            this.value = value;
         }
     }
 }

@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
@@ -15,7 +17,8 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeWait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeActTwo;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeHighNet;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeTransferPrep;
-
+@Disabled
+@Autonomous
 public class TESTAutoLeft extends LinearOpMode {
 
     @Override

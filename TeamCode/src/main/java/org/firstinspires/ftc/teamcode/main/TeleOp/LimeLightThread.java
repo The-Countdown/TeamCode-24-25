@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.main.Auto.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
@@ -26,22 +27,29 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
     }
     @Override
     public void run() {
-        //boolean protection = false;
-        //robot.intake.arm.up();
-        //robot.intake.elbow.down();
         boolean wasRightBumperPressed = false;
         boolean toggleStateRB = false;
+        boolean wasCrossPressed = false;
+        boolean toggleStateCross = false;
         while (opMode.opModeIsActive()) {
-//            if (!gamepad1.a) {
-//                protection = false;
-//                continue;
-//            }
-//            if (protection) {
-//                continue;
-//            }
-//            protection = true;
-
             boolean isRightBumperPressed = gamepad2.right_bumper;
+            boolean isCrossPressed = gamepad2.cross;
+
+            if (!toggleStateRB && robot.limeLight.getBlockOrientation() != 0 && Robot.HardwareDevices.intakeCoaxialPitch.getPosition() < 0.1) {
+                gamepad1.rumble(100);
+                gamepad2.rumble(100);
+            }
+
+            if (isCrossPressed && !wasCrossPressed) {
+                toggleStateCross = !toggleStateCross;
+
+                if (toggleStateCross) {
+                    robot.limeLight.limeLightInit(Robot.color, 100);
+                    gamepad2.rumble(100);
+                } else {
+                    robot.limeLight.limeLightInit(LimeLight.Pipelines.Yellow, 100);
+                }
+            }
 
             if (isRightBumperPressed && !wasRightBumperPressed) {
                 toggleStateRB = !toggleStateRB;
@@ -58,6 +66,8 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
                     robot.intake.hand.open();
                 }
             }
+
+            wasCrossPressed = isCrossPressed;
             wasRightBumperPressed = isRightBumperPressed;
         }
     }

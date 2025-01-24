@@ -5,11 +5,14 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
+@Disabled
 @Autonomous(name = "LimeLightTest")
 public class LimeLightTest extends LinearOpMode {
 
@@ -24,7 +27,7 @@ public class LimeLightTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this, new Pose2d(0, 57.11, Math.toRadians(0)));
-        robot.limeLight.limeLightInit(2,30);
+        robot.limeLight.limeLightInit(LimeLight.Pipelines.Red,30);
         robot.intake.arm.up();
 
         waitForStart();

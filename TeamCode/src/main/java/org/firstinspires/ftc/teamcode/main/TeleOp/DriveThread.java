@@ -31,13 +31,14 @@ public class DriveThread extends Robot.HardwareDevices implements Runnable {
         double xStickRMulti = TeleOp.xStickRMulti;
         boolean wasSharePressed = false;
         boolean driveToggle = false;
-        YawPitchRollAngles robotOrientation;
+//        YawPitchRollAngles robotOrientation;
 
         while (opMode.opModeIsActive()) {
             if (!robot.driveAvailable) continue;
 
-            robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
-            double imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
+//            robotOrientation = Robot.HardwareDevices.imu.getRobotYawPitchRollAngles();
+//            double imuYaw = -robotOrientation.getYaw(AngleUnit.DEGREES);
+            double imuYaw = -Math.toDegrees(robot.roadRunner.pose.heading.toDouble());
             if (imuYaw < 0) {
                 imuYaw += 360;
             }
