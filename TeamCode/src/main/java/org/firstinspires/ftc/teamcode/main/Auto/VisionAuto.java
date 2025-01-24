@@ -87,7 +87,7 @@ public class VisionAuto extends LinearOpMode {
                 new InstantAction(() -> robot.depositSlide.actTwo()),
                 new Wait(600),
                 new InstantAction(() -> robot.outtake.hand.open()),
-                //new InstantAction(() -> robot.intake.rest()),
+                new InstantAction(() -> robot.intake.rest()),
                 new Wait(300),
                 new OuttakeCondense(),
                 new Wait(1000)
