@@ -259,7 +259,7 @@ public class LimeLight extends Robot.HardwareDevices {
                 robot.opMode.telemetry.addData("y", yDistance * 1.4);
                 robot.opMode.telemetry.addData("x", xDistance * 1.4);
                 robot.opMode.telemetry.update();
-            } while (xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1.3
+            } while (xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1
                     && robot.limeLight.getLimeLightResult().isValid() && robot.opMode.opModeIsActive() && !robot.opMode.gamepad1.options && !robot.opMode.gamepad2.options);
 
             if (robot.opMode.gamepad1.options || robot.opMode.gamepad2.options) {
