@@ -88,7 +88,7 @@ public class TeleOp extends LinearOpMode {
                 depositMagnetPressed = false;
             }
 
-/*            if (Robot.HardwareDevices.intakeMagnetL.isPressed()) {
+            if (Robot.HardwareDevices.intakeMagnetL.isPressed()) {
                 if (!intakeMagnetLPressed) {
                     Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                     Robot.HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -108,7 +108,7 @@ public class TeleOp extends LinearOpMode {
                 }
             } else {
                 intakeMagnetRPressed = false;
-            }*/
+            }
 
 
             //region Safety
@@ -116,13 +116,16 @@ public class TeleOp extends LinearOpMode {
                     (Robot.HardwareDevices.depositSlide.getCurrentPosition() < DepositSlide.DepositSlidePosition.stopTolerance)) {
                 Robot.HardwareDevices.depositSlide.setPower(DepositSlide.DepositSlidePower.stop);
             }
-            if ((!Robot.HardwareDevices.intakeSlideL.isBusy()) && (Robot.HardwareDevices.intakeSlideL.getTargetPosition() < 10) &&
-                    (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() < 10)) {
-                Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
-            }
-            if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < 10) &&
-                    (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < 10)) {
-                Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
+
+            if (!IntakeSlide.IntakeSlidePosition.magRetracting) {
+                if ((!Robot.HardwareDevices.intakeSlideL.isBusy()) && (Robot.HardwareDevices.intakeSlideL.getTargetPosition() < 10) &&
+                        (Robot.HardwareDevices.intakeSlideL.getCurrentPosition() < 10)) {
+                    Robot.HardwareDevices.intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
+                }
+                if ((!Robot.HardwareDevices.intakeSlideR.isBusy()) && (Robot.HardwareDevices.intakeSlideR.getTargetPosition() < 10) &&
+                        (Robot.HardwareDevices.intakeSlideR.getCurrentPosition() < 10)) {
+                    Robot.HardwareDevices.intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
+                }
             }
 
             if (gamepad1.guide || gamepad2.ps) {

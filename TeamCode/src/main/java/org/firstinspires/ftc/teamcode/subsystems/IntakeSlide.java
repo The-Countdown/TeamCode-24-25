@@ -18,6 +18,8 @@ public class IntakeSlide extends Robot.HardwareDevices {
         public static int maximum = 1500;
         public static int tolerance = 5;
         public static int stepRange = 100;
+
+        public static boolean magRetracting = false;
     }
     @Config
     public static class IntakeSlidePower {
@@ -51,11 +53,12 @@ public class IntakeSlide extends Robot.HardwareDevices {
     }
 
     public void magRetract() {
+        IntakeSlidePosition.magRetracting = true;
         intakeSlideL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         intakeSlideR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         intakeSlideL.setPower(-IntakeSlide.IntakeSlidePower.move);
         intakeSlideR.setPower(-IntakeSlide.IntakeSlidePower.move);
-        //while (!Robot.HardwareDevices.intakeMagnetL.isPressed() && !Robot.HardwareDevices.intakeMagnetR.isPressed());
+        while (!Robot.HardwareDevices.intakeMagnetL.isPressed() && !Robot.HardwareDevices.intakeMagnetR.isPressed());
         intakeSlideL.setPower(IntakeSlide.IntakeSlidePower.stop);
         intakeSlideR.setPower(IntakeSlide.IntakeSlidePower.stop);
         intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -66,6 +69,7 @@ public class IntakeSlide extends Robot.HardwareDevices {
         intakeSlideR.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         intakeSlideL.setTargetPosition(avg());
         intakeSlideR.setTargetPosition(avg());
+        IntakeSlidePosition.magRetracting = false;
     }
 
     public void retract() {

@@ -14,9 +14,9 @@ public class Outtake extends Robot.HardwareDevices {
         // Arm positions
         public static double armUpClip = 0.37;
         public static double armUpLift = 0.54;
-        public static double armTransfer = 0.12;
+        public static double armTransfer = 0.13;
         public static double armBack = 0.95;
-        public static double armRest = 0.08;
+        public static double armRest = 0.1;
 
         // Wrist positions
         public static double wristVertical = 0.38;
@@ -24,9 +24,9 @@ public class Outtake extends Robot.HardwareDevices {
         public static double wristHorizontalFlip = 0.745;
 
         // Hand positions
-        public static double handOpen = 0.35;
-        public static double handClosed = 0.72;
-        public static double handHalfOpen = 0.53;
+        public static double handOpen = 0;
+        public static double handClosed = 0.45;
+        public static double handHalfOpen = 0.37;
     }
 
     public class Arm {

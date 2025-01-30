@@ -67,7 +67,7 @@ public class DepositThread extends Robot.HardwareDevices implements Runnable {
                     depositSlide.setTargetPosition(currentPosition - yStickRInt);
                     depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                     depositSlide.setPower(DepositSlide.DepositSlidePower.move);
-                } else if (currentPosition <= 2550 && gamepad2.right_stick_y < 0) {
+                } else if (currentPosition <= DepositSlide.DepositSlidePosition.highBasket && gamepad2.right_stick_y < 0) {
                     depositSlide.setTargetPosition(currentPosition - yStickRInt);
                     depositSlide.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                     depositSlide.setPower(DepositSlide.DepositSlidePower.move);

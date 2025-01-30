@@ -13,15 +13,15 @@ public class DepositSlide extends Robot.HardwareDevices {
     @Config
     public static class DepositSlidePosition {
         public static int retracted = 0;
-        public static int highBasket = 2550;
+        public static int highBasket = 2900;
         public static int lowBasket = 1500;
-        public static int specimenWall = 700;
+        public static int specimenWall = 750;
         public static int specimenBar = 820;
-        public static int specimenBarClip = 190;
+        public static int specimenBarClip = 250;
         public static int specimenBarAltUp = 1336;
         public static int specimenBarAltDown = 1240;
-        public static int transferUp = 1475;
-        public static int transferDown = 1350;
+        public static int transferUp = 1600;
+        public static int transferDown = 1500;
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 10;

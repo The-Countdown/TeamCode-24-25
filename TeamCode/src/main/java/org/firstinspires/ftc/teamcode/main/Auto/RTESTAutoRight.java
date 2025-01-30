@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadE
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimenAlt;
 
-@Disabled
+//@Disabled
 @Autonomous(group = "Auto")
 public class RTESTAutoRight extends LinearOpMode {
 
@@ -36,20 +36,13 @@ public class RTESTAutoRight extends LinearOpMode {
                 .strafeTo(new Vector2d(52, -2))
                 .stopAndAdd(new OuttakeClip())
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.elbow.down()))
-                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.wrist.autoRight()))
                 .endTrajectory();
 
         TrajectoryActionBuilder grab1 = robot.roadRunner.actionBuilder(new Pose2d(52, -2, Math.toRadians(180)))
                 .afterTime(0.75, new InstantAction(() -> robot.intakeSlide.moveTo(1400)))
                 .afterDisp(15, new OuttakeSpecimenAlt())
                 .splineToLinearHeading(new Pose2d(15, -50, Math.toRadians(320)), Math.toRadians(320))
-                .stopAndAdd(new LimeLightLineup(robot))
-                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
-                .waitSeconds(0.25)
-                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
-                .waitSeconds(0.15)
-                .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.up()))
-                .waitSeconds(0.1)
+                .stopAndAdd(new InstantAction(() -> robot.limeLight.pickUp()))
                 .endTrajectory();
 
         TrajectoryActionBuilder drop1 = robot.roadRunner.actionBuilder(new Pose2d(19.6, -50, Math.toRadians(320)))
@@ -58,7 +51,7 @@ public class RTESTAutoRight extends LinearOpMode {
 
         TrajectoryActionBuilder grab2 = robot.roadRunner.actionBuilder(new Pose2d(19.5, -50, Math.toRadians(225)))
                 .splineToLinearHeading(new Pose2d(15, -63, Math.toRadians(320)), Math.toRadians(320))
-                .stopAndAdd(new LimeLightLineup(robot))
+                .stopAndAdd(new InstantAction(() -> robot.limeLight.pickUp()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.arm.down()))
                 .waitSeconds(0.25)
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.hand.close()))
@@ -94,7 +87,7 @@ public class RTESTAutoRight extends LinearOpMode {
 
         TrajectoryActionBuilder specimen1 = robot.roadRunner.actionBuilder(new Pose2d(19.5, -63, Math.toRadians(200)))
                 .setReversed(true)
-                .strafeToLinearHeading(new Vector2d(19.6, -63), Math.toRadians(175))
+                .splineToLinearHeading(new Pose2d(19.6, -63, Math.toRadians(175)), Math.toRadians(175))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.intake.rest()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.outtake.arm.upClip()))
                 .stopAndAdd(new InstantAction(() -> Robot.rb.depositSlide.magRetract()))

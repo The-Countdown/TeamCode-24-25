@@ -55,8 +55,8 @@ public class Robot {
         public static ServoImplEx depositClawAngle;
 
         public static TouchSensor depositMagnet;
-        //public static TouchSensor intakeMagnetL;
-        //public static TouchSensor intakeMagnetR;
+        public static TouchSensor intakeMagnetL;
+        public static TouchSensor intakeMagnetR;
         public static Limelight3A limelight;
         public static IMU imu;
         public static RevColorSensorV3 flashLight;
@@ -72,8 +72,8 @@ public class Robot {
         this.beginPose = beginPose;
 
         HardwareDevices.depositMagnet = hardwareMap.get(TouchSensor.class, "depositMagnet");
-        //HardwareDevices.intakeMagnetL = hardwareMap.get(TouchSensor.class, "intakeLMagnet");
-        //HardwareDevices.intakeMagnetR = hardwareMap.get(TouchSensor.class, "intakeRMagnet");
+        HardwareDevices.intakeMagnetL = hardwareMap.get(TouchSensor.class, "intakeMagnetL");
+        HardwareDevices.intakeMagnetR = hardwareMap.get(TouchSensor.class, "intakeMagnetR");
         HardwareDevices.flashLight = hardwareMap.get(RevColorSensorV3.class, "flashLight");
         //HardwareDevices.voltageSensor = hardwareMap.get(VoltageSensor.class, "voltageSensor");
         HardwareDevices.limelight = hardwareMap.get(Limelight3A.class, "limelight");
