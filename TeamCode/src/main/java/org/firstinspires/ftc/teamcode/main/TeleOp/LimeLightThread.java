@@ -35,6 +35,10 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
             boolean isRightBumperPressed = gamepad2.right_bumper;
             boolean isCrossPressed = gamepad2.cross;
 
+            if (Robot.HardwareDevices.intakeClaw.getPosition() < Intake.IntakePosition.handHalfOpen) {
+                toggleStateRB = false;
+            }
+
             if (!toggleStateRB && robot.limeLight.getBlockOrientation() != 0 && Robot.HardwareDevices.intakeCoaxialPitch.getPosition() < 0.1) {
                 gamepad1.rumble(100);
                 gamepad2.rumble(100);

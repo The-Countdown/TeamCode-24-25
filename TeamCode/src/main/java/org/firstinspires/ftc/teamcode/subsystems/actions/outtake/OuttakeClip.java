@@ -12,7 +12,7 @@ public class OuttakeClip implements Action {
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
         try {
             Robot.rb.outtake.arm.back();
-            Thread.sleep(500);
+            Thread.sleep(300);
             Robot.rb.outtake.hand.open();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

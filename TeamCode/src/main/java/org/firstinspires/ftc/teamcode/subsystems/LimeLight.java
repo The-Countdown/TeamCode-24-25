@@ -234,6 +234,7 @@ public class LimeLight extends Robot.HardwareDevices {
 
             double yDistance;
             double xDistance;
+            int attempts = 0;
 
             do {
                 double height = 6.3; // height of the camera in inches
@@ -258,9 +259,11 @@ public class LimeLight extends Robot.HardwareDevices {
                 Actions.runBlocking(new SequentialAction(
                         robot.limeLight.goToLimelightPos(0, -10, 2.5).build()
                 ));
+
+                attempts++;
             } while ((xDistance * 1.4 > 1 || xDistance * 1.4 < -1 || yDistance * 1.4 > 1 || yDistance * 1.4 < -1)
                     && robot.limeLight.getLimeLightResult().isValid() && robot.opMode.opModeIsActive() &&
-                    !robot.opMode.gamepad1.options && !robot.opMode.gamepad2.options && robot.opMode.gamepad2.right_trigger < 0.5);
+                    !robot.opMode.gamepad1.options && !robot.opMode.gamepad2.options && robot.opMode.gamepad2.right_trigger < 0.5 && (!robot.isAuto || attempts < 1));
 
             if (robot.opMode.gamepad1.options || robot.opMode.gamepad2.options) {
                 return;

@@ -27,6 +27,8 @@ public class SpecimenAuto extends LinearOpMode {
         robot.limeLight.limeLightInit(Robot.color, 100);
 
         TrajectoryActionBuilder toFirstClip = robot.roadRunner.actionBuilder(robot.beginPose)
+                .afterTime(0.01, new OuttakePreloadEsc())
+                .afterTime(0.75, new InstantAction(() -> Robot.rb.depositSlide.move(250)))
                 .strafeToLinearHeading(new Vector2d(-47, -6), Math.toRadians(0));
 
         TrajectoryActionBuilder toFirstGrab = toFirstClip.fresh()
@@ -35,23 +37,33 @@ public class SpecimenAuto extends LinearOpMode {
         TrajectoryActionBuilder toPlace = robot.roadRunner.actionBuilder(new Pose2d(-33, 38, Math.toRadians(130)))
                 .strafeToLinearHeading(new Vector2d(-15, 42), Math.toRadians(40));
 
-        TrajectoryActionBuilder toSecondGrab = robot.roadRunner.actionBuilder(new Pose2d(-25, 57, Math.toRadians(145)))
-                .strafeToLinearHeading(new Vector2d(-22, 51), Math.toRadians(135));
+        TrajectoryActionBuilder toSecondGrab = robot.roadRunner.actionBuilder(new Pose2d(-15, 42, Math.toRadians(40)))
+                .strafeToLinearHeading(new Vector2d(-30, 49), Math.toRadians(128));
 
-        TrajectoryActionBuilder toWallPrep = toFirstClip.fresh()
-                .strafeToLinearHeading(new Vector2d(-19, 58), Math.toRadians(0));
+        TrajectoryActionBuilder toPlace2 = robot.roadRunner.actionBuilder(new Pose2d(-30, 49, Math.toRadians(128)))
+                .strafeToLinearHeading(new Vector2d(-15, 42), Math.toRadians(40));
 
-        TrajectoryActionBuilder toWall = robot.roadRunner.actionBuilder(new Pose2d(-19, 58, Math.toRadians(0)))
-                .strafeTo(new Vector2d(-2, 58));
+        TrajectoryActionBuilder toWallPrep = robot.roadRunner.actionBuilder(new Pose2d(-15, 42, Math.toRadians(40)))
+                .strafeToLinearHeading(new Vector2d(-19, 50), Math.toRadians(0));
 
-        TrajectoryActionBuilder toSecondClip = robot.roadRunner.actionBuilder(new Pose2d(-4, 58, Math.toRadians(0)))
-                .strafeToLinearHeading(new Vector2d(-47, -9), Math.toRadians(0));
+        TrajectoryActionBuilder toWallPrepClip = toFirstClip.fresh()
+                .strafeToLinearHeading(new Vector2d(-19, 50), Math.toRadians(0));
 
-        TrajectoryActionBuilder toThirdClip = robot.roadRunner.actionBuilder(new Pose2d(-4, 58, Math.toRadians(0)))
-                .strafeToLinearHeading(new Vector2d(-47, -12), Math.toRadians(0));
+        TrajectoryActionBuilder toWall = robot.roadRunner.actionBuilder(new Pose2d(-19, 50, Math.toRadians(0)))
+                .strafeTo(new Vector2d(-3, 50));
 
-        TrajectoryActionBuilder toFourthClip = robot.roadRunner.actionBuilder(new Pose2d(-4, 58, Math.toRadians(0)))
-                .strafeToLinearHeading(new Vector2d(-47, -15), Math.toRadians(0));
+        TrajectoryActionBuilder toSecondClip = robot.roadRunner.actionBuilder(new Pose2d(-3, 58, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-47, -11), Math.toRadians(0));
+
+        TrajectoryActionBuilder toThirdClip = robot.roadRunner.actionBuilder(new Pose2d(-3, 58, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-47, -16), Math.toRadians(0));
+
+        TrajectoryActionBuilder toWallPrepBackup = robot.roadRunner.actionBuilder(new Pose2d(-47, -14, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-30, -14), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(-19, 50), Math.toRadians(0));
+
+        TrajectoryActionBuilder toFourthClip = robot.roadRunner.actionBuilder(new Pose2d(-3, 58, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-47, -21), Math.toRadians(0));
 
         telemetry.addData("Color", Robot.color);
         telemetry.update();
@@ -63,11 +75,10 @@ public class SpecimenAuto extends LinearOpMode {
         teleOpPoseUpdaterThread.start();
 
         Actions.runBlocking(new SequentialAction(
-                new OuttakePreloadEsc(),
+//                new OuttakePreloadEsc(),
+//                new InstantAction(() -> robot.depositSlide.move(250)),
                 toFirstClip.build(),
                 new IntakeEsc(),
-                new InstantAction(() -> robot.depositSlide.move(190)),
-                new Wait(500),
                 new OuttakeClip(),
                 new InstantAction(() -> robot.intake.down()),
                 new InstantAction(() -> robot.intake.arm.up()),
@@ -82,11 +93,11 @@ public class SpecimenAuto extends LinearOpMode {
                 new InstantAction(() -> robot.intake.hand.open()),
                 new Wait(300),
                 toSecondGrab.build(),
-                new InstantAction(() -> robot.intakeSlide.moveTo(600)),
+                new InstantAction(() -> robot.intakeSlide.moveTo(800)),
                 new Wait(300),
                 new InstantAction(() -> robot.limeLight.pickUp()),
                 new InstantAction(() -> robot.intakeSlide.moveTo(664)),
-                toPlace.build(),
+                toPlace2.build(),
                 new InstantAction(() -> robot.intake.hand.open()),
                 new Wait(300),
                 new InstantAction(() -> robot.intake.rest()),
@@ -99,29 +110,29 @@ public class SpecimenAuto extends LinearOpMode {
                 toWall.build(),
                 new InstantAction(() -> robot.outtake.hand.close()),
                 new Wait(300),
-                new InstantAction(() -> robot.depositSlide.move(190)),
+                new InstantAction(() -> robot.depositSlide.move(250)),
                 new InstantAction(() -> robot.outtake.arm.upLift()),
                 new InstantAction(() -> robot.outtake.wrist.horizontalFlip()),
                 toSecondClip.build(),
                 new OuttakeClip(),
                 new Wait(100),
                 new OuttakeSpecimen(),
-                toWallPrep.build(),
+                toWallPrepClip.build(),
                 toWall.build(),
                 new InstantAction(() -> robot.outtake.hand.close()),
                 new Wait(300),
-                new InstantAction(() -> robot.depositSlide.move(190)),
+                new InstantAction(() -> robot.depositSlide.move(250)),
                 new InstantAction(() -> robot.outtake.arm.upLift()),
                 new InstantAction(() -> robot.outtake.wrist.horizontalFlip()),
                 toThirdClip.build(),
                 new OuttakeClip(),
                 new Wait(100),
                 new OuttakeSpecimen(),
-                toWallPrep.build(),
+                toWallPrepBackup.build(),
                 toWall.build(),
                 new InstantAction(() -> robot.outtake.hand.close()),
                 new Wait(300),
-                new InstantAction(() -> robot.depositSlide.move(190)),
+                new InstantAction(() -> robot.depositSlide.move(250)),
                 new InstantAction(() -> robot.outtake.arm.upLift()),
                 new InstantAction(() -> robot.outtake.wrist.horizontalFlip()),
                 toFourthClip.build(),

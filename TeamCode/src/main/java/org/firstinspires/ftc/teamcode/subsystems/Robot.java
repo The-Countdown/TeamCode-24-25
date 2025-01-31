@@ -28,6 +28,7 @@ public class Robot {
     public static Date teleOpStartDate = new Date(new Date().getTime() - 31556952000L);
     public static LimeLight.Pipelines color = LimeLight.Pipelines.Red;
     public boolean driveAvailable = true;
+    public boolean isAuto = false;
     public Pose2d beginPose;
     public MecanumDrive roadRunner;
     HardwareMap hardwareMap;
@@ -124,6 +125,10 @@ public class Robot {
         HardwareDevices.intakeSlideL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         HardwareDevices.intakeSlideR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         HardwareDevices.depositSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        if (beginPose != null) {
+            isAuto = true;
+        }
 
         if (beginPose != null || !hasResetEncoders) {
             HardwareDevices.intakeSlideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
