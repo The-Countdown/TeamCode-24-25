@@ -9,14 +9,11 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.TeleOpPoseUpdater;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeEsc;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeClip;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondense;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeHighNet;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadEsc;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 
@@ -53,7 +50,7 @@ public class SpecimenAuto extends LinearOpMode {
         TrajectoryActionBuilder toThirdClip = robot.roadRunner.actionBuilder(new Pose2d(-4, 58, Math.toRadians(0)))
                 .strafeToLinearHeading(new Vector2d(-47, -12), Math.toRadians(0));
 
-        TrajectoryActionBuilder toFourhClip = robot.roadRunner.actionBuilder(new Pose2d(-4, 58, Math.toRadians(0)))
+        TrajectoryActionBuilder toFourthClip = robot.roadRunner.actionBuilder(new Pose2d(-4, 58, Math.toRadians(0)))
                 .strafeToLinearHeading(new Vector2d(-47, -15), Math.toRadians(0));
 
         telemetry.addData("Color", Robot.color);
@@ -127,11 +124,11 @@ public class SpecimenAuto extends LinearOpMode {
                 new InstantAction(() -> robot.depositSlide.move(190)),
                 new InstantAction(() -> robot.outtake.arm.upLift()),
                 new InstantAction(() -> robot.outtake.wrist.horizontalFlip()),
-                toFourhClip.build(),
+                toFourthClip.build(),
                 new OuttakeClip(),
                 new Wait(100),
                 new OuttakeSpecimen(),
-                new Wait(10000)
+                new Wait(100000)
         ));
     }
 }
