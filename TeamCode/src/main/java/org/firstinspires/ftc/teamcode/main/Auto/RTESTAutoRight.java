@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakePreloadE
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimen;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeSpecimenAlt;
 
-//@Disabled
+@Disabled
 @Autonomous(group = "Auto")
 public class RTESTAutoRight extends LinearOpMode {
 

@@ -8,18 +8,16 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.main.TeleOp.DriveThread;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.TeleOpPoseUpdater;
 import org.firstinspires.ftc.teamcode.subsystems.actions.Wait;
 import org.firstinspires.ftc.teamcode.subsystems.actions.intake.IntakeEsc;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondense;
-import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeCondenseEnd;
 import org.firstinspires.ftc.teamcode.subsystems.actions.outtake.OuttakeHighNet;
 
 @Autonomous(name = "Sample Auto")
-public class VisionAuto extends LinearOpMode {
+public class SampleAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(this, new Pose2d(0, 0, 0));
@@ -28,8 +26,7 @@ public class VisionAuto extends LinearOpMode {
         robot.limeLight.limeLightInit(LimeLight.Pipelines.Yellow, 100);
 
         TrajectoryActionBuilder toBasket = robot.roadRunner.actionBuilder(robot.beginPose)
-                .splineToLinearHeading(new Pose2d(5, 31, Math.toRadians(-55)), 0)
-                .endTrajectory();
+                .splineToLinearHeading(new Pose2d(5, 31, Math.toRadians(-55)), 3.14/2);
 
         TrajectoryActionBuilder toFirstSample = toBasket.fresh()
                 .splineToLinearHeading(new Pose2d(16, 26, Math.toRadians(-23)), 0);
