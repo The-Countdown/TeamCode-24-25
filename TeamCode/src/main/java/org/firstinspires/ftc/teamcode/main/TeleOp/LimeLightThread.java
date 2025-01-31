@@ -59,13 +59,17 @@ public class LimeLightThread extends Robot.HardwareDevices implements Runnable {
                 toggleStateRB = !toggleStateRB;
 
                 if (toggleStateRB) {
-                    robot.driveAvailable = false;
-                    try {
-                        robot.limeLight.pickUp();
-                    } catch (Exception e) {
-                        opMode.telemetry.addData("Pick Up Error", e.getMessage());
+                    if (gamepad2.right_trigger > 0.1) {
+                        robot.intake.hand.close();
+                    } else {
+                        robot.driveAvailable = false;
+                        try {
+                            robot.limeLight.pickUp();
+                        } catch (Exception e) {
+                            opMode.telemetry.addData("Pick Up Error", e.getMessage());
+                        }
+                        robot.driveAvailable = true;
                     }
-                    robot.driveAvailable = true;
                 } else {
                     robot.intake.hand.open();
                 }

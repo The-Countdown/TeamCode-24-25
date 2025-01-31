@@ -26,6 +26,7 @@ public class Robot {
     public static boolean hasResetEncoders = false;
     public static Pose2d teleOpStart = new Pose2d(0,0,0);
     public static Date teleOpStartDate = new Date(new Date().getTime() - 31556952000L);
+    public static boolean isAutoReversed = false;
     public static LimeLight.Pipelines color = LimeLight.Pipelines.Red;
     public boolean driveAvailable = true;
     public boolean isAuto = false;
@@ -158,6 +159,9 @@ public class Robot {
         );
 
         if (beginPose == null && (new Date().getTime() - teleOpStartDate.getTime()) < 30000) {
+            if (isAutoReversed) {
+                teleOpStart = new Pose2d(teleOpStart.position.x, teleOpStart.position.y, teleOpStart.heading.toDouble() - Math.toRadians(180));
+            }
             beginPose = teleOpStart;
         } else {
             HardwareDevices.imu.resetYaw();
@@ -166,6 +170,8 @@ public class Robot {
         if (beginPose == null) {
             beginPose = new Pose2d(0, 0, Math.toRadians(0));
         }
+
+        isAutoReversed = false;
 
         roadRunner = new MecanumDrive(hardwareMap, beginPose);
         roadRunner.updatePoseEstimate();

@@ -9,6 +9,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
+import java.util.Date;
+
 public class DriverStationUtilities {
     private static OpModeMeta metaForClass(String name) {
         return new OpModeMeta.Builder()
@@ -20,6 +22,7 @@ public class DriverStationUtilities {
 
     @OpModeRegistrar
     public static void register(OpModeManager manager) {
+        manager.register(metaForClass("Clear Retained Pose"), new ClearRetainedPose());
         manager.register(metaForClass("Switch Sides"), new SwitchSides());
     }
 
@@ -38,6 +41,13 @@ public class DriverStationUtilities {
                     }
                 }
             }
+        }
+    }
+
+    static class ClearRetainedPose extends LinearOpMode {
+        @Override
+        public void runOpMode() {
+            Robot.teleOpStartDate = new Date(new Date().getTime() - 31556952000L);
         }
     }
 }

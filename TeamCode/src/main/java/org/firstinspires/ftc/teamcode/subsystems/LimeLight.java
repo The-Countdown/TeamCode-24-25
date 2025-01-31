@@ -282,6 +282,9 @@ public class LimeLight extends Robot.HardwareDevices {
             robot.intakeSlide.moveTo(target);
 
             double newOrientation = robot.limeLight.getBlockOrientation();
+
+            if (robot.isAuto) newOrientation = 45;
+
             if (newOrientation != 0) {
                 orientation = newOrientation / 355;
             }

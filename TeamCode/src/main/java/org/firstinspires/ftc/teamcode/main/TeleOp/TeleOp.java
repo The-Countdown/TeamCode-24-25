@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DepositSlide;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSlide;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.TeleOpPoseUpdater;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -68,6 +69,10 @@ public class TeleOp extends LinearOpMode {
         LimeLightThread limeLightThread = new LimeLightThread(this, robot);
         Thread limeLight = new Thread(limeLightThread);
         limeLight.start();
+
+        TeleOpPoseUpdater teleOpPoseUpdater = new TeleOpPoseUpdater();
+        Thread teleOpPoseUpdaterThread = new Thread(teleOpPoseUpdater);
+        teleOpPoseUpdaterThread.start();
 
         while (opModeIsActive()) {
             if (gamepad1.options || gamepad2.options) robot.driveAvailable = true;
