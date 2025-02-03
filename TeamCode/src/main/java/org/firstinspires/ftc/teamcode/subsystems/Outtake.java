@@ -12,7 +12,7 @@ public class Outtake extends Robot.HardwareDevices {
     @Config
     public static class OuttakePositions {
         // Arm positions
-        public static double armUpClip = 0.37;
+        public static double armUpClip = 0.4;
         public static double armUpLift = 0.54;
         public static double armTransfer = 0.11;
         public static double armBack = 0.95;

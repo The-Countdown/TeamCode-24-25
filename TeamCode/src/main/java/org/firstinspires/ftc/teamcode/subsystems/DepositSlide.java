@@ -20,8 +20,8 @@ public class DepositSlide extends Robot.HardwareDevices {
         public static int specimenBarClip = 250;
         public static int specimenBarAltUp = 1336;
         public static int specimenBarAltDown = 1240;
-        public static int transferUp = 1600;
-        public static int transferDown = 1500;
+        public static int transferUp = 1700;
+        public static int transferDown = 1450;
         public static int tolerance = 5;
         public static int stepRange = 50;
         public static int stopTolerance = 10;
@@ -146,7 +146,7 @@ public class DepositSlide extends Robot.HardwareDevices {
             robot.outtake.hand.close();
             Thread.sleep(200);
             robot.intake.hand.open();
-            Thread.sleep(200);
+            Thread.sleep(400);
             highBasket();
             Robot.HardwareDevices.depositSlide.setPower(DepositSlidePower.move/2);
             robot.outtake.arm.upClip();
